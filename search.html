@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resultados | Rservas.Roma Marketplace</title>
+    <meta name="description" content="Resultados de búsqueda en Rservas.Roma: negocios de belleza, barbería, uñas y cursos en Cuba con vista de lista y mapa." />
+    <meta name="keywords" content="resultados, mapa, negocios, belleza, barbería, uñas, Cuba, La Habana, WhatsApp" />
+
+    <meta property="og:title" content="Resultados | Rservas.Roma Marketplace" />
+    <meta property="og:description" content="Explora negocios en lista y mapa. Filtra por servicio y ubicación y contacta por WhatsApp." />
+    <meta name="twitter:title" content="Resultados | Rservas.Roma Marketplace" />
+    <meta name="twitter:description" content="Vista dividida lista + mapa y botón móvil para ver el mapa." />
+
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js"></script>
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://resource.trickle.so/vendor_lib/unpkg/lucide-static@0.516.0/font/lucide.css" rel="stylesheet">
+
+    <style type="text/tailwindcss">
+    @layer theme {
+        :root{
+            --bg: #FFFFFF;
+            --bg-muted: #F9FAFB;
+            --card: #FFFFFF;
+
+            --text: #1F2937;
+            --text-muted: #6B7280;
+
+            --border: rgba(31, 41, 55, 0.12);
+            --shadow: 0 16px 40px rgba(31, 41, 55, 0.10);
+
+            --primary-color: #D81B60;
+            --primary-hover: #C2185B;
+            --secondary-color: #FDF2F8;
+            --accent-soft: rgba(216, 27, 96, 0.08);
+
+            --gold: #D4AF37;
+            --gold-2: #F59E0B;
+
+            --radius-sm: 10px;
+            --radius-md: 14px;
+            --radius-lg: 18px;
+
+            --container: 1200px;
+            --brand-logo-url: url("https://app.trickle.so/storage/public/images/usr_1dec1efb58008001/55d88a3b-fbdf-46a8-bc34-5c6dac55ec46.png");
+        }
+    }
+
+    @layer base {
+        html, body { height: 100%; background: var(--bg); color: var(--text); }
+        body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; }
+        a { color: inherit; text-decoration: none; }
+        ::selection { background: rgba(11, 18, 32, 0.12); }
+    }
+
+    @layer components {
+        .container-rr { max-width: var(--container); margin: 0 auto; padding: 0 20px; }
+        .card-rr { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+        .surface-rr { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+        .chip-rr { border: 1px solid var(--border); background: rgba(11, 18, 32, 0.03); border-radius: 999px; }
+        .btn-rr { border-radius: 999px; padding: 12px 16px; border: 1px solid var(--border); transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease; }
+        .btn-rr:active { transform: translateY(1px); }
+        .btn-primary-rr { background: var(--primary-color); color: white; border-color: rgba(216, 27, 96, 0.32); box-shadow: 0 10px 25px rgba(216,27,96,0.16); }
+        .btn-primary-rr:hover { background: var(--primary-hover); box-shadow: 0 14px 34px rgba(216,27,96,0.22); }
+        .btn-ghost-rr { background: white; color: var(--text); }
+        .btn-ghost-rr:hover { background: var(--secondary-color); }
+        .input-rr { width: 100%; background: white; border: 1px solid var(--border); border-radius: 999px; padding: 12px 14px; outline: none; transition: box-shadow 200ms ease, border-color 200ms ease; }
+        .input-rr:focus { border-color: rgba(216, 27, 96, 0.45); box-shadow: 0 0 0 5px rgba(216, 27, 96, 0.10); }
+        .muted-rr { color: var(--text-muted); }
+        .divider-rr { height: 1px; background: var(--border); }
+        .skeleton-rr { background: linear-gradient(90deg, rgba(11,18,32,0.06), rgba(11,18,32,0.02), rgba(11,18,32,0.06)); background-size: 200% 100%; animation: shimmer 1.15s infinite linear; border-radius: 999px; }
+        @keyframes shimmer { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+    }
+
+    @layer utilities {
+        .text-balance { text-wrap: balance; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    }
+    </style>
+
+    <link href="styles/global.css" rel="stylesheet">
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="utils/navigation.js" type="text/babel"></script>
+    <script src="utils/format.js" type="text/babel"></script>
+    <script src="data/mockData.js" type="text/babel"></script>
+
+    <script src="components/ToastProvider.js" type="text/babel"></script>
+    <script src="components/Header.js" type="text/babel"></script>
+    <script src="components/Footer.js" type="text/babel"></script>
+    <script src="components/Badge.js" type="text/babel"></script>
+    <script src="components/StarRating.js" type="text/babel"></script>
+    <script src="components/SearchBar.js" type="text/babel"></script>
+    <script src="components/BusinessCard.js" type="text/babel"></script>
+    <script src="components/MapSplitView.js" type="text/babel"></script>
+    <script src="pages/search/SearchPage.js" type="text/babel"></script>
+
+    <script src="search-app.js" type="text/babel"></script>
+</body>
+</html>

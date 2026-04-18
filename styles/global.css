@@ -1,0 +1,12 @@
+/* Mantener CSS mínimo; la mayor parte vive en Tailwind (theme/base/components) */
+:root { color-scheme: light; }
+html { scroll-behavior: smooth; }
+body { margin: 0; }
+
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
