@@ -587,7 +587,7 @@ const MockData = (() => {
         throw new Error(loadError);
       }
       try {
-        const rows = await supabaseFetch('negocios?select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan');
+        const rows = await supabaseFetch('negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,suscripciones!inner(estado)&order=nombre.asc');
         const serviciosRows = await supabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,descripcion,activo,imagen,categoria');
         const relations = {
           servicios: groupByBusiness(serviciosRows),

@@ -587,7 +587,7 @@ const MockData = (() => {
         throw new Error(loadError);
       }
       try {
-        const rows = await supabaseFetch('negocios?select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan');
+        const rows = await supabaseFetch('negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,suscripciones!inner(estado)&order=nombre.asc');
         const serviciosRows = await supabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,descripcion,activo,imagen,categoria');
         const relations = {
           servicios: groupByBusiness(serviciosRows),
@@ -1604,7 +1604,7 @@ function SearchPage({
       className: "text-sm text-[var(--text-muted)] mt-1",
       "data-name": "search-sub",
       "data-file": "pages/search/SearchPage.js"
-    }, "Lista limpia a la izquierda y mapa interactivo a la derecha.")), React.createElement("div", {
+    }, "Desliza los negocios activos y consulta su ubicacion en el mapa.")), React.createElement("div", {
       className: "hidden md:flex items-center gap-2",
       "data-name": "search-meta",
       "data-file": "pages/search/SearchPage.js"
@@ -1675,30 +1675,46 @@ function SearchPage({
       "data-name": "inp-ubi",
       "data-file": "pages/search/SearchPage.js"
     }))))), React.createElement("div", {
-      className: "mt-5 grid grid-cols-1 lg:grid-cols-[420px_1fr] gap-4 min-h-[640px]",
-      "data-name": "split",
+      className: "mt-5",
+      "data-name": "horizontal-results",
       "data-file": "pages/search/SearchPage.js"
     }, React.createElement("div", {
-      className: "order-2 lg:order-1",
-      "data-name": "left",
+      className: "flex items-center justify-between gap-3 mb-3",
+      "data-name": "active-head",
       "data-file": "pages/search/SearchPage.js"
-    }, React.createElement("div", {
-      className: "space-y-3",
+    }, React.createElement("p", {
+      className: "text-sm font-semibold",
+      "data-name": "active-title",
+      "data-file": "pages/search/SearchPage.js"
+    }, "Negocios activos"), React.createElement("span", {
+      className: "md:hidden chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]",
+      "data-name": "count-mobile",
+      "data-file": "pages/search/SearchPage.js"
+    }, results.length, " negocios")), React.createElement("div", {
+      className: "flex gap-3 overflow-x-auto no-scrollbar pb-3 snap-x snap-mandatory",
       "data-name": "cards",
       "data-file": "pages/search/SearchPage.js"
-    }, results.map(b => React.createElement(BusinessCard, {
+    }, !results.length ? React.createElement("div", {
+      className: "surface-rr w-full p-6 text-center text-sm text-[var(--text-muted)]",
+      "data-name": "empty-active-businesses",
+      "data-file": "pages/search/SearchPage.js"
+    }, "No hay negocios activos para mostrar.") : null, results.map(b => React.createElement("div", {
       key: b.id,
+      className: "min-w-[340px] max-w-[340px] snap-start",
+      "data-name": "card-wrap",
+      "data-file": "pages/search/SearchPage.js"
+    }, React.createElement(BusinessCard, {
       business: b,
       onHover: x => setActiveId(x?.id || null),
       active: b.id === activeId,
       "data-name": "card",
       "data-file": "pages/search/SearchPage.js"
     })))), React.createElement("div", {
-      className: "order-1 lg:order-2",
-      "data-name": "right",
+      className: "mt-4",
+      "data-name": "map-area",
       "data-file": "pages/search/SearchPage.js"
     }, React.createElement("div", {
-      className: "hidden lg:block surface-rr overflow-hidden h-[640px]",
+      className: "hidden lg:block surface-rr overflow-hidden h-[520px]",
       "data-name": "map-desktop",
       "data-file": "pages/search/SearchPage.js"
     }, React.createElement(MapSplitView, {

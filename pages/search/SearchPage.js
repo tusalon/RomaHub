@@ -66,7 +66,7 @@ function SearchPage({ query, onQueryChange }) {
           <div data-name="search-titlewrap" data-file="pages/search/SearchPage.js">
             <h1 className="text-xl md:text-2xl font-semibold tracking-tight" data-name="search-title" data-file="pages/search/SearchPage.js">Resultados</h1>
             <p className="text-sm text-[var(--text-muted)] mt-1" data-name="search-sub" data-file="pages/search/SearchPage.js">
-              Lista limpia a la izquierda y mapa interactivo a la derecha.
+              Desliza los negocios activos y consulta su ubicacion en el mapa.
             </p>
           </div>
           <div className="hidden md:flex items-center gap-2" data-name="search-meta" data-file="pages/search/SearchPage.js">
@@ -100,24 +100,35 @@ function SearchPage({ query, onQueryChange }) {
           </div>
         </div>
 
-        <div className="mt-5 grid grid-cols-1 lg:grid-cols-[420px_1fr] gap-4 min-h-[640px]" data-name="split" data-file="pages/search/SearchPage.js">
-          <div className="order-2 lg:order-1" data-name="left" data-file="pages/search/SearchPage.js">
-            <div className="space-y-3" data-name="cards" data-file="pages/search/SearchPage.js">
-              {results.map((b) => (
-                <BusinessCard
-                  key={b.id}
-                  business={b}
-                  onHover={(x) => setActiveId(x?.id || null)}
-                  active={b.id === activeId}
-                  data-name="card"
-                  data-file="pages/search/SearchPage.js"
-                />
-              ))}
-            </div>
+        <div className="mt-5" data-name="horizontal-results" data-file="pages/search/SearchPage.js">
+          <div className="flex items-center justify-between gap-3 mb-3" data-name="active-head" data-file="pages/search/SearchPage.js">
+            <p className="text-sm font-semibold" data-name="active-title" data-file="pages/search/SearchPage.js">Negocios activos</p>
+            <span className="md:hidden chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="count-mobile" data-file="pages/search/SearchPage.js">
+              {results.length} negocios
+            </span>
           </div>
 
-          <div className="order-1 lg:order-2" data-name="right" data-file="pages/search/SearchPage.js">
-            <div className="hidden lg:block surface-rr overflow-hidden h-[640px]" data-name="map-desktop" data-file="pages/search/SearchPage.js">
+          <div className="flex gap-3 overflow-x-auto no-scrollbar pb-3 snap-x snap-mandatory" data-name="cards" data-file="pages/search/SearchPage.js">
+              {!results.length ? (
+                <div className="surface-rr w-full p-6 text-center text-sm text-[var(--text-muted)]" data-name="empty-active-businesses" data-file="pages/search/SearchPage.js">
+                  No hay negocios activos para mostrar.
+                </div>
+              ) : null}
+              {results.map((b) => (
+                <div key={b.id} className="min-w-[340px] max-w-[340px] snap-start" data-name="card-wrap" data-file="pages/search/SearchPage.js">
+                  <BusinessCard
+                    business={b}
+                    onHover={(x) => setActiveId(x?.id || null)}
+                    active={b.id === activeId}
+                    data-name="card"
+                    data-file="pages/search/SearchPage.js"
+                  />
+                </div>
+              ))}
+          </div>
+
+          <div className="mt-4" data-name="map-area" data-file="pages/search/SearchPage.js">
+            <div className="hidden lg:block surface-rr overflow-hidden h-[520px]" data-name="map-desktop" data-file="pages/search/SearchPage.js">
               <MapSplitView
                 businesses={results}
                 activeId={activeId}
@@ -153,8 +164,8 @@ function SearchPage({ query, onQueryChange }) {
               </div>
             </div>
 
-          </div>
         </div>
+      </div>
       </div>
     );
   } catch (error) {
