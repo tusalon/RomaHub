@@ -19,10 +19,10 @@ function HomeHero({ initialParams }) {
               </p>
 
               <h1 className="mt-4 text-5xl md:text-7xl font-semibold tracking-tight leading-[0.96]" data-name="hero-title" data-file="pages/home/HomeHero.js">
-                Tu negocio puede verse así.
+                El centro de la belleza en Cuba.
               </h1>
               <p className="mt-5 text-base md:text-lg text-[var(--text-muted)] leading-relaxed max-w-[680px]" data-name="hero-sub" data-file="pages/home/HomeHero.js">
-                Un escaparate premium para salones, manicuristas, barberos y especialistas. Clientes ven servicios, precios, reseñas y reservan directo.
+                Salones, manicuristas, barberos y especialistas reunidos en una experiencia hecha para descubrir, comparar y reservar sin vueltas.
               </p>
 
               <div className="mt-8 max-w-[820px]" data-name="hero-search" data-file="pages/home/HomeHero.js">

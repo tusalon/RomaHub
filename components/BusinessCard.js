@@ -21,7 +21,7 @@ function BusinessCard({ business, onHover, active }) {
         e?.stopPropagation?.();
         const msg = encodeURIComponent(`Hola, quiero reservar en ${b.nombre}. Tienen disponibilidad?`);
         const wa = (b.whatsapp || '').replace(/\s+/g, '');
-        const url = `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
+        const url = b.reservaUrl || `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
         window.open(url, '_blank', 'noopener,noreferrer');
       } catch (error) {
         console.error('BusinessCard.onContact error:', error);

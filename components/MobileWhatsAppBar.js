@@ -1,10 +1,10 @@
-function MobileWhatsAppBar({ whatsapp, nombre }) {
+function MobileWhatsAppBar({ whatsapp, nombre, reservaUrl }) {
   try {
     const onWhatsApp = () => {
       try {
         const wa = String(whatsapp || '').replace(/\s+/g, '');
         const msg = encodeURIComponent(`Hola, quiero reservar en ${nombre}. ¿Me ayudas con disponibilidad y precios?`);
-        const url = `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
+        const url = reservaUrl || `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
         window.open(url, '_blank', 'noopener,noreferrer');
       } catch (error) {
         console.error('MobileWhatsAppBar.onWhatsApp error:', error);

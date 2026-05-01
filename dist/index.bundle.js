@@ -493,6 +493,12 @@ const MockData = (() => {
     const value = Number(valueFrom(row, keys, fallback));
     return Number.isFinite(value) ? value : fallback;
   }
+  function normalizeExternalUrl(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    if (/^https?:\/\//i.test(raw)) return raw;
+    return `https://${raw}`;
+  }
   function groupByBusiness(rows) {
     return (rows || []).reduce((acc, row) => {
       const id = row.negocio_id || row.negocioId || row.business_id;
@@ -570,6 +576,7 @@ const MockData = (() => {
     const telefono = valueFrom(row, ['whatsapp', 'telefono', 'phone'], '');
     const coverUrl = valueFrom(row, ['imagen_fondo_url', 'portada_url', 'cover_url', 'foto_portada', 'imagen_url'], '');
     const logoUrl = valueFrom(row, ['logo_url', 'logo', 'avatar_url'], defaultLogoUrl);
+    const reservaUrl = normalizeExternalUrl(valueFrom(row, ['reserva_url', 'booking_url', 'url_reserva', 'url_negocio', 'negocio_url', 'sitio_web', 'url', 'link'], ''));
     const fotos = [coverUrl, logoUrl].filter(Boolean);
     const servicios = relations.servicios[id] || [];
     const productos = relations.productos[id] || [];
@@ -602,6 +609,7 @@ const MockData = (() => {
       totalReseñas: numberFrom(row, ['total_resenas', 'totalResenas', 'reviews_count'], resenas.length),
       portadaUrl: coverUrl,
       logoUrl,
+      reservaUrl,
       fotos: fotos.length ? fotos : [logoUrl],
       whatsapp: telefono ? String(telefono).replace(/[^\d+]/g, '') : '',
       descripcion: valueFrom(row, ['descripcion', 'description', 'mensaje_bienvenida'], 'Negocio disponible para reservas.'),
@@ -1790,11 +1798,11 @@ function HomeHero({
       className: "mt-4 text-5xl md:text-7xl font-semibold tracking-tight leading-[0.96]",
       "data-name": "hero-title",
       "data-file": "pages/home/HomeHero.js"
-    }, "Tu negocio puede verse as\xED."), React.createElement("p", {
+    }, "El centro de la belleza en Cuba."), React.createElement("p", {
       className: "mt-5 text-base md:text-lg text-[var(--text-muted)] leading-relaxed max-w-[680px]",
       "data-name": "hero-sub",
       "data-file": "pages/home/HomeHero.js"
-    }, "Un escaparate premium para salones, manicuristas, barberos y especialistas. Clientes ven servicios, precios, rese\xF1as y reservan directo."), React.createElement("div", {
+    }, "Salones, manicuristas, barberos y especialistas reunidos en una experiencia hecha para descubrir, comparar y reservar sin vueltas."), React.createElement("div", {
       className: "mt-8 max-w-[820px]",
       "data-name": "hero-search",
       "data-file": "pages/home/HomeHero.js"

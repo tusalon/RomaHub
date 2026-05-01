@@ -493,6 +493,12 @@ const MockData = (() => {
     const value = Number(valueFrom(row, keys, fallback));
     return Number.isFinite(value) ? value : fallback;
   }
+  function normalizeExternalUrl(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    if (/^https?:\/\//i.test(raw)) return raw;
+    return `https://${raw}`;
+  }
   function groupByBusiness(rows) {
     return (rows || []).reduce((acc, row) => {
       const id = row.negocio_id || row.negocioId || row.business_id;
@@ -570,6 +576,7 @@ const MockData = (() => {
     const telefono = valueFrom(row, ['whatsapp', 'telefono', 'phone'], '');
     const coverUrl = valueFrom(row, ['imagen_fondo_url', 'portada_url', 'cover_url', 'foto_portada', 'imagen_url'], '');
     const logoUrl = valueFrom(row, ['logo_url', 'logo', 'avatar_url'], defaultLogoUrl);
+    const reservaUrl = normalizeExternalUrl(valueFrom(row, ['reserva_url', 'booking_url', 'url_reserva', 'url_negocio', 'negocio_url', 'sitio_web', 'url', 'link'], ''));
     const fotos = [coverUrl, logoUrl].filter(Boolean);
     const servicios = relations.servicios[id] || [];
     const productos = relations.productos[id] || [];
@@ -602,6 +609,7 @@ const MockData = (() => {
       totalReseñas: numberFrom(row, ['total_resenas', 'totalResenas', 'reviews_count'], resenas.length),
       portadaUrl: coverUrl,
       logoUrl,
+      reservaUrl,
       fotos: fotos.length ? fotos : [logoUrl],
       whatsapp: telefono ? String(telefono).replace(/[^\d+]/g, '') : '',
       descripcion: valueFrom(row, ['descripcion', 'description', 'mensaje_bienvenida'], 'Negocio disponible para reservas.'),
@@ -1345,14 +1353,15 @@ function ReviewCard({
 }
 function MobileWhatsAppBar({
   whatsapp,
-  nombre
+  nombre,
+  reservaUrl
 }) {
   try {
     const onWhatsApp = () => {
       try {
         const wa = String(whatsapp || '').replace(/\s+/g, '');
         const msg = encodeURIComponent(`Hola, quiero reservar en ${nombre}. ¿Me ayudas con disponibilidad y precios?`);
-        const url = `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
+        const url = reservaUrl || `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
         window.open(url, '_blank', 'noopener,noreferrer');
       } catch (error) {
         console.error('MobileWhatsAppBar.onWhatsApp error:', error);
@@ -1486,7 +1495,7 @@ function BusinessHeader({
       "data-file": "pages/business/BusinessHeader.js"
     }, React.createElement("a", {
       className: "btn-rr btn-primary-rr w-full flex items-center justify-center gap-2",
-      href: `https://wa.me/${String(b.whatsapp || '').replace('+', '')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}. Tienen disponibilidad?`)}`,
+      href: b.reservaUrl || `https://wa.me/${String(b.whatsapp || '').replace('+', '')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}. Tienen disponibilidad?`)}`,
       target: "_blank",
       rel: "noreferrer",
       "data-name": "cta-wa",
@@ -1629,7 +1638,7 @@ function BusinessCatalog({
       "data-file": "pages/business/BusinessCatalog.js"
     }, Format.formatPrecioCUP(service.precio)), React.createElement("a", {
       className: "mt-2 btn-rr btn-ghost-rr py-2 px-3 text-xs inline-flex items-center gap-2",
-      href: `https://wa.me/${String(b.whatsapp || '').replace('+', '')}?text=${encodeURIComponent(`Hola, quiero reservar ${service.nombre} en ${b.nombre}.`)}`,
+      href: b.reservaUrl || `https://wa.me/${String(b.whatsapp || '').replace('+', '')}?text=${encodeURIComponent(`Hola, quiero reservar ${service.nombre} en ${b.nombre}.`)}`,
       target: "_blank",
       rel: "noreferrer",
       "data-name": "service-book",
@@ -1855,7 +1864,7 @@ function BusinessPage({
       "data-file": "pages/business/BusinessPage.js"
     }), React.createElement("a", {
       className: "btn-rr btn-primary-rr w-full flex items-center justify-center gap-2",
-      href: `https://wa.me/${String(b.whatsapp || '').replace('+', '')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}.`)}`,
+      href: b.reservaUrl || `https://wa.me/${String(b.whatsapp || '').replace('+', '')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}.`)}`,
       target: "_blank",
       rel: "noreferrer",
       "data-name": "sticky-wa",
@@ -1867,6 +1876,7 @@ function BusinessPage({
     }), "Reservar"))))), React.createElement(MobileWhatsAppBar, {
       whatsapp: b.whatsapp,
       nombre: b.nombre,
+      reservaUrl: b.reservaUrl,
       "data-name": "wa",
       "data-file": "pages/business/BusinessPage.js"
     }));

@@ -493,6 +493,12 @@ const MockData = (() => {
     const value = Number(valueFrom(row, keys, fallback));
     return Number.isFinite(value) ? value : fallback;
   }
+  function normalizeExternalUrl(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    if (/^https?:\/\//i.test(raw)) return raw;
+    return `https://${raw}`;
+  }
   function groupByBusiness(rows) {
     return (rows || []).reduce((acc, row) => {
       const id = row.negocio_id || row.negocioId || row.business_id;
@@ -570,6 +576,7 @@ const MockData = (() => {
     const telefono = valueFrom(row, ['whatsapp', 'telefono', 'phone'], '');
     const coverUrl = valueFrom(row, ['imagen_fondo_url', 'portada_url', 'cover_url', 'foto_portada', 'imagen_url'], '');
     const logoUrl = valueFrom(row, ['logo_url', 'logo', 'avatar_url'], defaultLogoUrl);
+    const reservaUrl = normalizeExternalUrl(valueFrom(row, ['reserva_url', 'booking_url', 'url_reserva', 'url_negocio', 'negocio_url', 'sitio_web', 'url', 'link'], ''));
     const fotos = [coverUrl, logoUrl].filter(Boolean);
     const servicios = relations.servicios[id] || [];
     const productos = relations.productos[id] || [];
@@ -602,6 +609,7 @@ const MockData = (() => {
       totalReseñas: numberFrom(row, ['total_resenas', 'totalResenas', 'reviews_count'], resenas.length),
       portadaUrl: coverUrl,
       logoUrl,
+      reservaUrl,
       fotos: fotos.length ? fotos : [logoUrl],
       whatsapp: telefono ? String(telefono).replace(/[^\d+]/g, '') : '',
       descripcion: valueFrom(row, ['descripcion', 'description', 'mensaje_bienvenida'], 'Negocio disponible para reservas.'),
@@ -1308,7 +1316,7 @@ function BusinessCard({
         e?.stopPropagation?.();
         const msg = encodeURIComponent(`Hola, quiero reservar en ${b.nombre}. Tienen disponibilidad?`);
         const wa = (b.whatsapp || '').replace(/\s+/g, '');
-        const url = `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
+        const url = b.reservaUrl || `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
         window.open(url, '_blank', 'noopener,noreferrer');
       } catch (error) {
         console.error('BusinessCard.onContact error:', error);

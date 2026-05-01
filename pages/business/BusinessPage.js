@@ -34,7 +34,7 @@ function BusinessPage({ business }) {
 
                 <a
                   className="btn-rr btn-primary-rr w-full flex items-center justify-center gap-2"
-                  href={`https://wa.me/${String(b.whatsapp||'').replace('+','')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}.`)}`}
+                  href={b.reservaUrl || `https://wa.me/${String(b.whatsapp||'').replace('+','')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}.`)}`}
                   target="_blank"
                   rel="noreferrer"
                   data-name="sticky-wa"
@@ -48,7 +48,7 @@ function BusinessPage({ business }) {
           </div>
         </div>
 
-        <MobileWhatsAppBar whatsapp={b.whatsapp} nombre={b.nombre} data-name="wa" data-file="pages/business/BusinessPage.js" />
+        <MobileWhatsAppBar whatsapp={b.whatsapp} nombre={b.nombre} reservaUrl={b.reservaUrl} data-name="wa" data-file="pages/business/BusinessPage.js" />
       </div>
     );
   } catch (error) {

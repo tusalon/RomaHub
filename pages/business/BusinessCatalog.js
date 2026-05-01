@@ -35,7 +35,7 @@ function BusinessCatalog({ business }) {
               </div>
               <div className="shrink-0 text-right" data-name="service-price-wrap" data-file="pages/business/BusinessCatalog.js">
                 <p className="text-sm md:text-base font-semibold whitespace-nowrap" data-name="service-price" data-file="pages/business/BusinessCatalog.js">{Format.formatPrecioCUP(service.precio)}</p>
-                <a className="mt-2 btn-rr btn-ghost-rr py-2 px-3 text-xs inline-flex items-center gap-2" href={`https://wa.me/${String(b.whatsapp||'').replace('+','')}?text=${encodeURIComponent(`Hola, quiero reservar ${service.nombre} en ${b.nombre}.`)}`} target="_blank" rel="noreferrer" data-name="service-book" data-file="pages/business/BusinessCatalog.js">
+                <a className="mt-2 btn-rr btn-ghost-rr py-2 px-3 text-xs inline-flex items-center gap-2" href={b.reservaUrl || `https://wa.me/${String(b.whatsapp||'').replace('+','')}?text=${encodeURIComponent(`Hola, quiero reservar ${service.nombre} en ${b.nombre}.`)}`} target="_blank" rel="noreferrer" data-name="service-book" data-file="pages/business/BusinessCatalog.js">
                   Reservar
                 </a>
               </div>
