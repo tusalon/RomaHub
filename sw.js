@@ -1,6 +1,5 @@
-const CACHE_NAME = 'rservasroma-marketplace-v2';
+const CACHE_NAME = 'rservasroma-marketplace-v4';
 const APP_SHELL = [
-  './',
   './index.html',
   './search.html',
   './business.html',
@@ -19,7 +18,7 @@ const APP_SHELL = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(APP_SHELL))
+      .then((cache) => Promise.allSettled(APP_SHELL.map((url) => cache.add(url))))
       .then(() => self.skipWaiting())
   );
 });
@@ -37,14 +36,32 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
 
   const url = new URL(request.url);
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
   if (url.hostname.includes('supabase.co')) return;
+  if (url.origin !== self.location.origin) return;
+
+  if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)).catch(() => {});
+          }
+          return response;
+        })
+        .catch(() => caches.match(request).then((cached) => cached || caches.match('./index.html')))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(request).then((cached) => {
       const network = fetch(request)
         .then((response) => {
+          if (!response || response.status !== 200 || response.type === 'opaque') return response;
           const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)).catch(() => {});
           return response;
         })
         .catch(() => cached);
