@@ -200,6 +200,7 @@
   let loadPromise = null;
   let loadedFromSupabase = false;
   let loadError = null;
+  let totalReservasHoy = 0;
 
   const defaultCoverUrl = '';
   const defaultLogoUrl = '';
@@ -317,19 +318,38 @@
     }, {});
   }
 
+  function getReservationCreatedAt(row) {
+    return row.created_at || row.fecha_creacion || row.fecha_registro || row.fecha || row.fecha_reserva || row.inicio;
+  }
+
+  function isActiveReservation(row) {
+    const estado = normalizeText(row.estado || row.status || '');
+    return !estado.includes('cancel');
+  }
+
   function countWeeklyReservations(rows) {
     const since = Date.now() - 7 * 24 * 60 * 60 * 1000;
     return (rows || []).reduce((acc, row) => {
       const id = row.negocio_id || row.negocioId || row.business_id;
       if (!id) return acc;
-      const dateValue = row.fecha || row.created_at || row.fecha_reserva || row.inicio;
+      const dateValue = getReservationCreatedAt(row);
       const time = dateValue ? new Date(dateValue).getTime() : Date.now();
-      if (!Number.isFinite(time) || time < since) return acc;
-      const estado = normalizeText(row.estado || row.status || '');
-      if (estado.includes('cancel')) return acc;
+      if (!Number.isFinite(time) || time < since || !isActiveReservation(row)) return acc;
       acc[id] = (acc[id] || 0) + 1;
       return acc;
     }, {});
+  }
+
+  function countTodayReservations(rows) {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const startTime = todayStart.getTime();
+    return (rows || []).reduce((acc, row) => {
+      const dateValue = getReservationCreatedAt(row);
+      const time = dateValue ? new Date(dateValue).getTime() : NaN;
+      if (!Number.isFinite(time) || time < startTime || !isActiveReservation(row)) return acc;
+      return acc + 1;
+    }, 0);
   }
 
   function buildCatalogSections({ servicios, productos, cursos }) {
@@ -462,6 +482,7 @@
         const cursosRows = await optionalSupabaseFetch('cursos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,imagen,fecha,ubicacion,activo&limit=1000');
         const reservasRows = await optionalSupabaseFetch('reservas?select=*&limit=2000');
         const reservasSemana = countWeeklyReservations(reservasRows);
+        totalReservasHoy = countTodayReservations(reservasRows);
 
         const relations = {
           servicios: groupByBusiness(serviciosRows),
@@ -498,6 +519,10 @@
 
   function getLoadError() {
     return loadError;
+  }
+
+  function getTodayReservations() {
+    return totalReservasHoy;
   }
 
   function listTopRated() {
@@ -602,8 +627,9 @@
     });
   }
 
-  return { listBusinesses, listTopRated, listWeeklyFeatured, listRomaReviews, searchBusinesses, getBusinessById, loadBusinesses, getLoadError, addReview };
+  return { listBusinesses, listTopRated, listWeeklyFeatured, listRomaReviews, searchBusinesses, getBusinessById, loadBusinesses, getLoadError, getTodayReservations, addReview };
 })();
+
 
 
 

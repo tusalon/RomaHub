@@ -6,6 +6,7 @@
       const count = (business.categoriasCatalogo || []).reduce((innerSum, section) => innerSum + (section.items?.length || 0), 0);
       return sum + count;
     }, 0);
+    const reservasHoy = MockData.getTodayReservations ? MockData.getTodayReservations() : 0;
     const featured = MockData.listWeeklyFeatured()[0] || businesses[0] || null;
     const categories = Array.from(new Set(businesses.map((business) => business.categoria).filter(Boolean))).slice(0, 8);
 
@@ -47,17 +48,17 @@
               </div>
 
               <div className="mt-7 grid grid-cols-3 max-w-[560px] border border-[var(--border)] rounded-lg overflow-hidden bg-white" data-name="hero-stats" data-file="pages/home/HomeHero.js">
+                <div className="p-4 border-r border-[var(--border)]" data-name="stat-today" data-file="pages/home/HomeHero.js">
+                  <p className="text-xl md:text-2xl font-semibold" data-name="stat-today-value" data-file="pages/home/HomeHero.js">{reservasHoy}</p>
+                  <p className="text-[11px] text-[var(--text-muted)] mt-1" data-name="stat-today-label" data-file="pages/home/HomeHero.js">reservas de hoy</p>
+                </div>
                 <div className="p-4 border-r border-[var(--border)]" data-name="stat-businesses" data-file="pages/home/HomeHero.js">
                   <p className="text-xl md:text-2xl font-semibold" data-name="stat-businesses-value" data-file="pages/home/HomeHero.js">{totalBusinesses}</p>
                   <p className="text-[11px] text-[var(--text-muted)] mt-1" data-name="stat-businesses-label" data-file="pages/home/HomeHero.js">negocios</p>
                 </div>
-                <div className="p-4 border-r border-[var(--border)]" data-name="stat-services" data-file="pages/home/HomeHero.js">
+                <div className="p-4" data-name="stat-services" data-file="pages/home/HomeHero.js">
                   <p className="text-xl md:text-2xl font-semibold" data-name="stat-services-value" data-file="pages/home/HomeHero.js">{totalServices}</p>
                   <p className="text-[11px] text-[var(--text-muted)] mt-1" data-name="stat-services-label" data-file="pages/home/HomeHero.js">servicios</p>
-                </div>
-                <div className="p-4" data-name="stat-booking" data-file="pages/home/HomeHero.js">
-                  <p className="text-xl md:text-2xl font-semibold" data-name="stat-booking-value">WA</p>
-                  <p className="text-[11px] text-[var(--text-muted)] mt-1" data-name="stat-booking-label" data-file="pages/home/HomeHero.js">reserva</p>
                 </div>
               </div>
             </div>
@@ -112,4 +113,5 @@
     return null;
   }
 }
+
 
