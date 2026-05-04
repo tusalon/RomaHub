@@ -91,7 +91,7 @@ function Header({ currentParams }) {
               data-file="components/Header.js"
               aria-label="Abrir menú"
             >
-              <div className="icon-menú text-xl text-[var(--primary-color)]" data-name="nav-toggle-icon" data-file="components/Header.js"></div>
+              <div className="icon-menu text-xl text-[var(--primary-color)]" data-name="nav-toggle-icon" data-file="components/Header.js"></div>
             </button>
           </div>
 
