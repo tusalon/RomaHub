@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = 'rservasroma-marketplace-v10';
+﻿const CACHE_NAME = 'rservasroma-marketplace-v11';
 const APP_SHELL = [
   './index.html',
   './manifest.webmanifest',
@@ -6,6 +6,7 @@ const APP_SHELL = [
   './styles/global.css',
   './utils/pwa.js',
   './dist/index.bundle.js',
+  './assets/cuba-provinces.svg',
   './icons/icon-72x72.png',
   './icons/icon-192x192.png',
   './icons/icon-512x512.png'
@@ -65,4 +66,5 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
 

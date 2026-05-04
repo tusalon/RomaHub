@@ -105,75 +105,72 @@
           </div>
         </div>
 
-        <svg viewBox="0 0 1000 520" className="absolute inset-x-3 top-[92px] bottom-[108px] w-[calc(100%-1.5rem)] h-[calc(100%-200px)] drop-shadow-[0_26px_44px_rgba(11,18,32,0.12)]" role="img" aria-label="Mapa de Cuba" data-name="cuba-map-svg" data-file="components/MapSplitView.js">
-          <defs>
-            <linearGradient id="cubaFill" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stopColor="#DDF7E9" />
-              <stop offset="50%" stopColor="#F4FFF7" />
-              <stop offset="100%" stopColor="#F9E7F4" />
-            </linearGradient>
-            <linearGradient id="cubaStroke" x1="0" x2="1" y1="0" y2="0">
-              <stop offset="0%" stopColor="#16A36A" />
-              <stop offset="100%" stopColor="#D81B60" />
-            </linearGradient>
-          </defs>
-          <path d="M48 245 C111 198 185 185 258 197 C322 207 381 194 449 207 C514 219 573 244 634 262 C700 292 781 279 858 291 C897 297 929 310 956 331 C900 358 819 353 746 338 C671 324 612 297 542 285 C469 273 408 295 333 289 C261 284 208 268 151 272 C109 275 74 266 48 245 Z" fill="url(#cubaFill)" stroke="url(#cubaStroke)" strokeOpacity="0.55" strokeWidth="6" data-name="cuba-main" data-file="components/MapSplitView.js" />
-          <path d="M235 377 C276 351 320 354 358 382 C320 407 271 407 235 377 Z" fill="url(#cubaFill)" stroke="url(#cubaStroke)" strokeOpacity="0.45" strokeWidth="5" data-name="cuba-isla" data-file="components/MapSplitView.js" />
-          <path d="M74 244 C178 225 262 230 352 243 C455 258 546 245 640 288 C725 326 828 324 924 326" fill="none" stroke="#0B1220" strokeOpacity="0.08" strokeWidth="10" strokeLinecap="round" data-name="cuba-shine" data-file="components/MapSplitView.js" />
-        </svg>
+        <div className="absolute inset-x-3 top-[100px] bottom-[116px] z-10 flex items-center" data-name="real-cuba-map-stage" data-file="components/MapSplitView.js">
+          <div className="relative w-full" style={{ aspectRatio: '1018.2939 / 342.2775' }} data-name="real-cuba-map-frame" data-file="components/MapSplitView.js">
+            <img
+              src="assets/cuba-provinces.svg"
+              alt="Mapa de Cuba dividido por provincias"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_24px_42px_rgba(11,18,32,0.16)]"
+              data-name="real-cuba-map-image"
+              data-file="components/MapSplitView.js"
+            />
+            <div className="absolute inset-0 rounded-[24px] pointer-events-none" style={{ background: 'linear-gradient(90deg, rgba(216,27,96,0.08), rgba(22,163,106,0.08))', mixBlendMode: 'multiply' }} data-name="real-cuba-map-tint" data-file="components/MapSplitView.js"></div>
 
-        <div className="absolute inset-x-3 top-[92px] bottom-[108px] z-20" data-name="business-markers" data-file="components/MapSplitView.js">
-          {markers.map(({ business, provinceName, x, y }, index) => {
-            const isSelected = selected && normalize(provinceName) === selected;
-            return (
-              <button
-                key={`${business.id}-${index}`}
-                className={`absolute -translate-x-1/2 -translate-y-full group transition-transform ${isSelected ? 'scale-110 z-30' : 'z-20 hover:scale-110'}`}
-                style={{ left: `${x}%`, top: `${y}%` }}
-                onClick={() => onProvinceSelect?.(provinceName)}
-                title={`${business.nombre} - ${provinceName}`}
-                aria-label={`Filtrar por ${provinceName}: ${business.nombre}`}
-                data-name="business-map-marker"
-                data-file="components/MapSplitView.js"
-              >
-                <span className="relative flex flex-col items-center" data-name="business-marker-wrap" data-file="components/MapSplitView.js">
-                  <span className="w-9 h-9 rounded-full bg-white border-2 border-[var(--primary-color)] shadow-[0_12px_26px_rgba(11,18,32,0.22)] flex items-center justify-center overflow-hidden" data-name="business-marker-dot" data-file="components/MapSplitView.js">
-                    {business.logoUrl ? (
-                      <img src={business.logoUrl} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" data-name="business-marker-logo" data-file="components/MapSplitView.js" />
-                    ) : (
-                      <span className="text-[10px] font-bold text-[var(--primary-color)]" data-name="business-marker-rr" data-file="components/MapSplitView.js">RR</span>
-                    )}
-                  </span>
-                  <span className="w-2.5 h-2.5 -mt-1 rotate-45 bg-[var(--primary-color)] border-r border-b border-[var(--primary-color)]" data-name="business-marker-tip" data-file="components/MapSplitView.js"></span>
-                  <span className="pointer-events-none absolute left-1/2 top-[-38px] hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-white px-2 py-1 text-[10px] font-semibold shadow-lg border border-[var(--border)] group-hover:block" data-name="business-marker-label" data-file="components/MapSplitView.js">
-                    {business.nombre}
-                  </span>
-                </span>
-              </button>
-            );
-          })}
+            <div className="absolute inset-0 z-20" data-name="business-markers" data-file="components/MapSplitView.js">
+              {markers.map(({ business, provinceName, x, y }, index) => {
+                const isSelected = selected && normalize(provinceName) === selected;
+                return (
+                  <button
+                    key={`${business.id}-${index}`}
+                    className={`absolute -translate-x-1/2 -translate-y-full group transition-transform ${isSelected ? 'scale-110 z-30' : 'z-20 hover:scale-110'}`}
+                    style={{ left: `${x}%`, top: `${y}%` }}
+                    onClick={() => onProvinceSelect?.(provinceName)}
+                    title={`${business.nombre} - ${provinceName}`}
+                    aria-label={`Filtrar por ${provinceName}: ${business.nombre}`}
+                    data-name="business-map-marker"
+                    data-file="components/MapSplitView.js"
+                  >
+                    <span className="relative flex flex-col items-center" data-name="business-marker-wrap" data-file="components/MapSplitView.js">
+                      <span className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white border-2 border-[var(--primary-color)] shadow-[0_12px_26px_rgba(11,18,32,0.22)] flex items-center justify-center overflow-hidden" data-name="business-marker-dot" data-file="components/MapSplitView.js">
+                        {business.logoUrl ? (
+                          <img src={business.logoUrl} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" data-name="business-marker-logo" data-file="components/MapSplitView.js" />
+                        ) : (
+                          <span className="text-[10px] font-bold text-[var(--primary-color)]" data-name="business-marker-rr" data-file="components/MapSplitView.js">RR</span>
+                        )}
+                      </span>
+                      <span className="w-2.5 h-2.5 -mt-1 rotate-45 bg-[var(--primary-color)] border-r border-b border-[var(--primary-color)]" data-name="business-marker-tip" data-file="components/MapSplitView.js"></span>
+                      <span className="pointer-events-none absolute left-1/2 top-[-38px] hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-white px-2 py-1 text-[10px] font-semibold shadow-lg border border-[var(--border)] group-hover:block" data-name="business-marker-label" data-file="components/MapSplitView.js">
+                        {business.nombre}
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="absolute inset-0 z-10" data-name="province-hit-areas" data-file="components/MapSplitView.js">
+              {provinces.map((province) => {
+                const key = normalize(province.name);
+                const count = counts[key] || 0;
+                const isSelected = selected && key === selected;
+                return count ? (
+                  <button
+                    key={province.name}
+                    className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full px-2 py-1 text-[10px] font-semibold border transition-colors ${isSelected ? 'bg-[var(--primary-color)] text-white border-[var(--primary-color)]' : 'bg-white/88 text-[var(--text)] border-white/90'}`}
+                    style={{ left: `${province.x}%`, top: `${province.y + 8}%` }}
+                    onClick={() => onProvinceSelect?.(province.name)}
+                    data-name="province-count-pill"
+                    data-file="components/MapSplitView.js"
+                  >
+                    {province.name} · {count}
+                  </button>
+                ) : null;
+              })}
+            </div>
+          </div>
         </div>
-
-        <div className="absolute inset-x-3 top-[92px] bottom-[108px] z-10" data-name="province-hit-areas" data-file="components/MapSplitView.js">
-          {provinces.map((province) => {
-            const key = normalize(province.name);
-            const count = counts[key] || 0;
-            const isSelected = selected && key === selected;
-            return count ? (
-              <button
-                key={province.name}
-                className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full px-2 py-1 text-[10px] font-semibold border transition-colors ${isSelected ? 'bg-[var(--primary-color)] text-white border-[var(--primary-color)]' : 'bg-white/85 text-[var(--text)] border-white/90'}`}
-                style={{ left: `${province.x}%`, top: `${province.y + 8}%` }}
-                onClick={() => onProvinceSelect?.(province.name)}
-                data-name="province-count-pill"
-                data-file="components/MapSplitView.js"
-              >
-                {province.name} · {count}
-              </button>
-            ) : null;
-          })}
-        </div>
-
         <div className="absolute left-4 right-4 bottom-4 z-30" data-name="province-summary" data-file="components/MapSplitView.js">
           <div className="card-rr p-4 flex items-center justify-between gap-3 bg-white/94 backdrop-blur" data-name="province-summary-card" data-file="components/MapSplitView.js">
             <div className="min-w-0" data-name="province-summary-copy" data-file="components/MapSplitView.js">
@@ -201,3 +198,4 @@
     return null;
   }
 }
+
