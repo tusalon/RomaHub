@@ -7,6 +7,51 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   outline: none;
 }
 
+[class^="icon-"], [class*=" icon-"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-style: normal;
+  line-height: 1;
+}
+
+[class^="icon-"]::before, [class*=" icon-"]::before {
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+}
+
+.icon-search::before { content: "⌕"; }
+.icon-map-pin::before { content: "⌖"; }
+.icon-map::before { content: "⌖"; }
+.icon-arrow-right::before { content: "→"; }
+.icon-chevron-right::before { content: "›"; }
+.icon-chevron-left::before { content: "‹"; }
+.icon-chevron-up::before { content: "⌃"; }
+.icon-chevron-down::before { content: "⌄"; }
+.icon-check::before, .icon-circle-check::before { content: "✓"; }
+.icon-x::before { content: "×"; }
+.icon-star::before { content: "★"; }
+.icon-sparkles::before { content: "✦"; }
+.icon-crown::before { content: "♛"; }
+.icon-award::before { content: "★"; }
+.icon-flame::before { content: "▲"; }
+.icon-calendar::before { content: "□"; }
+.icon-shopping-bag::before, .icon-store::before { content: "▣"; }
+.icon-graduation-cap::before { content: "△"; }
+.icon-message-circle::before, .icon-message-square::before { content: "□"; }
+.icon-send::before { content: "→"; }
+.icon-log-in::before { content: "↪"; }
+.icon-list::before, .icon-menu::before, .icon-men::before { content: "☰"; }
+.icon-user::before { content: "●"; }
+.icon-image::before { content: "▧"; }
+.icon-info::before { content: "i"; }
+.icon-external-link::before { content: "↗"; }
+.icon-database-zap::before { content: "▦"; }
+.icon-triangle-alert::before { content: "!"; }
+.icon-search-x::before { content: "⌕"; }
+.icon-receipt-text::before { content: "▤"; }
+.icon-chart-no-axes-column::before { content: "▥"; }
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
