@@ -78,7 +78,7 @@
               <div className="min-w-0" data-name="title" data-file="components/BusinessCard.js">
                 <p className="text-base font-semibold leading-snug truncate" data-name="name" data-file="components/BusinessCard.js">{b.nombre}</p>
                 <p className="text-xs text-[var(--text-muted)] mt-1 truncate" data-name="meta" data-file="components/BusinessCard.js">
-                  {b.categoria} Â· {b.ubicacion?.provincia || b.ubicacion?.zona}
+                  {b.categoria} ? {b.ubicacion?.provincia || b.ubicacion?.zona}
                 </p>
               </div>
               <div className="ml-auto hidden sm:flex flex-col items-end gap-1" data-name="top-right" data-file="components/BusinessCard.js">
@@ -86,7 +86,7 @@
                   <div className="icon-star text-base text-[#F59E0B]" data-name="star" data-file="components/BusinessCard.js"></div>
                   <span className="text-sm font-semibold" data-name="star-val" data-file="components/BusinessCard.js">{Number(b.estrellas).toFixed(1)}</span>
                 </div>
-                <span className="text-[11px] text-[var(--text-muted)]" data-name="reviews" data-file="components/BusinessCard.js">{b.totalResenas} reseÃ±as</span>
+                <span className="text-[11px] text-[var(--text-muted)]" data-name="reviews" data-file="components/BusinessCard.js">{b.totalResenas} resenas</span>
               </div>
             </div>
 

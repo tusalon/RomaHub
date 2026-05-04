@@ -12,8 +12,8 @@
               </p>
             </div>
             <div className="flex items-center gap-2" data-name="footer-legal" data-file="components/Footer.js">
-              <span className="text-xs text-[var(--text-muted)]" data-name="footer-copy" data-file="components/Footer.js">Â© {year} Rservas.Roma</span>
-              <span className="text-xs text-[var(--text-muted)]" data-name="footer-dot" data-file="components/Footer.js">â€¢</span>
+              <span className="text-xs text-[var(--text-muted)]" data-name="footer-copy" data-file="components/Footer.js">(c) {year} Rservas.Roma</span>
+              <span className="text-xs text-[var(--text-muted)]" data-name="footer-dot" data-file="components/Footer.js">-</span>
               <a className="text-xs text-[var(--text-muted)] hover:text-[var(--primary-color)] transition-colors" href="search.html" data-name="footer-businesses" data-file="components/Footer.js">
                 Negocios
               </a>

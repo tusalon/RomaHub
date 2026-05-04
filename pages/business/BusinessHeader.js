@@ -40,7 +40,7 @@
                 {b.vip ? <Badge type="vip" text="VIP" data-name="vip" data-file="pages/business/BusinessHeader.js" /> : null}
               </div>
               <p className="text-sm text-[var(--text-muted)] mt-2" data-name="meta" data-file="pages/business/BusinessHeader.js">
-                {b.categoria} Â· {b.ubicacion?.provincia || b.ubicacion?.zona || b.ubicacion?.ciudad}
+                {b.categoria} ? {b.ubicacion?.provincia || b.ubicacion?.zona || b.ubicacion?.ciudad}
               </p>
               {b.ubicacion?.direccion ? (
                 <p className="text-sm text-[var(--text-muted)] mt-1" data-name="address" data-file="pages/business/BusinessHeader.js">{b.ubicacion.direccion}</p>

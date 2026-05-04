@@ -1,22 +1,22 @@
-function MapSplitView({ businesses, selectedProvince, onProvinceSelect }) {
+﻿function MapSplitView({ businesses, selectedProvince, onProvinceSelect }) {
   try {
     const list = businesses || [];
     const provinces = [
-      { name: 'Pinar del Río', x: 9, y: 50 },
+      { name: 'Pinar del Rio', x: 9, y: 50 },
       { name: 'Artemisa', x: 19, y: 48 },
       { name: 'La Habana', x: 25, y: 44 },
       { name: 'Mayabeque', x: 30, y: 48 },
       { name: 'Matanzas', x: 38, y: 50 },
       { name: 'Cienfuegos', x: 47, y: 59 },
       { name: 'Villa Clara', x: 50, y: 50 },
-      { name: 'Sancti Spíritus', x: 58, y: 56 },
-      { name: 'Ciego de Ávila', x: 66, y: 55 },
-      { name: 'Camagüey', x: 74, y: 58 },
+      { name: 'Sancti Spiritus', x: 58, y: 56 },
+      { name: 'Ciego de Avila', x: 66, y: 55 },
+      { name: 'Camaguey', x: 74, y: 58 },
       { name: 'Las Tunas', x: 83, y: 61 },
-      { name: 'Holguín', x: 89, y: 57 },
+      { name: 'Holguin', x: 89, y: 57 },
       { name: 'Granma', x: 86, y: 70 },
       { name: 'Santiago de Cuba', x: 93, y: 72 },
-      { name: 'Guantánamo', x: 97, y: 68 },
+      { name: 'Guantanamo', x: 97, y: 68 },
       { name: 'Isla de la Juventud', x: 29, y: 72 }
     ];
 
@@ -102,7 +102,7 @@ function MapSplitView({ businesses, selectedProvince, onProvinceSelect }) {
                   <span className="text-xs font-semibold" data-name="province-pin-logo" data-file="components/MapSplitView.js">RR</span>
                 </span>
                 <span className="px-2 py-1 rounded-full bg-white/95 border border-[var(--border)] text-[10px] font-medium whitespace-nowrap shadow-sm" data-name="province-pin-label" data-file="components/MapSplitView.js">
-                  {province.name} · {count}
+                  {province.name} - {count}
                 </span>
               </button>
             );
@@ -136,3 +136,4 @@ function MapSplitView({ businesses, selectedProvince, onProvinceSelect }) {
     return null;
   }
 }
+

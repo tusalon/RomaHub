@@ -21,7 +21,7 @@
             <div data-name="top-rated-titlewrap" data-file="components/TopRatedCarousel.js">
               <h2 className="text-xl md:text-2xl font-semibold tracking-tight text-balance" data-name="top-rated-title" data-file="components/TopRatedCarousel.js">Mejor calificados</h2>
               <p className="text-sm text-[var(--text-muted)] mt-1" data-name="top-rated-sub" data-file="components/TopRatedCarousel.js">
-                Negocios con reseÃ±as consistentes y estilo boutique.
+                Negocios con resenas consistentes y estilo boutique.
               </p>
             </div>
             <div className="hidden md:flex items-center gap-2" data-name="top-rated-controls" data-file="components/TopRatedCarousel.js">
@@ -58,7 +58,7 @@
                       </div>
                     )}
                     <div className="absolute top-3 left-3 flex flex-wrap gap-2" data-name="top-rated-badges" data-file="components/TopRatedCarousel.js">
-                      {b.topRoma ? <Badge type="top" text="ðŸŒŸ Top Roma" data-name="badge-top" data-file="components/TopRatedCarousel.js" /> : null}
+                      {b.topRoma ? <Badge type="top" text="Top Roma" data-name="badge-top" data-file="components/TopRatedCarousel.js" /> : null}
                     </div>
                     {b.vip ? (
                       <div className="absolute top-3 right-3" data-name="vip-pin" data-file="components/TopRatedCarousel.js">
@@ -72,7 +72,7 @@
 
                   <div className="p-4" data-name="top-rated-body" data-file="components/TopRatedCarousel.js">
                     <p className="text-sm font-semibold" data-name="top-rated-name" data-file="components/TopRatedCarousel.js">{b.nombre}</p>
-                    <p className="text-xs text-[var(--text-muted)] mt-1" data-name="top-rated-meta" data-file="components/TopRatedCarousel.js">{b.categoria} Â· {b.ubicacion?.zona}</p>
+                    <p className="text-xs text-[var(--text-muted)] mt-1" data-name="top-rated-meta" data-file="components/TopRatedCarousel.js">{b.categoria} ? {b.ubicacion?.zona}</p>
                     <div className="mt-3 flex items-center justify-between gap-3" data-name="top-rated-bottom" data-file="components/TopRatedCarousel.js">
                       <div className="flex items-center gap-2" data-name="top-rated-rating" data-file="components/TopRatedCarousel.js">
                         <div className="icon-star text-base text-[#F59E0B]" data-name="star" data-file="components/TopRatedCarousel.js"></div>

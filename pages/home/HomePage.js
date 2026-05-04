@@ -21,7 +21,7 @@
           subtitle=""
           badge="Clientes felices"
           items={top}
-          emptyText="Aun no hay reseÃ±as publicas."
+          emptyText="Aun no hay resenas publicas."
           data-name="top-rated"
           data-file="pages/home/HomePage.js"
         />
@@ -34,9 +34,9 @@
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[var(--secondary-color)]" data-name="trust-1-iw" data-file="pages/home/HomePage.js">
                   <div className="icon-circle-check text-xl text-[var(--primary-color)]" data-name="trust-1-i" data-file="pages/home/HomePage.js"></div>
                 </div>
-                <p className="mt-4 text-sm font-semibold" data-name="trust-1-t" data-file="pages/home/HomePage.js">ReseÃ±a verificada</p>
+                <p className="mt-4 text-sm font-semibold" data-name="trust-1-t" data-file="pages/home/HomePage.js">Resena verificada</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed" data-name="trust-1-d" data-file="pages/home/HomePage.js">
-                  Cuando ves â€œReseÃ±a verificadaâ€, significa que el cliente confirmÃ³ su cita.
+                  Cuando ves "Resena verificada", significa que el cliente confirmo su cita.
                 </p>
               </div>
 
@@ -44,9 +44,9 @@
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[var(--secondary-color)]" data-name="trust-2-iw" data-file="pages/home/HomePage.js">
                   <div className="icon-crown text-xl text-[var(--primary-color)]" data-name="trust-2-i" data-file="pages/home/HomePage.js"></div>
                 </div>
-                <p className="mt-4 text-sm font-semibold" data-name="trust-2-t" data-file="pages/home/HomePage.js">DistinciÃ³n VIP</p>
+                <p className="mt-4 text-sm font-semibold" data-name="trust-2-t" data-file="pages/home/HomePage.js">Distincion VIP</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed" data-name="trust-2-d" data-file="pages/home/HomePage.js">
-                  Negocios VIP destacan con fotos premium, mejor posicionamiento y respuesta mÃ¡s rÃ¡pida.
+                  Negocios VIP destacan con fotos premium, mejor posicionamiento y respuesta mas rapida.
                 </p>
               </div>
 

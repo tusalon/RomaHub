@@ -3,7 +3,7 @@
     {
       id: 'roma-001',
       nombre: 'Gordis Nails Boutique',
-      categoria: 'UÃ±as AcrÃ­licas',
+      categoria: 'Unas Acrilicas',
       vip: true,
       verificado: true,
       topRoma: true,
@@ -23,14 +23,14 @@
         'https://images.unsplash.com/photo-1605034313761-73ea4a8f35a1?auto=format&fit=crop&w=1200&q=70'
       ],
       whatsapp: '+5355550101',
-      descripcion: 'Boutique minimalista de uÃ±as, diseÃ±o premium y protocolos higiÃ©nicos.',
+      descripcion: 'Boutique minimalista de unas, diseno premium y protocolos higienicos.',
       categoriasCatalogo: [
         {
           tipo: 'servicios',
           titulo: 'Manos',
           items: [
-            { nombre: 'UÃ±as acrÃ­licas + diseÃ±o natural', duracionMin: 90, precio: 1800, destacado: true },
-            { nombre: 'Relleno acrÃ­lico', duracionMin: 60, precio: 1400 },
+            { nombre: 'Unas acrilicas + diseno natural', duracionMin: 90, precio: 1800, destacado: true },
+            { nombre: 'Relleno acrilico', duracionMin: 60, precio: 1400 },
             { nombre: 'Esmaltado semipermanente', duracionMin: 45, precio: 900 }
           ]
         },
@@ -39,14 +39,14 @@
           titulo: 'Pies',
           items: [
             { nombre: 'Pedicura spa', duracionMin: 55, precio: 1200 },
-            { nombre: 'ReconstrucciÃ³n de uÃ±a', duracionMin: 30, precio: 650 }
+            { nombre: 'Reconstruccion de una', duracionMin: 30, precio: 650 }
           ]
         },
         {
           tipo: 'productos',
           titulo: 'Productos',
           items: [
-            { nombre: 'Aceite de cutÃ­cula (15 ml)', stock: 12, precio: 350 },
+            { nombre: 'Aceite de cuticula (15 ml)', stock: 12, precio: 350 },
             { nombre: 'Crema de manos premium', stock: 6, precio: 500 }
           ]
         },
@@ -54,27 +54,27 @@
           tipo: 'cursos',
           titulo: 'Cursos y Talleres',
           items: [
-            { nombre: 'Taller: diseÃ±o minimalista', fecha: '2026-05-04T10:00:00.000Z', ubicacion: 'Vedado, La Habana', precio: 4500 },
-            { nombre: 'Curso completo: acrÃ­lico desde cero', fecha: '2026-05-18T09:30:00.000Z', ubicacion: 'Vedado, La Habana', precio: 12000 }
+            { nombre: 'Taller: diseno minimalista', fecha: '2026-05-04T10:00:00.000Z', ubicacion: 'Vedado, La Habana', precio: 4500 },
+            { nombre: 'Curso completo: acrilico desde cero', fecha: '2026-05-18T09:30:00.000Z', ubicacion: 'Vedado, La Habana', precio: 12000 }
           ]
         }
       ],
       resenas: [
-        { id: 'r1', nombre: 'Camila', estrellas: 5, verificada: true, texto: 'AtenciÃ³n impecable y un acabado sÃºper fino. Se nota el nivel.', fecha: '2026-03-22' },
-        { id: 'r2', nombre: 'Dayana', estrellas: 5, verificada: true, texto: 'Higiene top y diseÃ±o minimalista tal cual lo querÃ­a.', fecha: '2026-03-10' },
-        { id: 'r3', nombre: 'Roxana', estrellas: 4, verificada: false, texto: 'Muy buen servicio, solo esperÃ© un poquito, pero valiÃ³ la pena.', fecha: '2026-02-18' }
+        { id: 'r1', nombre: 'Camila', estrellas: 5, verificada: true, texto: 'Atencion impecable y un acabado super fino. Se nota el nivel.', fecha: '2026-03-22' },
+        { id: 'r2', nombre: 'Dayana', estrellas: 5, verificada: true, texto: 'Higiene top y diseno minimalista tal cual lo queria.', fecha: '2026-03-10' },
+        { id: 'r3', nombre: 'Roxana', estrellas: 4, verificada: false, texto: 'Muy buen servicio, solo espere un poquito, pero valio la pena.', fecha: '2026-02-18' }
       ]
     },
     {
       id: 'roma-002',
-      nombre: 'BarberÃ­a MalecÃ³n',
-      categoria: 'BarberÃ­a',
+      nombre: 'Barberia Malecon',
+      categoria: 'Barberia',
       vip: false,
       verificado: true,
       topRoma: false,
       masReservado: true,
       negocioDelMes: false,
-      ubicacion: { ciudad: 'La Habana', zona: 'Centro Habana', direccion: 'San LÃ¡zaro, Centro Habana' },
+      ubicacion: { ciudad: 'La Habana', zona: 'Centro Habana', direccion: 'San Lazaro, Centro Habana' },
       coordenadas: { lat: 23.1375, lng: -82.3701 },
       rangoPrecio: { min: 350, max: 1500 },
       estrellas: 4.7,
@@ -87,13 +87,13 @@
         'https://images.unsplash.com/photo-1517832207067-4db24a2ae47c?auto=format&fit=crop&w=900&q=80'
       ],
       whatsapp: '+5355550202',
-      descripcion: 'Cortes clÃ¡sicos y modernos, ritual de barba y ambiente limpio frente al mar.',
+      descripcion: 'Cortes clasicos y modernos, ritual de barba y ambiente limpio frente al mar.',
       categoriasCatalogo: [
         {
           tipo: 'servicios',
           titulo: 'Cortes',
           items: [
-            { nombre: 'Corte clÃ¡sico', duracionMin: 35, precio: 500, destacado: true },
+            { nombre: 'Corte clasico', duracionMin: 35, precio: 500, destacado: true },
             { nombre: 'Fade premium', duracionMin: 45, precio: 700 }
           ]
         },
@@ -107,14 +107,14 @@
         }
       ],
       resenas: [
-        { id: 'r4', nombre: 'Ernesto', estrellas: 5, verificada: true, texto: 'Profesionales, rÃ¡pidos y con un estilo bien moderno.', fecha: '2026-03-05' },
-        { id: 'r5', nombre: 'Luis', estrellas: 4, verificada: true, texto: 'Buen trato. El fade quedÃ³ perfecto.', fecha: '2026-02-14' }
+        { id: 'r4', nombre: 'Ernesto', estrellas: 5, verificada: true, texto: 'Profesionales, rapidos y con un estilo bien moderno.', fecha: '2026-03-05' },
+        { id: 'r5', nombre: 'Luis', estrellas: 4, verificada: true, texto: 'Buen trato. El fade quedo perfecto.', fecha: '2026-02-14' }
       ]
     },
     {
       id: 'roma-003',
       nombre: 'Roma Skin Studio',
-      categoria: 'EstÃ©tica Facial',
+      categoria: 'Estetica Facial',
       vip: true,
       verificado: true,
       topRoma: false,
@@ -133,13 +133,13 @@
         'https://images.unsplash.com/photo-1556228579-0d85b1a4d571?auto=format&fit=crop&w=900&q=70'
       ],
       whatsapp: '+5355550303',
-      descripcion: 'Piel luminosa con protocolos clÃ­nicos y un espacio ultra-limpio.',
+      descripcion: 'Piel luminosa con protocolos clinicos y un espacio ultra-limpio.',
       categoriasCatalogo: [
         {
           tipo: 'servicios',
           titulo: 'Facial',
           items: [
-            { nombre: 'Limpieza profunda + hidrataciÃ³n', duracionMin: 70, precio: 2500, destacado: true },
+            { nombre: 'Limpieza profunda + hidratacion', duracionMin: 70, precio: 2500, destacado: true },
             { nombre: 'Peeling suave', duracionMin: 45, precio: 1800 }
           ]
         },
@@ -147,14 +147,14 @@
           tipo: 'productos',
           titulo: 'Productos',
           items: [
-            { nombre: 'SÃ©rum iluminador', stock: 4, precio: 3200 },
+            { nombre: 'Serum iluminador', stock: 4, precio: 3200 },
             { nombre: 'Protector solar premium', stock: 9, precio: 2100 }
           ]
         }
       ],
       resenas: [
-        { id: 'r6', nombre: 'Melany', estrellas: 5, verificada: true, texto: 'Me dejÃ³ la piel increÃ­ble y el espacio es sÃºper limpio.', fecha: '2026-03-29' },
-        { id: 'r7', nombre: 'Ana', estrellas: 4, verificada: false, texto: 'Muy buena atenciÃ³n, me gustÃ³ el protocolo paso a paso.', fecha: '2026-03-12' }
+        { id: 'r6', nombre: 'Melany', estrellas: 5, verificada: true, texto: 'Me dejo la piel increible y el espacio es super limpio.', fecha: '2026-03-29' },
+        { id: 'r7', nombre: 'Ana', estrellas: 4, verificada: false, texto: 'Muy buena atencion, me gust? el protocolo paso a paso.', fecha: '2026-03-12' }
       ]
     },
     {
@@ -179,19 +179,19 @@
         'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=70'
       ],
       whatsapp: '+5355550404',
-      descripcion: 'Talleres para elevar tu tÃ©cnica y convertir tu talento en un negocio.',
+      descripcion: 'Talleres para elevar tu tecnica y convertir tu talento en un negocio.',
       categoriasCatalogo: [
         {
           tipo: 'cursos',
           titulo: 'Cursos y Talleres',
           items: [
-            { nombre: 'Taller: barberÃ­a moderna', fecha: '2026-06-06T10:00:00.000Z', ubicacion: 'Habana Vieja', precio: 6000 },
+            { nombre: 'Taller: barberia moderna', fecha: '2026-06-06T10:00:00.000Z', ubicacion: 'Habana Vieja', precio: 6000 },
             { nombre: 'Curso: manicure profesional', fecha: '2026-06-20T09:00:00.000Z', ubicacion: 'Habana Vieja', precio: 11000 }
           ]
         }
       ],
       resenas: [
-        { id: 'r8', nombre: 'Yusniel', estrellas: 5, verificada: false, texto: 'Muy buena explicaciÃ³n y prÃ¡ctica real.', fecha: '2026-01-23' }
+        { id: 'r8', nombre: 'Yusniel', estrellas: 5, verificada: false, texto: 'Muy buena explicacion y practica real.', fecha: '2026-01-23' }
       ]
     }
   ];
@@ -479,7 +479,7 @@
           .filter((business) => business.id);
         loadedFromSupabase = true;
         loadError = null;
-        console.log(`âœ… Marketplace cargÃ³ ${businesses.length} negocios desde Supabase`);
+        console.log(`Marketplace cargo ${businesses.length} negocios desde Supabase`);
         return businesses.slice();
       } catch (error) {
         businesses = [];
@@ -540,7 +540,7 @@
     try {
       inserted = await supabaseInsert('resenas', payload);
     } catch (error) {
-      throw new Error('No se pudo guardar la reseÃ±a porque Supabase no tiene disponible la tabla publica resenas para insertar.');
+      throw new Error('No se pudo guardar la resena porque Supabase no tiene disponible la tabla publica resenas para insertar.');
     }
     const created = inserted?.[0] || payload;
     const business = businesses.find((b) => b.id === negocioId);
@@ -578,9 +578,17 @@
     const ubicacion = normalizeText(q.ubicacion);
 
     return businesses.filter((b) => {
+      const catalogTerms = (b.categoriasCatalogo || [])
+        .flatMap((section) => [
+          section.titulo,
+          section.tipo,
+          ...(section.items || []).flatMap((item) => [item.nombre, item.descripcion, item.categoria])
+        ])
+        .filter(Boolean);
+
       const hayServicio = !servicio
         ? true
-        : [b.nombre, b.categoria, b.descripcion]
+        : [b.nombre, b.categoria, b.descripcion, ...catalogTerms]
           .filter(Boolean)
           .some((t) => normalizeText(t).includes(servicio));
 

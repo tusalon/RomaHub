@@ -80,7 +80,7 @@
                   <div className="p-5" data-name="hero-feature-body" data-file="pages/home/HomeHero.js">
                     <p className="text-xs uppercase tracking-[0.16em] text-[var(--primary-color)] font-semibold" data-name="hero-feature-kicker" data-file="pages/home/HomeHero.js">Destacado</p>
                     <p className="mt-2 text-xl font-semibold leading-tight" data-name="hero-feature-name" data-file="pages/home/HomeHero.js">{featured.nombre}</p>
-                    <p className="mt-1 text-sm text-[var(--text-muted)]" data-name="hero-feature-meta" data-file="pages/home/HomeHero.js">{featured.categoria} Â· {featured.ubicacion?.zona || featured.ubicacion?.ciudad}</p>
+                    <p className="mt-1 text-sm text-[var(--text-muted)]" data-name="hero-feature-meta" data-file="pages/home/HomeHero.js">{featured.categoria} ? {featured.ubicacion?.zona || featured.ubicacion?.ciudad}</p>
                     <div className="mt-5 flex items-center justify-between gap-3" data-name="hero-feature-bottom" data-file="pages/home/HomeHero.js">
                       <span className="text-sm text-[var(--text-muted)]" data-name="hero-feature-services" data-file="pages/home/HomeHero.js">{(featured.categoriasCatalogo?.[0]?.items || []).length} servicios</span>
                       <span className="btn-rr btn-primary-rr py-2 px-4 text-sm" data-name="hero-feature-open" data-file="pages/home/HomeHero.js">Ver perfil</span>

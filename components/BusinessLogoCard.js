@@ -29,7 +29,7 @@
 
         <div className="p-4" data-name="logo-card-body" data-file="components/BusinessLogoCard.js">
           <p className="text-sm font-semibold leading-snug" data-name="name" data-file="components/BusinessLogoCard.js">{b.nombre}</p>
-          <p className="text-xs text-[var(--text-muted)] mt-1" data-name="category" data-file="components/BusinessLogoCard.js">{b.categoria} Â· {b.ubicacion?.provincia || b.ubicacion?.zona}</p>
+          <p className="text-xs text-[var(--text-muted)] mt-1" data-name="category" data-file="components/BusinessLogoCard.js">{b.categoria} ? {b.ubicacion?.provincia || b.ubicacion?.zona}</p>
           {(productCount || courseCount) ? (
             <div className="mt-3 flex flex-wrap gap-2" data-name="store-flags" data-file="components/BusinessLogoCard.js">
               {productCount ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--text-muted)]" data-name="store-flag" data-file="components/BusinessLogoCard.js">Tienda</span> : null}

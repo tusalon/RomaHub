@@ -68,7 +68,7 @@
                       <div className="min-w-0" data-name="intrigue-titlewrap" data-file="pages/home/AllBusinessesSection.js">
                         <p className="text-lg md:text-xl font-semibold leading-tight" data-name="intrigue-name" data-file="pages/home/AllBusinessesSection.js">{business.nombre}</p>
                         <p className="text-sm text-[var(--text-muted)] mt-1" data-name="intrigue-meta" data-file="pages/home/AllBusinessesSection.js">
-                          {business.categoria} Â· {business.ubicacion?.zona} Â· {business.ubicacion?.ciudad}
+                          {business.categoria} ? {business.ubicacion?.zona} ? {business.ubicacion?.ciudad}
                         </p>
                       </div>
                       {business.vip ? (
@@ -93,7 +93,7 @@
                           <div className="icon-map-pin text-xl text-[var(--primary-color)]" data-name="intrigue-loc-i" data-file="pages/home/AllBusinessesSection.js"></div>
                         </div>
                         <div className="min-w-0" data-name="intrigue-loc-t" data-file="pages/home/AllBusinessesSection.js">
-                          <p className="text-xs text-[var(--text-muted)]" data-name="intrigue-loc-l" data-file="pages/home/AllBusinessesSection.js">UbicaciÃ³n</p>
+                          <p className="text-xs text-[var(--text-muted)]" data-name="intrigue-loc-l" data-file="pages/home/AllBusinessesSection.js">Ubicacion</p>
                           <p className="text-sm font-medium leading-snug" data-name="intrigue-loc-v" data-file="pages/home/AllBusinessesSection.js">
                             {business.ubicacion?.direccion}
                           </p>
