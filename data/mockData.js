@@ -212,6 +212,14 @@
     return { url: String(url).replace(/\/$/, ''), key };
   }
 
+  function tiendaTablesEnabled() {
+    try {
+      return window.ENABLE_TIENDA_TABLES === true || window.localStorage?.getItem('enableTiendaTables') === 'true';
+    } catch (error) {
+      return window.ENABLE_TIENDA_TABLES === true;
+    }
+  }
+
   async function supabaseFetch(path) {
     const config = getSupabaseConfig();
     if (!config) throw new Error('Supabase no configurado');
@@ -476,8 +484,12 @@
         const serviciosRows = await supabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,descripcion,activo,imagen,categoria');
         const provincias = await loadOptionalBusinessProvinces();
         const resenasRows = await optionalSupabaseFetch('resenas?select=*&limit=500');
-        const productosRows = [];
-        const cursosRows = [];
+        const productosRows = tiendaTablesEnabled()
+          ? await optionalSupabaseFetch('productos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,imagen_url,categoria,stock,activo,destacado,orden&order=destacado.desc,orden.asc,nombre.asc&limit=1000')
+          : [];
+        const cursosRows = tiendaTablesEnabled()
+          ? await optionalSupabaseFetch('cursos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=destacado.desc,orden.asc,fecha.asc,nombre.asc&limit=1000')
+          : [];
         const reservasRows = await optionalSupabaseFetch('reservas?select=*&limit=2000');
         const reservasHoyRows = await optionalSupabaseFetch('reservas?created_at=gte.' + encodeURIComponent(getTodayStartIso()) + '&select=created_at,negocio_id&limit=5000');
         const reservasSemana = countWeeklyReservations(reservasRows);
