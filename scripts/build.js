@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 const babel = require('@babel/core');
 const { execFileSync } = require('child_process');
@@ -71,6 +71,7 @@ const bundles = {
   ],
   'login.bundle.js': [
     'utils/navigation.js',
+    'utils/supabase-auth.js',
     'components/ToastProvider.js',
     'components/Header.js',
     'components/Footer.js',
@@ -79,6 +80,8 @@ const bundles = {
   ],
   'panel.bundle.js': [
     'utils/navigation.js',
+    'utils/format.js',
+    'utils/supabase-auth.js',
     'components/ToastProvider.js',
     'components/Header.js',
     'components/Footer.js',

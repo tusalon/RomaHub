@@ -25,19 +25,15 @@ function Header({ currentParams }) {
       <header className="sticky top-0 z-[60] bg-white/95 backdrop-blur border-b border-[var(--border)]" data-name="header" data-file="components/Header.js">
         <div className="container-rr py-3" data-name="header-inner" data-file="components/Header.js">
           <div className="flex items-center gap-3" data-name="header-row" data-file="components/Header.js">
-            <button className="flex items-center gap-3" onClick={onGoHome} data-name="brand" data-file="components/Header.js">
-              <div className="w-10 h-10 rounded-lg overflow-hidden border border-[rgba(216,27,96,0.18)] bg-white flex items-center justify-center" data-name="brand-mark" data-file="components/Header.js">
-                <img
-                  src="https://app.trickle.so/storage/public/images/usr_1dec1efb58008001/55d88a3b-fbdf-46a8-bc34-5c6dac55ec46.png"
-                  alt="Logo de Rservas.Roma"
-                  className="w-full h-full object-cover"
-                  data-name="brand-mark-img"
-                  data-file="components/Header.js"
-                />
+            <button className="flex items-center gap-2.5" onClick={onGoHome} data-name="brand" data-file="components/Header.js">
+              <div className="w-9 h-9 rounded-full bg-[#FF1493] flex items-center justify-center" data-name="brand-mark" data-file="components/Header.js">
+                <span className="text-white text-sm font-bold leading-none">R</span>
               </div>
               <div className="leading-tight" data-name="brand-text" data-file="components/Header.js">
-                <p className="text-sm font-semibold tracking-tight text-[#1F2937]" data-name="brand-title" data-file="components/Header.js">Rservas.Roma</p>
-                <p className="text-xs text-[var(--text-muted)]" data-name="brand-sub" data-file="components/Header.js">Marketplace</p>
+                <p className="text-sm font-bold tracking-tight text-[#1A1A1A]" data-name="brand-title" data-file="components/Header.js">
+                  Roma<span className="text-[#FF1493]">Hub</span>
+                </p>
+                <p className="text-[10px] text-[var(--text-muted)] tracking-wide uppercase" data-name="brand-sub" data-file="components/Header.js">by Rservasroma</p>
               </div>
             </button>
 
@@ -56,16 +52,8 @@ function Header({ currentParams }) {
                 data-name="nav-search"
                 data-file="components/Header.js"
               >
-                Explorar
+                Directorio
               </button>
-              <a
-                className="btn-rr btn-ghost-rr"
-                href="search.html"
-                data-name="nav-demo"
-                data-file="components/Header.js"
-              >
-                Negocios
-              </a>
               <a
                 className={`btn-rr ${page === 'register.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 href="register.html"
@@ -85,13 +73,13 @@ function Header({ currentParams }) {
             </div>
 
             <button
-              className="ml-auto md:hidden w-11 h-11 rounded-lg border border-[var(--border)] bg-white flex items-center justify-center"
+              className="ml-auto md:hidden w-11 h-11 rounded-xl border border-[var(--border)] bg-white flex items-center justify-center"
               onClick={() => setOpen((v) => !v)}
               data-name="nav-toggle"
               data-file="components/Header.js"
               aria-label="Abrir menú"
             >
-              <div className="icon-menu text-xl text-[var(--primary-color)]" data-name="nav-toggle-icon" data-file="components/Header.js"></div>
+              <div className="icon-menu text-xl text-[#FF1493]" data-name="nav-toggle-icon" data-file="components/Header.js"></div>
             </button>
           </div>
 
@@ -101,23 +89,19 @@ function Header({ currentParams }) {
                 <div className="grid grid-cols-1 gap-2" data-name="header-mobile-actions" data-file="components/Header.js">
                   <button className="btn-rr btn-ghost-rr w-full flex items-center justify-between" onClick={onGoHome} data-name="m-home" data-file="components/Header.js">
                     <span data-name="m-home-text" data-file="components/Header.js">Inicio</span>
-                    <div className="icon-arrow-right text-xl text-[var(--primary-color)]" data-name="m-home-icon" data-file="components/Header.js"></div>
+                    <div className="icon-arrow-right text-xl text-[#FF1493]" data-name="m-home-icon" data-file="components/Header.js"></div>
                   </button>
                   <button className="btn-rr btn-primary-rr w-full flex items-center justify-between" onClick={onGoSearch} data-name="m-search" data-file="components/Header.js">
-                    <span data-name="m-search-text" data-file="components/Header.js">Explorar</span>
+                    <span data-name="m-search-text" data-file="components/Header.js">Directorio</span>
                     <div className="icon-arrow-right text-xl text-white" data-name="m-search-icon" data-file="components/Header.js"></div>
                   </button>
-                  <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="search.html" data-name="m-demo" data-file="components/Header.js">
-                    <span data-name="m-demo-text" data-file="components/Header.js">Negocios</span>
-                    <div className="icon-external-link text-xl text-[var(--primary-color)]" data-name="m-demo-icon" data-file="components/Header.js"></div>
-                  </a>
                   <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="register.html" data-name="m-register" data-file="components/Header.js">
                     <span data-name="m-register-text" data-file="components/Header.js">Registrar negocio</span>
-                    <div className="icon-arrow-right text-xl text-[var(--primary-color)]" data-name="m-register-icon" data-file="components/Header.js"></div>
+                    <div className="icon-arrow-right text-xl text-[#FF1493]" data-name="m-register-icon" data-file="components/Header.js"></div>
                   </a>
                   <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="login.html" data-name="m-login" data-file="components/Header.js">
                     <span data-name="m-login-text" data-file="components/Header.js">Acceso negocio</span>
-                    <div className="icon-log-in text-xl text-[var(--primary-color)]" data-name="m-login-icon" data-file="components/Header.js"></div>
+                    <div className="icon-log-in text-xl text-[#FF1493]" data-name="m-login-icon" data-file="components/Header.js"></div>
                   </a>
                 </div>
               </div>

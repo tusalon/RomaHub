@@ -130,7 +130,23 @@ drop policy if exists "Pedidos whatsapp publicos" on public.pedidos_whatsapp;
 create policy "Pedidos whatsapp publicos"
 on public.pedidos_whatsapp
 for insert
-with check (true);
+to anon
+with check (
+  negocio_id is not null
+  and length(trim(cliente_nombre)) between 2 and 120
+  and cliente_whatsapp ~ '^[0-9]{8,15}$'
+  and jsonb_typeof(items) = 'array'
+  and jsonb_array_length(items) between 1 and 50
+  and total > 0
+  and total <= 10000000
+  and estado = 'enviado_whatsapp'
+  and exists (
+    select 1
+    from public.negocios n
+    where n.id = pedidos_whatsapp.negocio_id
+      and n.configurado = true
+  )
+);
 
 -- Opcional para probar rapido:
 -- insert into public.productos (negocio_id, nombre, descripcion, precio, imagen_url, stock, activo)

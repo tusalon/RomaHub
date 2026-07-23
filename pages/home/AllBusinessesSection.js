@@ -68,7 +68,7 @@
                       <div className="min-w-0" data-name="intrigue-titlewrap" data-file="pages/home/AllBusinessesSection.js">
                         <p className="text-lg md:text-xl font-semibold leading-tight" data-name="intrigue-name" data-file="pages/home/AllBusinessesSection.js">{business.nombre}</p>
                         <p className="text-sm text-[var(--text-muted)] mt-1" data-name="intrigue-meta" data-file="pages/home/AllBusinessesSection.js">
-                          {business.categoria} ? {business.ubicacion?.zona} ? {business.ubicacion?.ciudad}
+                          {business.categoria} · {business.ubicacion?.zona} · {business.ubicacion?.ciudad}
                         </p>
                       </div>
                       {business.vip ? (

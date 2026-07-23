@@ -61,7 +61,7 @@ function RegisterBusinessPage() {
 
     const buildMessage = () => {
       const lines = [
-        'Hola, quiero registrar mi negocio en RservasRoma.',
+        'Hola, quiero registrar mi negocio en RomaHub.',
         '',
         `Plan solicitado: ${form.plan}`,
         `Tipo de negocio: ${form.tipo}`,
@@ -110,10 +110,10 @@ function RegisterBusinessPage() {
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-8 lg:gap-10 items-start" data-name="register-grid" data-file="pages/register/RegisterBusinessPage.js">
               <div data-name="register-copy" data-file="pages/register/RegisterBusinessPage.js">
                 <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-[var(--primary-color)]" data-name="register-kicker" data-file="pages/register/RegisterBusinessPage.js">
-                  RservasRoma para negocios
+                  RomaHub para negocios
                 </p>
                 <h1 className="mt-4 text-4xl md:text-6xl font-semibold tracking-tight leading-[0.98]" data-name="register-title" data-file="pages/register/RegisterBusinessPage.js">
-                  Crea tu espacio profesional en el marketplace.
+                  Aparece en el directorio de belleza de Cuba.
                 </h1>
                 <p className="mt-5 text-base md:text-lg text-[var(--text-muted)] leading-relaxed max-w-[700px]" data-name="register-subtitle" data-file="pages/register/RegisterBusinessPage.js">
                   Solicita tu entrada, organiza tu perfil y prepara tu tienda para vender productos, cursos o servicios con cierre directo por WhatsApp.
@@ -123,7 +123,7 @@ function RegisterBusinessPage() {
                   {[
                     ['icon-map-pin', 'Mapa por provincia', 'Aparece donde tus clientes te buscan.'],
                     ['icon-shopping-bag', 'Mini tienda', 'Productos y cursos listos para carrito.'],
-                    ['icon-star', 'Perfil verificado', 'Una presencia seria dentro de RservasRoma.']
+                    ['icon-star', 'Perfil verificado', 'Una presencia seria dentro de RomaHub.']
                   ].map((item) => (
                     <div key={item[1]} className="surface-rr p-4" data-name="register-benefit" data-file="pages/register/RegisterBusinessPage.js">
                       <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[var(--secondary-color)]" data-name="benefit-icon-wrap" data-file="pages/register/RegisterBusinessPage.js">
@@ -146,7 +146,7 @@ function RegisterBusinessPage() {
                     data-name="plan-vip"
                     data-file="pages/register/RegisterBusinessPage.js"
                   >
-                    <p className="text-sm font-semibold" data-name="plan-vip-title" data-file="pages/register/RegisterBusinessPage.js">VIP RservasRoma</p>
+                    <p className="text-sm font-semibold" data-name="plan-vip-title" data-file="pages/register/RegisterBusinessPage.js">VIP RomaHub</p>
                     <p className="mt-1 text-xs text-[var(--text-muted)] leading-relaxed" data-name="plan-vip-desc" data-file="pages/register/RegisterBusinessPage.js">
                       Perfil completo, reservas, tienda, cursos, reseñas y mayor visibilidad.
                     </p>

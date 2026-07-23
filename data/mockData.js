@@ -1,201 +1,4 @@
-﻿const MockData = (() => {
-  const fallbackBusinesses = [
-    {
-      id: 'roma-001',
-      nombre: 'Gordis Nails Boutique',
-      categoria: 'Uñas Acrílicas',
-      vip: true,
-      verificado: true,
-      topRoma: true,
-      masReservado: false,
-      negocioDelMes: true,
-      ubicacion: { ciudad: 'La Habana', zona: 'Vedado', direccion: 'Calle 23, Vedado, Plaza' },
-      coordenadas: { lat: 23.1291, lng: -82.3790 },
-      rangoPrecio: { min: 800, max: 3500 },
-      estrellas: 4.9,
-      totalResenas: 212,
-      portadaUrl: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1600&q=80',
-      logoUrl: 'https://images.unsplash.com/photo-1520975958221-17f0d4a12a4a?auto=format&fit=crop&w=256&q=80',
-      fotos: [
-        'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1610992015732-2449b0b2b8f5?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1605034313761-73ea4a8f35a1?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1605034313761-73ea4a8f35a1?auto=format&fit=crop&w=1200&q=70'
-      ],
-      whatsapp: '+5355550101',
-      descripcion: 'Boutique minimalista de uñas, diseño premium y protocolos higiénicos.',
-      categoriasCatalogo: [
-        {
-          tipo: 'servicios',
-          titulo: 'Manos',
-          items: [
-            { nombre: 'Uñas acrílicas + diseño natural', duracionMin: 90, precio: 1800, destacado: true },
-            { nombre: 'Relleno acrílico', duracionMin: 60, precio: 1400 },
-            { nombre: 'Esmaltado semipermanente', duracionMin: 45, precio: 900 }
-          ]
-        },
-        {
-          tipo: 'servicios',
-          titulo: 'Pies',
-          items: [
-            { nombre: 'Pedicura spa', duracionMin: 55, precio: 1200 },
-            { nombre: 'Reconstrucción de uña', duracionMin: 30, precio: 650 }
-          ]
-        },
-        {
-          tipo: 'productos',
-          titulo: 'Productos',
-          items: [
-            { nombre: 'Aceite de cutícula (15 ml)', stock: 12, precio: 350 },
-            { nombre: 'Crema de manos premium', stock: 6, precio: 500 }
-          ]
-        },
-        {
-          tipo: 'cursos',
-          titulo: 'Cursos y Talleres',
-          items: [
-            { nombre: 'Taller: diseño minimalista', fecha: '2026-05-04T10:00:00.000Z', ubicacion: 'Vedado, La Habana', precio: 4500 },
-            { nombre: 'Curso completo: acrílico desde cero', fecha: '2026-05-18T09:30:00.000Z', ubicacion: 'Vedado, La Habana', precio: 12000 }
-          ]
-        }
-      ],
-      resenas: [
-        { id: 'r1', nombre: 'Camila', estrellas: 5, verificada: true, texto: 'Atención impecable y un acabado super fino. Se nota el nivel.', fecha: '2026-03-22' },
-        { id: 'r2', nombre: 'Dayana', estrellas: 5, verificada: true, texto: 'Higiene top y diseño minimalista tal cual lo quería.', fecha: '2026-03-10' },
-        { id: 'r3', nombre: 'Roxana', estrellas: 4, verificada: false, texto: 'Muy buen servicio, solo esperé un poquito, pero valió la pena.', fecha: '2026-02-18' }
-      ]
-    },
-    {
-      id: 'roma-002',
-      nombre: 'Barbería Malecón',
-      categoria: 'Barbería',
-      vip: false,
-      verificado: true,
-      topRoma: false,
-      masReservado: true,
-      negocioDelMes: false,
-      ubicacion: { ciudad: 'La Habana', zona: 'Centro Habana', direccion: 'San Lázaro, Centro Habana' },
-      coordenadas: { lat: 23.1375, lng: -82.3701 },
-      rangoPrecio: { min: 350, max: 1500 },
-      estrellas: 4.7,
-      totalResenas: 154,
-      portadaUrl: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=1600&q=80',
-      logoUrl: 'https://images.unsplash.com/photo-1520975732134-340aee8f36d4?auto=format&fit=crop&w=256&q=80',
-      fotos: [
-        'https://images.unsplash.com/photo-1520975911267-56c7b0199c4f?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1520975682030-1a7d1b93e2a3?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1517832207067-4db24a2ae47c?auto=format&fit=crop&w=900&q=80'
-      ],
-      whatsapp: '+5355550202',
-      descripcion: 'Cortes clásicos y modernos, ritual de barba y ambiente limpio frente al mar.',
-      categoriasCatalogo: [
-        {
-          tipo: 'servicios',
-          titulo: 'Cortes',
-          items: [
-            { nombre: 'Corte clásico', duracionMin: 35, precio: 500, destacado: true },
-            { nombre: 'Fade premium', duracionMin: 45, precio: 700 }
-          ]
-        },
-        {
-          tipo: 'servicios',
-          titulo: 'Barba',
-          items: [
-            { nombre: 'Ritual de barba', duracionMin: 30, precio: 600 },
-            { nombre: 'Perfilado', duracionMin: 20, precio: 350 }
-          ]
-        }
-      ],
-      resenas: [
-        { id: 'r4', nombre: 'Ernesto', estrellas: 5, verificada: true, texto: 'Profesionales, rápidos y con un estilo bien moderno.', fecha: '2026-03-05' },
-        { id: 'r5', nombre: 'Luis', estrellas: 4, verificada: true, texto: 'Buen trato. El fade quedó perfecto.', fecha: '2026-02-14' }
-      ]
-    },
-    {
-      id: 'roma-003',
-      nombre: 'Roma Skin Studio',
-      categoria: 'Estética Facial',
-      vip: true,
-      verificado: true,
-      topRoma: false,
-      masReservado: true,
-      negocioDelMes: false,
-      ubicacion: { ciudad: 'La Habana', zona: 'Miramar', direccion: '5ta Avenida, Playa' },
-      coordenadas: { lat: 23.1100, lng: -82.4370 },
-      rangoPrecio: { min: 1200, max: 7500 },
-      estrellas: 4.8,
-      totalResenas: 98,
-      portadaUrl: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=1600&q=80',
-      logoUrl: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=256&q=60',
-      fotos: [
-        'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1556228579-0d85b1a4d571?auto=format&fit=crop&w=900&q=70'
-      ],
-      whatsapp: '+5355550303',
-      descripcion: 'Piel luminosa con protocolos clínicos y un espacio ultra-limpio.',
-      categoriasCatalogo: [
-        {
-          tipo: 'servicios',
-          titulo: 'Facial',
-          items: [
-            { nombre: 'Limpieza profunda + hidratación', duracionMin: 70, precio: 2500, destacado: true },
-            { nombre: 'Peeling suave', duracionMin: 45, precio: 1800 }
-          ]
-        },
-        {
-          tipo: 'productos',
-          titulo: 'Productos',
-          items: [
-            { nombre: 'Sérum iluminador', stock: 4, precio: 3200 },
-            { nombre: 'Protector solar premium', stock: 9, precio: 2100 }
-          ]
-        }
-      ],
-      resenas: [
-        { id: 'r6', nombre: 'Melany', estrellas: 5, verificada: true, texto: 'Me dejó la piel increíble y el espacio es súper limpio.', fecha: '2026-03-29' },
-        { id: 'r7', nombre: 'Ana', estrellas: 4, verificada: false, texto: 'Muy buena atención, me gustó el protocolo paso a paso.', fecha: '2026-03-12' }
-      ]
-    },
-    {
-      id: 'roma-004',
-      nombre: 'Academia Roma Pro',
-      categoria: 'Cursos y Talleres',
-      vip: false,
-      verificado: false,
-      topRoma: false,
-      masReservado: false,
-      negocioDelMes: false,
-      ubicacion: { ciudad: 'La Habana', zona: 'Habana Vieja', direccion: 'Obispo, Habana Vieja' },
-      coordenadas: { lat: 23.1400, lng: -82.3500 },
-      rangoPrecio: { min: 3000, max: 15000 },
-      estrellas: 4.5,
-      totalResenas: 41,
-      portadaUrl: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=1600&q=80',
-      logoUrl: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=256&q=60',
-      fotos: [
-        'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1584697964192-5f5f5b1cdb4b?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=70'
-      ],
-      whatsapp: '+5355550404',
-      descripcion: 'Talleres para elevar tu técnica y convertir tu talento en un negocio.',
-      categoriasCatalogo: [
-        {
-          tipo: 'cursos',
-          titulo: 'Cursos y Talleres',
-          items: [
-            { nombre: 'Taller: barbería moderna', fecha: '2026-06-06T10:00:00.000Z', ubicacion: 'Habana Vieja', precio: 6000 },
-            { nombre: 'Curso: manicure profesional', fecha: '2026-06-20T09:00:00.000Z', ubicacion: 'Habana Vieja', precio: 11000 }
-          ]
-        }
-      ],
-      resenas: [
-        { id: 'r8', nombre: 'Yusniel', estrellas: 5, verificada: false, texto: 'Muy buena explicación y práctica real.', fecha: '2026-01-23' }
-      ]
-    }
-  ];
-
+const MockData = (() => {
   let businesses = [];
   let loadPromise = null;
   let loadedFromSupabase = false;
@@ -307,14 +110,6 @@
     return response.json();
   }
 
-  async function loadOptionalBusinessProvinces() {
-    const rows = await optionalSupabaseFetch('negocios?select=id,provincia&limit=1000');
-    return (rows || []).reduce((acc, row) => {
-      if (row.id && row.provincia) acc[row.id] = row.provincia;
-      return acc;
-    }, {});
-  }
-
   function valueFrom(row, keys, fallback = '') {
     for (const key of keys) {
       if (row?.[key] != null && row[key] !== '') return row[key];
@@ -381,8 +176,10 @@
     return todayStart.toISOString();
   }
 
-  function countTodayReservations(rows) {
-    return (rows || []).length;
+  function getWeekStartIso() {
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - 7);
+    return weekStart.toISOString();
   }
 
   function buildCatalogSections({ servicios, productos, cursos }) {
@@ -436,9 +233,9 @@
     return sections;
   }
 
-  function normalizeBusiness(row, relations) {
+  function normalizeBusiness(row, relations, ratingData) {
     const id = String(row.id || row.negocio_id || row.uuid || '');
-    const provincia = valueFrom(row, ['provincia', 'province'], 'La Habana');
+    const provincia = valueFrom(row, ['provincia', 'province'], '');
     const ciudad = valueFrom(row, ['ciudad', 'municipio', 'city'], provincia);
     const zona = valueFrom(row, ['zona', 'barrio', 'municipio'], ciudad);
     const direccion = valueFrom(row, ['direccion', 'ubicacion', 'address'], zona);
@@ -447,8 +244,12 @@
     const telefono = valueFrom(row, ['whatsapp', 'telefono', 'phone'], '');
     const coverUrl = valueFrom(row, ['imagen_fondo_url', 'portada_url', 'cover_url', 'foto_portada', 'imagen_url'], '');
     const logoUrl = valueFrom(row, ['logo_url', 'logo', 'avatar_url'], defaultLogoUrl);
-    const reservaUrl = normalizeExternalUrl(valueFrom(row, ['reserva_url', 'booking_url', 'url_reserva', 'url_negocio', 'negocio_url', 'sitio_web', 'url', 'link'], ''));
     const fotos = [coverUrl, logoUrl].filter(Boolean);
+    const slug = valueFrom(row, ['slug'], '');
+    const externalUrl = normalizeExternalUrl(valueFrom(row, ['reserva_url', 'booking_url', 'url_reserva', 'url_negocio', 'negocio_url', 'sitio_web', 'url', 'link'], ''));
+    const reservaUrl = slug
+      ? `https://tusalon.github.io/rservasroma/?s=${encodeURIComponent(slug)}`
+      : externalUrl;
 
     const servicios = relations.servicios[id] || [];
     const productos = relations.productos[id] || [];
@@ -459,12 +260,18 @@
       .map((item) => numberFrom(item, ['precio', 'precio_cup', 'monto'], null))
       .filter((value) => value != null && Number.isFinite(value) && value > 0);
 
+    const rating = ratingData?.[id];
+    const estrellas = rating ? rating.promedio : 0;
+    const totalValoraciones = rating ? rating.total : 0;
+    const enRanking = totalValoraciones >= 3;
+
     return {
       id,
+      slug,
       nombre: valueFrom(row, ['nombre', 'name', 'titulo'], 'Negocio sin nombre'),
       categoria: valueFrom(row, ['categoria', 'tipo_negocio', 'rubro', 'especialidad'], 'Belleza'),
       vip: boolFrom(row, ['vip', 'es_vip', 'premium'], false),
-      verificado: boolFrom(row, ['verificado', 'verificada', 'configurado'], false),
+      verificado: enRanking,
       topRoma: boolFrom(row, ['top_roma', 'topRoma', 'destacado'], false),
       masReservado: boolFrom(row, ['mas_reservado', 'masReservado'], false),
       negocioDelMes: boolFrom(row, ['negocio_del_mes', 'negocioDelMes'], false),
@@ -474,14 +281,16 @@
         min: precios.length ? Math.min(...precios) : numberFrom(row, ['precio_min', 'precio_desde'], 0),
         max: precios.length ? Math.max(...precios) : numberFrom(row, ['precio_max', 'precio_hasta'], 0)
       },
-      estrellas: numberFrom(row, ['estrellas', 'rating', 'calificacion'], resenas.length ? 4.8 : 0),
-      totalResenas: numberFrom(row, ['total_resenas', 'totalResenas', 'reviews_count'], resenas.length),
+      estrellas,
+      totalValoraciones,
+      totalResenas: totalValoraciones,
+      enRanking,
       portadaUrl: coverUrl,
       logoUrl,
       reservaUrl,
       fotos: fotos.length ? fotos : [logoUrl],
       whatsapp: telefono ? String(telefono).replace(/[^\d+]/g, '') : '',
-      descripcion: valueFrom(row, ['descripcion', 'description', 'mensaje_bienvenida'], 'Negocio disponible para reseñas.'),
+      descripcion: valueFrom(row, ['descripcion', 'description', 'mensaje_bienvenida'], ''),
       categoriasCatalogo: buildCatalogSections({ servicios, productos, cursos }),
       resenas: resenas.map((item, index) => ({
         id: String(item.id || `${id}-resena-${index}`),
@@ -492,6 +301,33 @@
         fecha: valueFrom(item, ['fecha', 'created_at'], new Date().toISOString())
       }))
     };
+  }
+
+  async function fetchVerifiedRatings() {
+    try {
+      const rows = await optionalSupabaseFetch(
+        'reservas?valoracion_servicio=not.is.null&select=negocio_id,valoracion_servicio&limit=10000'
+      );
+      const grouped = {};
+      (rows || []).forEach((row) => {
+        const id = row.negocio_id;
+        if (!id || !row.valoracion_servicio) return;
+        if (!grouped[id]) grouped[id] = [];
+        grouped[id].push(Number(row.valoracion_servicio));
+      });
+      const result = {};
+      Object.entries(grouped).forEach(([id, vals]) => {
+        const sum = vals.reduce((a, b) => a + b, 0);
+        result[id] = {
+          promedio: Math.round((sum / vals.length) * 10) / 10,
+          total: vals.length
+        };
+      });
+      return result;
+    } catch (error) {
+      console.warn('No se pudieron cargar valoraciones verificadas:', error?.message || error);
+      return {};
+    }
   }
 
   async function loadBusinesses(forceRefresh = false) {
@@ -507,27 +343,34 @@
       }
 
       try {
-        const rows = await supabaseFetch('negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,suscripciones!inner(estado)&order=nombre.asc');
+        const [rows, ratingData] = await Promise.all([
+          supabaseFetch('negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,suscripciones!inner(estado)&order=nombre.asc'),
+          fetchVerifiedRatings()
+        ]);
+
         totalReservasHoy = await optionalSupabaseCount('reservas?created_at=gte.' + encodeURIComponent(getTodayStartIso()) + '&select=id');
+        const serviciosRows = await optionalSupabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,descripcion,activo,imagen,categoria&order=nombre.asc&limit=5000');
+        const reservasSemanaRows = await optionalSupabaseFetch('reservas?created_at=gte.' + encodeURIComponent(getWeekStartIso()) + '&select=*&limit=5000');
         const productosTiendaRows = tiendaTablesEnabled()
-          ? await optionalSupabaseFetch('productos?activo=eq.true&select=negocio_id&limit=1000')
+          ? await optionalSupabaseFetch('productos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,imagen_url,categoria,stock,activo,destacado,orden&order=destacado.desc,orden.asc,nombre.asc&limit=5000')
           : [];
         const cursosTiendaRows = tiendaTablesEnabled()
-          ? await optionalSupabaseFetch('cursos?activo=eq.true&select=negocio_id&limit=1000')
+          ? await optionalSupabaseFetch('cursos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=destacado.desc,orden.asc,fecha.asc,nombre.asc&limit=5000')
           : [];
         const tiendasIds = new Set([...businessIdSet(productosTiendaRows), ...businessIdSet(cursosTiendaRows)]);
+        const reservasSemanaPorNegocio = countWeeklyReservations(reservasSemanaRows);
 
         const relations = {
-          servicios: {},
-          productos: {},
-          cursos: {},
+          servicios: groupByBusiness(serviciosRows),
+          productos: groupByBusiness(productosTiendaRows),
+          cursos: groupByBusiness(cursosTiendaRows),
           resenas: {}
         };
 
         businesses = (rows || [])
           .map((row) => {
-            const business = normalizeBusiness(row, relations);
-            business.reservasSemana = 0;
+            const business = normalizeBusiness(row, relations, ratingData);
+            business.reservasSemana = reservasSemanaPorNegocio[business.id] || 0;
             business.detallesCargados = false;
             business.tieneTienda = tiendasIds.has(business.id);
             return business;
@@ -535,7 +378,7 @@
           .filter((business) => business.id);
         loadedFromSupabase = true;
         loadError = null;
-        console.log(`Marketplace cargó ${businesses.length} negocios desde Supabase`);
+        console.log(`RomaHub cargo ${businesses.length} negocios desde Supabase (${Object.keys(ratingData).length} con valoraciones verificadas)`);
         return businesses.slice();
       } catch (error) {
         businesses = [];
@@ -556,7 +399,10 @@
     if (current?.detallesCargados && !forceRefresh) return current;
 
     const encodedId = encodeURIComponent(negocioId);
-    const rows = await optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,suscripciones!inner(estado)`);
+    const [rows, ratingData] = await Promise.all([
+      optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,suscripciones!inner(estado)`),
+      fetchVerifiedRatings()
+    ]);
     const row = rows?.[0] || current || { id: negocioId };
     if (!rows?.[0] && !current) return null;
     const serviciosRows = await optionalSupabaseFetch(`servicios?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,duracion,precio,descripcion,activo,imagen,categoria&order=nombre.asc`);
@@ -573,7 +419,7 @@
       productos: groupByBusiness(productosRows),
       cursos: groupByBusiness(cursosRows),
       resenas: groupByBusiness(resenasRows)
-    });
+    }, ratingData);
     detailed.reservasSemana = current?.reservasSemana || 0;
     detailed.detallesCargados = true;
 
@@ -602,32 +448,22 @@
   function listTopRated() {
     return businesses
       .slice()
-      .filter((b) => (b.totalResenas || b.totalResenas || 0) > 0)
-      .sort((a, b) => (b.estrellas - a.estrellas) || ((b.totalResenas || b.totalResenas || 0) - (a.totalResenas || a.totalResenas || 0)))
-      .slice(0, 8);
+      .filter((b) => b.enRanking)
+      .sort((a, b) => (b.estrellas - a.estrellas) || (b.totalValoraciones - a.totalValoraciones))
+      .slice(0, 12);
   }
 
   function listWeeklyFeatured() {
-    const gordis = (business) => normalizeText(business.nombre).includes('gordis');
     return businesses
       .slice()
-      .sort((a, b) => {
-        if (gordis(a) && !gordis(b)) return -1;
-        if (!gordis(a) && gordis(b)) return 1;
-        return (b.reservasSemana || 0) - (a.reservasSemana || 0) || a.nombre.localeCompare(b.nombre);
-      })
+      .sort((a, b) => (b.reservasSemana || 0) - (a.reservasSemana || 0) || a.nombre.localeCompare(b.nombre))
       .slice(0, 10);
   }
 
   function listRomaStores() {
     return businesses
       .filter((business) => business.tieneTienda)
-      .sort((a, b) => {
-        const gordis = (business) => normalizeText(business.nombre).includes('gordis');
-        if (gordis(a) && !gordis(b)) return -1;
-        if (!gordis(a) && gordis(b)) return 1;
-        return a.nombre.localeCompare(b.nombre);
-      })
+      .sort((a, b) => a.nombre.localeCompare(b.nombre))
       .slice(0, 12);
   }
 
@@ -651,7 +487,7 @@
     try {
       inserted = await supabaseInsert('resenas', payload);
     } catch (error) {
-      throw new Error('No se pudo guardar la reseña porque Supabase no tiene disponible la tabla pública reseñas para insertar.');
+      throw new Error('No se pudo guardar la resena.');
     }
     const created = inserted?.[0] || payload;
     const business = businesses.find((b) => b.id === negocioId);
@@ -665,8 +501,6 @@
         fecha: created.fecha || created.created_at || payload.fecha
       };
       business.resenas = [normalized, ...(business.resenas || [])];
-      business.totalResenas = business.resenas.length;
-      business.estrellas = business.resenas.reduce((sum, item) => sum + Number(item.estrellas || 0), 0) / business.resenas.length;
     }
     return created;
   }
@@ -693,7 +527,7 @@
     return String(value || '')
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
+      .replace(/[̀-ͯ]/g, '');
   }
 
   function searchBusinesses(query) {
@@ -728,9 +562,3 @@
 
   return { listBusinesses, listTopRated, listWeeklyFeatured, listRomaStores, listRomaReviews, searchBusinesses, getBusinessById, loadBusinesses, loadBusinessDetails, getLoadError, getTodayReservations, addReview, addOrder };
 })();
-
-
-
-
-
-

@@ -13,7 +13,7 @@ function BusinessReviews({ business }) {
         event.preventDefault();
         setMessage('');
         if (!name.trim() || !text.trim()) {
-          setMessage('Escribe tu nombre y tu resena.');
+          setMessage('Escribe tu nombre y tu reseña.');
           return;
         }
 
@@ -35,10 +35,10 @@ function BusinessReviews({ business }) {
         setName('');
         setText('');
         setRating(5);
-        setMessage('Gracias. Tu resena ya fue enviada.');
+        setMessage('Gracias. Tu reseña ya fue enviada.');
       } catch (error) {
         console.error('BusinessReviews.submitReview error:', error);
-        setMessage(error.message || 'No se pudo guardar la resena.');
+        setMessage(error.message || 'No se pudo guardar la reseña.');
       } finally {
         setSaving(false);
       }
@@ -79,7 +79,7 @@ function BusinessReviews({ business }) {
             <textarea className="input-rr min-h-[104px] resize-y" value={text} onChange={(e) => setText(e.target.value)} placeholder="Cuenta como fue tu experiencia" data-name="review-text-input" data-file="pages/business/BusinessReviews.js"></textarea>
             <div className="flex flex-col sm:flex-row sm:items-center gap-3" data-name="review-submit-row" data-file="pages/business/BusinessReviews.js">
               <button className="btn-rr btn-primary-rr w-full sm:w-auto" type="submit" disabled={saving} data-name="review-submit" data-file="pages/business/BusinessReviews.js">
-                {saving ? 'Enviando...' : 'Enviar resena'}
+                {saving ? 'Enviando...' : 'Enviar reseña'}
               </button>
               {message ? <p className="text-sm text-[var(--text-muted)]" data-name="review-message" data-file="pages/business/BusinessReviews.js">{message}</p> : null}
             </div>

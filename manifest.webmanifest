@@ -1,12 +1,12 @@
 {
-  "name": "RservasRoma Marketplace",
-  "short_name": "RservasRoma",
-  "description": "Marketplace de belleza y servicios en Cuba.",
+  "name": "RomaHub — La belleza de Cuba",
+  "short_name": "RomaHub",
+  "description": "Directorio, ranking y marketplace de belleza en Cuba.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#D81B60",
+  "background_color": "#1A1A1A",
+  "theme_color": "#FF1493",
   "orientation": "portrait-primary",
   "icons": [
     {

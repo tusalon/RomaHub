@@ -72,7 +72,7 @@
 
                   <div className="p-4" data-name="top-rated-body" data-file="components/TopRatedCarousel.js">
                     <p className="text-sm font-semibold" data-name="top-rated-name" data-file="components/TopRatedCarousel.js">{b.nombre}</p>
-                    <p className="text-xs text-[var(--text-muted)] mt-1" data-name="top-rated-meta" data-file="components/TopRatedCarousel.js">{b.categoria} ? {b.ubicacion?.zona}</p>
+                    <p className="text-xs text-[var(--text-muted)] mt-1" data-name="top-rated-meta" data-file="components/TopRatedCarousel.js">{b.categoria} · {b.ubicacion?.zona}</p>
                     <div className="mt-3 flex items-center justify-between gap-3" data-name="top-rated-bottom" data-file="components/TopRatedCarousel.js">
                       <div className="flex items-center gap-2" data-name="top-rated-rating" data-file="components/TopRatedCarousel.js">
                         <div className="icon-star text-base text-[#F59E0B]" data-name="star" data-file="components/TopRatedCarousel.js"></div>

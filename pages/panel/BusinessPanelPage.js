@@ -1,7 +1,8 @@
-function BusinessPanelPage() {
+﻿function BusinessPanelPage() {
   try {
-    const params = new URLSearchParams(window.location.search);
-    const negocioId = params.get('negocio_id') || params.get('id') || localStorage.getItem('negocioId') || window.NEGOCIO_ID_POR_DEFECTO || '';
+    const [negocioId, setNegocioId] = React.useState('');
+    const [businessName, setBusinessName] = React.useState('');
+    const [authLoading, setAuthLoading] = React.useState(true);
     const [tab, setTab] = React.useState('productos');
     const [items, setItems] = React.useState({ productos: [], cursos: [] });
     const [loading, setLoading] = React.useState(true);
@@ -23,38 +24,53 @@ function BusinessPanelPage() {
       destacado: false
     });
 
-    const getConfig = () => {
-      const url = window.SUPABASE_URL || '';
-      const key = window.SUPABASE_ANON_KEY || '';
-      if (!url || !key) throw new Error('Supabase no configurado.');
-      return { url: String(url).replace(/\/$/, ''), key };
+    const supabaseRequest = async (path, options = {}) => {
+      if (!window.RomaAuth) throw new Error('No se cargó el acceso de Supabase.');
+      return window.RomaAuth.request(path, options, { requireAuth: true });
     };
 
-    const supabaseRequest = async (path, options = {}) => {
-      const config = getConfig();
-      const response = await fetch(`${config.url}/rest/v1/${path}`, {
-        ...options,
-        headers: {
-          apikey: config.key,
-          Authorization: `Bearer ${config.key}`,
-          'Content-Type': 'application/json',
-          Prefer: 'return=representation',
-          ...(options.headers || {})
-        }
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || 'No se pudo completar la operación.');
-      }
-      if (response.status === 204) return [];
-      return response.json();
+    const goToLogin = () => {
+      window.location.href = 'login.html';
     };
+
+    React.useEffect(() => {
+      const initPanel = async () => {
+        try {
+          setAuthLoading(true);
+          setMessage('');
+          const session = window.RomaAuth?.getSession?.();
+          if (!session) {
+            goToLogin();
+            return;
+          }
+
+          const access = await window.RomaAuth.getBusinessAccess();
+          if (!access?.negocio_id) {
+            window.RomaAuth.signOut();
+            goToLogin();
+            return;
+          }
+
+          localStorage.setItem('negocioId', access.negocio_id);
+          setNegocioId(access.negocio_id);
+          setBusinessName(access.negocios?.nombre || 'Tu negocio');
+        } catch (error) {
+          console.error('BusinessPanelPage.initPanel error:', error);
+          setMessage(error.message || 'No se pudo abrir el panel.');
+          window.RomaAuth?.signOut?.();
+        } finally {
+          setAuthLoading(false);
+        }
+      };
+
+      initPanel();
+    }, []);
 
     const loadStore = async () => {
       try {
         setLoading(true);
         setMessage('');
-        if (!negocioId) throw new Error('Falta negocio_id en el panel.');
+        if (!negocioId) return;
         const encoded = encodeURIComponent(negocioId);
         const [productos, cursos] = await Promise.all([
           supabaseRequest(`productos?negocio_id=eq.${encoded}&select=*&order=destacado.desc,orden.asc,nombre.asc`),
@@ -70,7 +86,7 @@ function BusinessPanelPage() {
     };
 
     React.useEffect(() => {
-      loadStore();
+      if (negocioId) loadStore();
     }, [negocioId]);
 
     const resetForm = () => {
@@ -182,8 +198,17 @@ function BusinessPanelPage() {
       }
     };
 
+    const signOut = () => {
+      window.RomaAuth?.signOut?.();
+      goToLogin();
+    };
+
     const currentItems = items[tab] || [];
     const isProduct = tab === 'productos';
+
+    if (authLoading) {
+      return <div className="container-rr py-16 text-sm text-[var(--text-muted)]">Abriendo panel...</div>;
+    }
 
     return (
       <div className="container-rr pt-6 md:pt-10" data-name="business-panel-page" data-file="pages/panel/BusinessPanelPage.js">
@@ -193,12 +218,13 @@ function BusinessPanelPage() {
               <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-[var(--primary-color)]" data-name="panel-kicker" data-file="pages/panel/BusinessPanelPage.js">Panel de tienda</p>
               <h1 className="mt-3 text-3xl md:text-5xl font-semibold tracking-tight" data-name="panel-title" data-file="pages/panel/BusinessPanelPage.js">Productos y cursos</h1>
               <p className="mt-3 text-sm md:text-base text-[var(--text-muted)] max-w-[720px] leading-relaxed" data-name="panel-subtitle" data-file="pages/panel/BusinessPanelPage.js">
-                Gestiona la mini tienda del negocio. Las imágenes se guardan como URL externa.
+                {businessName}. Gestiona tu mini tienda. Las imágenes se guardan como URL externa.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2" data-name="panel-actions" data-file="pages/panel/BusinessPanelPage.js">
               <span className="chip-rr px-3 py-2 text-xs text-[var(--text-muted)]" data-name="panel-id" data-file="pages/panel/BusinessPanelPage.js">ID: {negocioId || 'sin negocio'}</span>
               <a className="btn-rr btn-ghost-rr flex items-center justify-center gap-2" href={`business.html?id=${encodeURIComponent(negocioId)}`} data-name="view-business" data-file="pages/panel/BusinessPanelPage.js">Ver ficha</a>
+              <button className="btn-rr btn-ghost-rr" type="button" onClick={signOut} data-name="logout" data-file="pages/panel/BusinessPanelPage.js">Salir</button>
             </div>
           </div>
         </section>

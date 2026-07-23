@@ -3,8 +3,9 @@
 html { scroll-behavior: smooth; }
 body { margin: 0; -webkit-font-smoothing: antialiased; }
 
-a:focus-visible, button:focus-visible, input:focus-visible {
-  outline: none;
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid rgba(255, 20, 147, 0.36);
+  outline-offset: 2px;
 }
 
 [class^="icon-"], [class*=" icon-"] {
@@ -20,69 +21,30 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   font-weight: 700;
 }
 
-.icon-search::before { content: "⌕"; }
-.icon-map-pin::before { content: "⌖"; }
-.icon-map::before { content: "⌖"; }
-.icon-arrow-right::before { content: "→"; }
-.icon-chevron-right::before { content: "›"; }
-.icon-chevron-left::before { content: "‹"; }
-.icon-chevron-up::before { content: "⌃"; }
-.icon-chevron-down::before { content: "⌄"; }
-.icon-check::before, .icon-circle-check::before { content: "✓"; }
-.icon-x::before { content: "×"; }
-.icon-star::before { content: "★"; }
-.icon-sparkles::before { content: "✦"; }
-.icon-crown::before { content: "♛"; }
-.icon-award::before { content: "★"; }
-.icon-flame::before { content: "▲"; }
-.icon-calendar::before { content: "□"; }
-.icon-shopping-bag::before, .icon-store::before { content: "▣"; }
-.icon-graduation-cap::before { content: "△"; }
-.icon-message-circle::before, .icon-message-square::before { content: "□"; }
-.icon-send::before { content: "→"; }
-.icon-log-in::before { content: "↪"; }
-.icon-list::before, .icon-menu::before, .icon-men::before { content: "☰"; }
-.icon-user::before { content: "●"; }
-.icon-image::before { content: "▧"; }
+/* Iconos ligeros sin fuentes externas. Usamos escapes para evitar errores de codificacion. */
+.icon-search::before, .icon-search-x::before { content: "\2315"; }
+.icon-map-pin::before, .icon-map::before { content: "\25CE"; }
+.icon-arrow-right::before, .icon-send::before { content: "\2192"; }
+.icon-chevron-right::before, .icon-external-link::before { content: "\203A"; }
+.icon-chevron-left::before { content: "\2039"; }
+.icon-chevron-up::before { content: "\2303"; }
+.icon-chevron-down::before { content: "\2304"; }
+.icon-check::before, .icon-circle-check::before { content: "\2713"; }
+.icon-x::before { content: "\00D7"; }
+.icon-star::before, .icon-award::before { content: "\2605"; }
+.icon-sparkles::before { content: "\2726"; }
+.icon-crown::before { content: "\265B"; }
+.icon-flame::before, .icon-graduation-cap::before { content: "\25B3"; }
+.icon-calendar::before, .icon-receipt-text::before { content: "\25A4"; }
+.icon-shopping-bag::before, .icon-store::before, .icon-image::before { content: "\25A3"; }
+.icon-message-circle::before, .icon-message-square::before { content: "\2709"; }
+.icon-log-in::before { content: "\21AA"; }
+.icon-list::before, .icon-menu::before, .icon-men::before { content: "\2630"; }
+.icon-user::before { content: "\25CF"; }
 .icon-info::before { content: "i"; }
-.icon-external-link::before { content: "↗"; }
-.icon-database-zap::before { content: "▦"; }
-.icon-triangle-alert::before { content: "!"; }
-.icon-search-x::before { content: "⌕"; }
-.icon-receipt-text::before { content: "▤"; }
-.icon-chart-no-axes-column::before { content: "▥"; }
-
-/* Overrides ASCII: evita depender de fuentes externas y de simbolos corruptos. */
-.icon-search::before { content: "?"; }
-.icon-map-pin::before { content: "o"; }
-.icon-map::before { content: "o"; }
-.icon-arrow-right::before { content: ">"; }
-.icon-chevron-right::before { content: ">"; }
-.icon-chevron-left::before { content: "<"; }
-.icon-chevron-up::before { content: "^"; }
-.icon-chevron-down::before { content: "v"; }
-.icon-check::before, .icon-circle-check::before { content: "OK"; font-size: 0.7em; }
-.icon-x::before { content: "x"; }
-.icon-star::before { content: "*"; }
-.icon-sparkles::before { content: "*"; }
-.icon-crown::before { content: "VIP"; font-size: 0.62em; }
-.icon-award::before { content: "*"; }
-.icon-flame::before { content: "^"; }
-.icon-calendar::before { content: "[]"; font-size: 0.7em; }
-.icon-shopping-bag::before, .icon-store::before { content: "[]"; font-size: 0.7em; }
-.icon-graduation-cap::before { content: "^"; }
-.icon-message-circle::before, .icon-message-square::before { content: "[]"; font-size: 0.7em; }
-.icon-send::before { content: ">"; }
-.icon-log-in::before { content: ">"; }
-.icon-list::before, .icon-menu::before, .icon-men::before { content: "|||"; letter-spacing: -2px; }
-.icon-user::before { content: "o"; }
-.icon-image::before { content: "[]"; font-size: 0.7em; }
-.icon-external-link::before { content: ">"; }
 .icon-database-zap::before { content: "DB"; font-size: 0.65em; }
 .icon-triangle-alert::before { content: "!"; }
-.icon-search-x::before { content: "?"; }
-.icon-receipt-text::before { content: "[]"; font-size: 0.7em; }
-.icon-chart-no-axes-column::before { content: "|||"; letter-spacing: -2px; }
+.icon-chart-no-axes-column::before { content: "\25A5"; }
 
 .rr-leaflet-map,
 .rr-leaflet-map .leaflet-container {

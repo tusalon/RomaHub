@@ -47,8 +47,12 @@
         const whatsappCliente = customer.whatsapp.replace(/\D/g, '');
         const direccion = customer.direccion.trim();
         const nota = customer.nota.trim();
-        if (!nombre || !whatsappCliente) {
-          setCartMessage('Escribe tu nombre y WhatsApp para procesar el pedido.');
+        if (nombre.length < 2) {
+          setCartMessage('Escribe tu nombre para procesar el pedido.');
+          return;
+        }
+        if (!/^\d{8,15}$/.test(whatsappCliente)) {
+          setCartMessage('Escribe un WhatsApp válido, solo números.');
           return;
         }
         setSendingOrder(true);
