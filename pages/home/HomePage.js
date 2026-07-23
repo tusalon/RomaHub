@@ -86,7 +86,7 @@ function HomePage({ initialParams }) {
         <section className="mt-12" data-name="home-trust" data-file="pages/home/HomePage.js">
           <div className="container-rr" data-name="home-trust-inner" data-file="pages/home/HomePage.js">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4" data-name="trust-grid" data-file="pages/home/HomePage.js">
-              <div className="surface-rr p-5" data-name="trust-1" data-file="pages/home/HomePage.js">
+              <div className="surface-rr card-lift-rr p-5" data-name="trust-1" data-file="pages/home/HomePage.js">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(34,197,94,0.08)]" data-name="trust-1-iw" data-file="pages/home/HomePage.js">
                   <div className="icon-circle-check text-xl text-[#22C55E]" data-name="trust-1-i" data-file="pages/home/HomePage.js"></div>
                 </div>
@@ -96,7 +96,7 @@ function HomePage({ initialParams }) {
                 </p>
               </div>
 
-              <div className="surface-rr p-5" data-name="trust-2" data-file="pages/home/HomePage.js">
+              <div className="surface-rr card-lift-rr p-5" data-name="trust-2" data-file="pages/home/HomePage.js">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(232,51,135,0.08)]" data-name="trust-2-iw" data-file="pages/home/HomePage.js">
                   <div className="icon-trophy text-xl text-[#e83387]" data-name="trust-2-i" data-file="pages/home/HomePage.js"></div>
                 </div>
@@ -106,7 +106,7 @@ function HomePage({ initialParams }) {
                 </p>
               </div>
 
-              <div className="surface-rr p-5" data-name="trust-3" data-file="pages/home/HomePage.js">
+              <div className="surface-rr card-lift-rr p-5" data-name="trust-3" data-file="pages/home/HomePage.js">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(232,51,135,0.08)]" data-name="trust-3-iw" data-file="pages/home/HomePage.js">
                   <div className="icon-map-pin text-xl text-[#e83387]" data-name="trust-3-i" data-file="pages/home/HomePage.js"></div>
                 </div>

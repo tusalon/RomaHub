@@ -45,7 +45,7 @@
 
     return (
       <div
-        className={`surface-rr w-full text-left overflow-hidden transition-shadow hover:shadow-[0_14px_34px_rgba(11,18,32,0.10)] ${border} cursor-pointer`}
+        className={`surface-rr card-lift-rr w-full text-left overflow-hidden ${border} cursor-pointer`}
         onMouseEnter={() => onHover?.(b)}
         onFocus={() => onHover?.(b)}
         onClick={onOpen}

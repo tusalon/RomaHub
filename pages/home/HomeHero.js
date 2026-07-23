@@ -6,9 +6,10 @@ function HomeHero({ initialParams }) {
     const reservasHoy = MockData.getTodayReservations ? MockData.getTodayReservations() : 0;
 
     return (
-      <section className="pt-8 md:pt-14 pb-2" data-name="home-hero" data-file="pages/home/HomeHero.js">
-        <div className="container-rr" data-name="home-hero-inner" data-file="pages/home/HomeHero.js">
-          <div className="max-w-3xl" data-name="home-hero-copy" data-file="pages/home/HomeHero.js">
+      <section className="relative overflow-hidden pt-8 md:pt-14 pb-2" data-name="home-hero" data-file="pages/home/HomeHero.js">
+        <div className="hero-blob-rr top-[-160px] right-[-120px]" aria-hidden="true" data-name="hero-blob" data-file="pages/home/HomeHero.js"></div>
+        <div className="container-rr relative" data-name="home-hero-inner" data-file="pages/home/HomeHero.js">
+          <div className="max-w-3xl hero-anim-rr" data-name="home-hero-copy" data-file="pages/home/HomeHero.js">
             <p className="kicker-rr mb-5" data-name="hero-kicker" data-file="pages/home/HomeHero.js">
               El directorio de la belleza en Cuba
             </p>
@@ -43,15 +44,15 @@ function HomeHero({ initialParams }) {
 
             <div className="mt-7 flex gap-1" data-name="hero-stats" data-file="pages/home/HomeHero.js">
               <div className="px-4 py-3 rounded-l-xl border border-[var(--border)] bg-white" data-name="stat-businesses" data-file="pages/home/HomeHero.js">
-                <p className="text-xl md:text-2xl font-bold text-[#111827]" data-name="stat-businesses-value" data-file="pages/home/HomeHero.js">{totalBusinesses}</p>
+                <p className="text-xl md:text-2xl font-bold text-[#111827]" data-name="stat-businesses-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={totalBusinesses}>{totalBusinesses}</span></p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-businesses-label" data-file="pages/home/HomeHero.js">negocios</p>
               </div>
               <div className="px-4 py-3 border border-[var(--border)] bg-white" data-name="stat-ranked" data-file="pages/home/HomeHero.js">
-                <p className="text-xl md:text-2xl font-bold text-[#e83387]" data-name="stat-ranked-value" data-file="pages/home/HomeHero.js">{rankingCount}</p>
+                <p className="text-xl md:text-2xl font-bold text-[#e83387]" data-name="stat-ranked-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={rankingCount}>{rankingCount}</span></p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-ranked-label" data-file="pages/home/HomeHero.js">en el ranking</p>
               </div>
               <div className="px-4 py-3 rounded-r-xl border border-[var(--border)] bg-white" data-name="stat-today" data-file="pages/home/HomeHero.js">
-                <p className="text-xl md:text-2xl font-bold text-[#111827]" data-name="stat-today-value" data-file="pages/home/HomeHero.js">{Number(reservasHoy || 0).toLocaleString('es-ES')}</p>
+                <p className="text-xl md:text-2xl font-bold text-[#111827]" data-name="stat-today-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={Number(reservasHoy || 0)}>{Number(reservasHoy || 0)}</span></p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-today-label" data-file="pages/home/HomeHero.js">reservas hoy</p>
               </div>
             </div>
