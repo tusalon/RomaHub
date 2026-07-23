@@ -57,12 +57,17 @@
         aria-label={`Abrir perfil de ${b.nombre}`}
       >
         <div className="grid grid-cols-[96px_1fr] gap-4 p-3" data-name="business-card-inner" data-file="components/BusinessCard.js">
-          <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-white border border-[var(--border)] p-2" data-name="photo" data-file="components/BusinessCard.js">
-            {b.logoUrl ? (
-              <img loading="lazy" decoding="async" src={b.logoUrl} alt={`Logo de ${b.nombre}`} className="w-full h-full object-contain" data-name="photo-img" data-file="components/BusinessCard.js" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-xl font-semibold text-[var(--primary-color)]" data-name="photo-initials" data-file="components/BusinessCard.js">{initials}</div>
-            )}
+          <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-[#F3F4F6]" data-name="photo" data-file="components/BusinessCard.js">
+            {b.portadaUrl ? (
+              <img loading="lazy" decoding="async" src={b.portadaUrl} alt={`Imagen de ${b.nombre}`} className="absolute inset-0 w-full h-full object-cover" data-name="photo-cover" data-file="components/BusinessCard.js" />
+            ) : null}
+            <div className="absolute bottom-1 right-1 w-8 h-8 rounded-lg border-2 border-white bg-white overflow-hidden shadow-sm" data-name="photo-logo-badge" data-file="components/BusinessCard.js">
+              {b.logoUrl ? (
+                <img loading="lazy" decoding="async" src={b.logoUrl} alt={`Logo de ${b.nombre}`} className="w-full h-full object-contain" data-name="photo-img" data-file="components/BusinessCard.js" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-[var(--primary-color)] bg-[var(--secondary-color)]" data-name="photo-initials" data-file="components/BusinessCard.js">{initials}</div>
+              )}
+            </div>
             {b.vip ? (
               <div className="absolute top-2 left-2" data-name="vip" data-file="components/BusinessCard.js">
                 <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[#1F2937] text-white text-[11px] border border-white/20" data-name="vip-chip" data-file="components/BusinessCard.js">
@@ -82,11 +87,17 @@
                 </p>
               </div>
               <div className="ml-auto hidden sm:flex flex-col items-end gap-1" data-name="top-right" data-file="components/BusinessCard.js">
-                <div className="flex items-center gap-1" data-name="stars" data-file="components/BusinessCard.js">
-                  <div className="icon-star text-base text-[#F59E0B]" data-name="star" data-file="components/BusinessCard.js"></div>
-                  <span className="text-sm font-semibold" data-name="star-val" data-file="components/BusinessCard.js">{Number(b.estrellas).toFixed(1)}</span>
-                </div>
-                <span className="text-[11px] text-[var(--text-muted)]" data-name="reviews" data-file="components/BusinessCard.js">{b.totalValoraciones || b.totalResenas || 0} valoraciones</span>
+                {b.estrellas > 0 ? (
+                  <React.Fragment>
+                    <div className="flex items-center gap-1" data-name="stars" data-file="components/BusinessCard.js">
+                      <div className="icon-star text-base text-[#F59E0B]" data-name="star" data-file="components/BusinessCard.js"></div>
+                      <span className="text-sm font-semibold" data-name="star-val" data-file="components/BusinessCard.js">{Number(b.estrellas).toFixed(1)}</span>
+                    </div>
+                    <span className="text-[11px] text-[var(--text-muted)]" data-name="reviews" data-file="components/BusinessCard.js">{b.totalValoraciones || 0} valoraciones</span>
+                  </React.Fragment>
+                ) : (
+                  <span className="text-[11px] text-[var(--text-muted)]" data-name="reviews" data-file="components/BusinessCard.js">Sin valoraciones</span>
+                )}
               </div>
             </div>
 

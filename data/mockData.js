@@ -8,6 +8,31 @@ const MockData = (() => {
   const defaultCoverUrl = '';
   const defaultLogoUrl = '';
 
+  // Fotos de stock por categoria (mismas que usa rservasroma en
+  // utils/hero-backgrounds.js). imagen_fondo_url casi siempre esta vacia en
+  // negocios: el dueno solo elige una categoria (imagen_fondo_tipo) y
+  // rservasroma resuelve la foto en su propio cliente, nunca llega a la BD.
+  // Sin esto las tarjetas quedan en gris plano para el 100% de los negocios.
+  const CATEGORY_COVER_PHOTOS = {
+    unas: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=60&w=800&auto=format&fit=crop',
+    belleza: 'https://images.unsplash.com/photo-1560750588-73207b1ef5b8?q=60&w=800&auto=format&fit=crop',
+    barberia: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?q=60&w=800&auto=format&fit=crop',
+    peluqueria: 'https://images.unsplash.com/photo-1701976333339-1d41dad8138b?ixlib=rb-4.1.0&q=60&fm=jpg&crop=entropy&cs=srgb&w=800&auto=format&fit=crop',
+    lashes: 'https://images.unsplash.com/photo-1589710751893-f9a6770ad71b?ixlib=rb-4.1.0&q=60&fm=jpg&crop=entropy&cs=srgb&w=800&auto=format&fit=crop'
+  };
+
+  function resolveCategoryCoverPhoto(fondoTipo, especialidad) {
+    const tipo = String(fondoTipo || '').trim().toLowerCase();
+    if (CATEGORY_COVER_PHOTOS[tipo]) return CATEGORY_COVER_PHOTOS[tipo];
+
+    const texto = String(especialidad || '').toLowerCase();
+    if (/barber/.test(texto)) return CATEGORY_COVER_PHOTOS.barberia;
+    if (/pesta/.test(texto)) return CATEGORY_COVER_PHOTOS.lashes;
+    if (/pelo|peluquer/.test(texto)) return CATEGORY_COVER_PHOTOS.peluqueria;
+    if (/u[ñn]a|manicur|pedicur/.test(texto)) return CATEGORY_COVER_PHOTOS.unas;
+    return CATEGORY_COVER_PHOTOS.belleza;
+  }
+
   function getSupabaseConfig() {
     const url = window.SUPABASE_URL || window.supabaseUrl || '';
     const key = window.SUPABASE_ANON_KEY || window.supabaseAnonKey || '';
@@ -243,7 +268,9 @@ const MockData = (() => {
     const lat = numberFrom(row, ['lat', 'latitud', 'latitude'], 23.1136);
     const lng = numberFrom(row, ['lng', 'longitud', 'lon', 'longitude'], -82.3666);
     const telefono = valueFrom(row, ['whatsapp', 'telefono', 'phone'], '');
-    const coverUrl = valueFrom(row, ['imagen_fondo_url', 'portada_url', 'cover_url', 'foto_portada', 'imagen_url'], '');
+    const especialidad = valueFrom(row, ['categoria', 'tipo_negocio', 'rubro', 'especialidad'], 'Belleza');
+    const coverUrlPropia = valueFrom(row, ['imagen_fondo_url', 'portada_url', 'cover_url', 'foto_portada', 'imagen_url'], '');
+    const coverUrl = coverUrlPropia || resolveCategoryCoverPhoto(row.imagen_fondo_tipo, especialidad);
     const logoUrl = valueFrom(row, ['logo_url', 'logo', 'avatar_url'], defaultLogoUrl);
     const fotos = [coverUrl, logoUrl].filter(Boolean);
     const slug = valueFrom(row, ['slug'], '');
@@ -270,7 +297,7 @@ const MockData = (() => {
       id,
       slug,
       nombre: valueFrom(row, ['nombre', 'name', 'titulo'], 'Negocio sin nombre'),
-      categoria: valueFrom(row, ['categoria', 'tipo_negocio', 'rubro', 'especialidad'], 'Belleza'),
+      categoria: especialidad,
       vip: boolFrom(row, ['vip', 'es_vip', 'premium'], false),
       verificado: enRanking,
       topRoma: boolFrom(row, ['top_roma', 'topRoma', 'destacado'], false),
@@ -288,6 +315,7 @@ const MockData = (() => {
       totalResenas: totalValoraciones,
       enRanking,
       portadaUrl: coverUrl,
+      portadaEsPropia: Boolean(coverUrlPropia),
       logoUrl,
       reservaUrl,
       fotos: fotos.length ? fotos : [logoUrl],
@@ -346,7 +374,7 @@ const MockData = (() => {
 
       try {
         const [rows, ratingData] = await Promise.all([
-          supabaseFetch('negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,suscripciones!inner(estado)&order=nombre.asc'),
+          supabaseFetch('negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,suscripciones!inner(estado)&order=nombre.asc'),
           fetchVerifiedRatings()
         ]);
 
@@ -402,7 +430,7 @@ const MockData = (() => {
 
     const encodedId = encodeURIComponent(negocioId);
     const [rows, ratingData] = await Promise.all([
-      optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,suscripciones!inner(estado)`),
+      optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,suscripciones!inner(estado)`),
       fetchVerifiedRatings()
     ]);
     const row = rows?.[0] || current || { id: negocioId };

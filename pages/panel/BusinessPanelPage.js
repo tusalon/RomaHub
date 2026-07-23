@@ -8,6 +8,8 @@
     const [loading, setLoading] = React.useState(true);
     const [saving, setSaving] = React.useState(false);
     const [message, setMessage] = React.useState('');
+    const [uploadingImage, setUploadingImage] = React.useState(false);
+    const fileInputRef = React.useRef(null);
     const [form, setForm] = React.useState({
       id: '',
       nombre: '',
@@ -184,6 +186,24 @@
       }
     };
 
+    const onPickImage = async (event) => {
+      const file = event.target.files?.[0];
+      event.target.value = '';
+      if (!file) return;
+      try {
+        setMessage('');
+        setUploadingImage(true);
+        if (!window.RomaUpload) throw new Error('No se cargó el subidor de imágenes.');
+        const url = await window.RomaUpload.subirImagenProducto(file, form.nombre || 'producto');
+        updateForm('imagen_url', url);
+      } catch (error) {
+        console.error('BusinessPanelPage.onPickImage error:', error);
+        setMessage(error.message || 'No se pudo subir la imagen.');
+      } finally {
+        setUploadingImage(false);
+      }
+    };
+
     const toggleActive = async (item, type) => {
       try {
         const table = type === 'productos' ? 'productos' : 'cursos';
@@ -218,7 +238,7 @@
               <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-[var(--primary-color)]" data-name="panel-kicker" data-file="pages/panel/BusinessPanelPage.js">Panel de tienda</p>
               <h1 className="mt-3 text-3xl md:text-5xl font-semibold tracking-tight" data-name="panel-title" data-file="pages/panel/BusinessPanelPage.js">Productos y cursos</h1>
               <p className="mt-3 text-sm md:text-base text-[var(--text-muted)] max-w-[720px] leading-relaxed" data-name="panel-subtitle" data-file="pages/panel/BusinessPanelPage.js">
-                {businessName}. Gestiona tu mini tienda. Las imágenes se guardan como URL externa.
+                {businessName}. Gestiona tu mini tienda. Sube fotos desde tu teléfono o computadora.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2" data-name="panel-actions" data-file="pages/panel/BusinessPanelPage.js">
@@ -242,7 +262,26 @@
               <input className="input-rr" value={form.precio} onChange={(e) => updateForm('precio', e.target.value)} inputMode="decimal" placeholder="Precio CUP" data-name="item-price" data-file="pages/panel/BusinessPanelPage.js" />
               <input className="input-rr" value={form.categoria} onChange={(e) => updateForm('categoria', e.target.value)} placeholder="Categoría" data-name="item-category" data-file="pages/panel/BusinessPanelPage.js" />
             </div>
-            <input className="input-rr" value={form.imagen_url} onChange={(e) => updateForm('imagen_url', e.target.value)} placeholder="URL de imagen" data-name="item-image" data-file="pages/panel/BusinessPanelPage.js" />
+            <div className="flex items-center gap-3" data-name="item-image-uploader" data-file="pages/panel/BusinessPanelPage.js">
+              <div className="w-16 h-16 rounded-lg border border-[var(--border)] bg-[var(--bg-muted)] overflow-hidden flex items-center justify-center shrink-0" data-name="item-image-preview" data-file="pages/panel/BusinessPanelPage.js">
+                {uploadingImage ? (
+                  <div className="w-5 h-5 rounded-full border-2 border-[var(--border)] border-t-[var(--primary-color)] animate-spin" data-name="item-image-spinner" data-file="pages/panel/BusinessPanelPage.js"></div>
+                ) : form.imagen_url ? (
+                  <img src={form.imagen_url} alt="Foto del producto" className="w-full h-full object-cover" data-name="item-image-thumb" data-file="pages/panel/BusinessPanelPage.js" />
+                ) : (
+                  <div className="icon-image text-xl text-[var(--text-muted)]" data-name="item-image-empty" data-file="pages/panel/BusinessPanelPage.js"></div>
+                )}
+              </div>
+              <div className="flex-1 min-w-0" data-name="item-image-actions" data-file="pages/panel/BusinessPanelPage.js">
+                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={onPickImage} data-name="item-image-input" data-file="pages/panel/BusinessPanelPage.js" />
+                <button type="button" className="btn-rr btn-ghost-rr w-full text-xs py-2" onClick={() => fileInputRef.current?.click()} disabled={uploadingImage} data-name="item-image-pick" data-file="pages/panel/BusinessPanelPage.js">
+                  {uploadingImage ? 'Subiendo...' : form.imagen_url ? 'Cambiar foto' : 'Subir foto'}
+                </button>
+                {form.imagen_url ? (
+                  <button type="button" className="mt-1 text-[11px] text-[var(--text-muted)] hover:text-[var(--primary-color)]" onClick={() => updateForm('imagen_url', '')} data-name="item-image-clear" data-file="pages/panel/BusinessPanelPage.js">Quitar foto</button>
+                ) : null}
+              </div>
+            </div>
 
             {isProduct ? (
               <input className="input-rr" value={form.stock} onChange={(e) => updateForm('stock', e.target.value)} inputMode="numeric" placeholder="Stock" data-name="item-stock" data-file="pages/panel/BusinessPanelPage.js" />

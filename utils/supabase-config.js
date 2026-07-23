@@ -10,3 +10,11 @@ window.ENABLE_TIENDA_TABLES = window.ENABLE_TIENDA_TABLES || true;
 
 // Opcional: conservar el ID del negocio cliente si otras paginas lo usan.
 window.NEGOCIO_ID_POR_DEFECTO = window.NEGOCIO_ID_POR_DEFECTO || '08638828-1a42-4c60-a6d4-4f2b2b841646';
+
+// Cloud name de Cloudinary (Dashboard > arriba a la izquierda). Las fotos de
+// productos/cursos se suben ahi, no a Supabase Storage: el free tier de
+// Cloudinary (25 creditos/mes, sin tarjeta) rinde mucho mas que el 1GB de
+// Supabase para un catalogo con fotos de muchos negocios.
+// Requiere ademas un upload preset SIN FIRMA llamado "romahub_productos"
+// (Settings > Upload > Upload presets > Add > Signing Mode: Unsigned).
+window.CLOUDINARY_CLOUD_NAME = window.CLOUDINARY_CLOUD_NAME || 'CONFIGURAR_CLOUD_NAME';
