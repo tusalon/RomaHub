@@ -26,8 +26,8 @@ function Header({ currentParams }) {
         <div className="container-rr py-3" data-name="header-inner" data-file="components/Header.js">
           <div className="flex items-center gap-3" data-name="header-row" data-file="components/Header.js">
             <button className="flex items-center gap-2.5" onClick={onGoHome} data-name="brand" data-file="components/Header.js">
-              <div className="w-9 h-9 rounded-xl bg-[#e83387] flex items-center justify-center shadow-[0_4px_12px_rgba(232,51,135,0.20)]" data-name="brand-mark" data-file="components/Header.js">
-                <span className="text-white text-sm font-bold leading-none">R</span>
+              <div className="w-9 h-9 rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(232,51,135,0.20)]" data-name="brand-mark" data-file="components/Header.js">
+                <img src="icons/icon-96x96.png" alt="RomaHub" className="w-full h-full object-cover" width="36" height="36" data-name="brand-mark-img" data-file="components/Header.js" />
               </div>
               <div className="leading-tight" data-name="brand-text" data-file="components/Header.js">
                 <p className="text-sm font-bold tracking-tight text-[#111827]" data-name="brand-title" data-file="components/Header.js">
