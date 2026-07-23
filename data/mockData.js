@@ -236,6 +236,7 @@ const MockData = (() => {
   function normalizeBusiness(row, relations, ratingData) {
     const id = String(row.id || row.negocio_id || row.uuid || '');
     const provincia = valueFrom(row, ['provincia', 'province'], '');
+    const municipio = valueFrom(row, ['municipio'], '');
     const ciudad = valueFrom(row, ['ciudad', 'municipio', 'city'], provincia);
     const zona = valueFrom(row, ['zona', 'barrio', 'municipio'], ciudad);
     const direccion = valueFrom(row, ['direccion', 'ubicacion', 'address'], zona);
@@ -275,7 +276,8 @@ const MockData = (() => {
       topRoma: boolFrom(row, ['top_roma', 'topRoma', 'destacado'], false),
       masReservado: boolFrom(row, ['mas_reservado', 'masReservado'], false),
       negocioDelMes: boolFrom(row, ['negocio_del_mes', 'negocioDelMes'], false),
-      ubicacion: { provincia, ciudad, zona, direccion },
+      ubicacion: { provincia, municipio, ciudad, zona, direccion },
+      ubicacionCorta: [municipio, provincia].filter(Boolean).join(', '),
       coordenadas: { lat, lng },
       rangoPrecio: {
         min: precios.length ? Math.min(...precios) : numberFrom(row, ['precio_min', 'precio_desde'], 0),
@@ -344,7 +346,7 @@ const MockData = (() => {
 
       try {
         const [rows, ratingData] = await Promise.all([
-          supabaseFetch('negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,suscripciones!inner(estado)&order=nombre.asc'),
+          supabaseFetch('negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,suscripciones!inner(estado)&order=nombre.asc'),
           fetchVerifiedRatings()
         ]);
 
@@ -400,7 +402,7 @@ const MockData = (() => {
 
     const encodedId = encodeURIComponent(negocioId);
     const [rows, ratingData] = await Promise.all([
-      optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,suscripciones!inner(estado)`),
+      optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,suscripciones!inner(estado)`),
       fetchVerifiedRatings()
     ]);
     const row = rows?.[0] || current || { id: negocioId };

@@ -78,7 +78,7 @@
               <div className="min-w-0" data-name="title" data-file="components/BusinessCard.js">
                 <p className="text-base font-semibold leading-snug truncate" data-name="name" data-file="components/BusinessCard.js">{b.nombre}</p>
                 <p className="text-xs text-[var(--text-muted)] mt-1 truncate" data-name="meta" data-file="components/BusinessCard.js">
-                  {b.categoria} · {b.ubicacion?.provincia || b.ubicacion?.zona}
+                  {[b.categoria, b.ubicacionCorta || b.ubicacion?.zona].filter(Boolean).join(' · ')}
                 </p>
               </div>
               <div className="ml-auto hidden sm:flex flex-col items-end gap-1" data-name="top-right" data-file="components/BusinessCard.js">
