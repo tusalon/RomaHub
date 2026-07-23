@@ -69,7 +69,7 @@
       <div className="container-rr" data-name="search-page" data-file="pages/search/SearchPage.js">
         <div className="flex items-start justify-between gap-4" data-name="search-head" data-file="pages/search/SearchPage.js">
           <div data-name="search-titlewrap" data-file="pages/search/SearchPage.js">
-            <h1 className="text-xl md:text-2xl font-semibold tracking-tight" data-name="search-title" data-file="pages/search/SearchPage.js">Resultados</h1>
+            <h1 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]" data-name="search-title" data-file="pages/search/SearchPage.js">Resultados</h1>
             <p className="text-sm text-[var(--text-muted)] mt-1" data-name="search-sub" data-file="pages/search/SearchPage.js">
               Desliza los negocios activos y consulta su ubicación en el mapa.
             </p>

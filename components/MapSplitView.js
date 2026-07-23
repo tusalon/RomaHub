@@ -23,7 +23,7 @@
 
         <div className="relative z-10 h-full flex flex-col justify-center p-5 md:p-8" data-name="map-soon-content" data-file="components/MapSplitView.js">
           <div className="surface-rr bg-white/94 backdrop-blur p-5 md:p-7 max-w-[620px] mx-auto text-center" data-name="map-soon-card" data-file="components/MapSplitView.js">
-            <div className="mx-auto w-14 h-14 rounded-2xl bg-[var(--primary-color)] flex items-center justify-center shadow-[0_16px_44px_rgba(255,20,147,0.22)]" data-name="map-soon-logo" data-file="components/MapSplitView.js">
+            <div className="mx-auto w-14 h-14 rounded-2xl bg-[var(--primary-color)] flex items-center justify-center shadow-[0_16px_44px_rgba(232,51,135,0.22)]" data-name="map-soon-logo" data-file="components/MapSplitView.js">
               <img src="icons/icon-72x72.png" alt="" className="w-10 h-10 object-contain rounded-xl" data-name="map-soon-logo-img" data-file="components/MapSplitView.js" />
             </div>
             <p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--primary-color)]" data-name="map-soon-kicker" data-file="components/MapSplitView.js">Próximas actualizaciones</p>

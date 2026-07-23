@@ -18,8 +18,8 @@ function BusinessRail({ title, subtitle, items, badge, emptyText }) {
         <div className="container-rr" data-name="business-rail-inner" data-file="components/BusinessRail.js">
           <div className="flex items-end justify-between gap-4 mb-4" data-name="business-rail-head" data-file="components/BusinessRail.js">
             <div data-name="business-rail-copy" data-file="components/BusinessRail.js">
-              {badge ? <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)] mb-2 inline-flex" data-name="business-rail-badge" data-file="components/BusinessRail.js">{badge}</span> : null}
-              <h2 className="text-xl md:text-2xl font-semibold tracking-tight" data-name="business-rail-title" data-file="components/BusinessRail.js">{title}</h2>
+              {badge ? <span className="kicker-rr block mb-2" data-name="business-rail-badge" data-file="components/BusinessRail.js">{badge}</span> : null}
+              <h2 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]" data-name="business-rail-title" data-file="components/BusinessRail.js">{title}</h2>
               {subtitle ? <p className="text-sm text-[var(--text-muted)] mt-1" data-name="business-rail-subtitle" data-file="components/BusinessRail.js">{subtitle}</p> : null}
             </div>
             <div className="hidden md:flex items-center gap-2" data-name="business-rail-controls" data-file="components/BusinessRail.js">

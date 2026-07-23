@@ -7,8 +7,8 @@ function RomaReviewsRail({ reviews }) {
       <section className="mt-12" data-name="roma-reviews" data-file="components/RomaReviewsRail.js">
         <div className="container-rr" data-name="roma-reviews-inner" data-file="components/RomaReviewsRail.js">
           <div className="mb-4" data-name="roma-reviews-head" data-file="components/RomaReviewsRail.js">
-            <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)] mb-2 inline-flex" data-name="roma-reviews-badge" data-file="components/RomaReviewsRail.js">Comunidad</span>
-            <h2 className="text-xl md:text-2xl font-semibold tracking-tight" data-name="roma-reviews-title" data-file="components/RomaReviewsRail.js">Lo que dicen las clientas</h2>
+            <span className="kicker-rr block mb-2" data-name="roma-reviews-badge" data-file="components/RomaReviewsRail.js">Comunidad</span>
+            <h2 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]" data-name="roma-reviews-title" data-file="components/RomaReviewsRail.js">Lo que dicen las clientas</h2>
           </div>
 
           <div className="flex gap-4 overflow-x-auto no-scrollbar pb-3 snap-x snap-mandatory" data-name="roma-reviews-track" data-file="components/RomaReviewsRail.js">

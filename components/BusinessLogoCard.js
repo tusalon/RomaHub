@@ -20,7 +20,7 @@ function BusinessLogoCard({ business, onOpen }) {
             {b.logoUrl ? (
               <img loading="lazy" decoding="async" src={b.logoUrl} alt={`Logo de ${b.nombre}`} className="w-full h-full object-contain" data-name="logo-img" data-file="components/BusinessLogoCard.js" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-sm font-bold text-[#FF1493]" data-name="logo-initials" data-file="components/BusinessLogoCard.js">{initials}</div>
+              <div className="w-full h-full flex items-center justify-center text-sm font-bold text-[#e83387]" data-name="logo-initials" data-file="components/BusinessLogoCard.js">{initials}</div>
             )}
           </div>
           {b.enRanking ? (
@@ -54,7 +54,7 @@ function BusinessLogoCard({ business, onOpen }) {
             )}
             <div className="flex items-center gap-1 text-xs text-[var(--text-muted)]" data-name="peek" data-file="components/BusinessLogoCard.js">
               <span data-name="peek-text" data-file="components/BusinessLogoCard.js">Ver perfil</span>
-              <div className="icon-arrow-right text-base text-[#FF1493]" data-name="peek-icon" data-file="components/BusinessLogoCard.js"></div>
+              <div className="icon-arrow-right text-base text-[#e83387]" data-name="peek-icon" data-file="components/BusinessLogoCard.js"></div>
             </div>
           </div>
         </div>

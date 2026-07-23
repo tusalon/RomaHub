@@ -87,7 +87,7 @@
                 {provincias.slice(0, 8).map((item) => (
                   <button
                     key={item}
-                    className={`px-3 py-1.5 rounded-full border text-xs whitespace-nowrap transition-colors ${provincia === item ? 'bg-[var(--primary-color)] text-white border-[var(--primary-color)]' : 'border-[var(--border)] bg-white text-[var(--text-muted)] hover:text-[var(--primary-color)] hover:border-[rgba(255,20,147,0.35)]'}`}
+                    className={`px-3 py-1.5 rounded-full border text-xs whitespace-nowrap transition-colors ${provincia === item ? 'bg-[var(--primary-color)] text-white border-[var(--primary-color)]' : 'border-[var(--border)] bg-white text-[var(--text-muted)] hover:text-[var(--primary-color)] hover:border-[rgba(232,51,135,0.35)]'}`}
                     onClick={() => setProvincia(item)}
                     data-name="suggestion-chip"
                     data-file="components/SearchBar.js"

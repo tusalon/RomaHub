@@ -19,7 +19,7 @@
         <div className="container-rr" data-name="top-rated-inner" data-file="components/TopRatedCarousel.js">
           <div className="flex items-end justify-between gap-4 mb-5" data-name="top-rated-head" data-file="components/TopRatedCarousel.js">
             <div data-name="top-rated-titlewrap" data-file="components/TopRatedCarousel.js">
-              <h2 className="text-xl md:text-2xl font-semibold tracking-tight text-balance" data-name="top-rated-title" data-file="components/TopRatedCarousel.js">Mejor calificados</h2>
+              <h2 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em] text-balance" data-name="top-rated-title" data-file="components/TopRatedCarousel.js">Mejor calificados</h2>
               <p className="text-sm text-[var(--text-muted)] mt-1" data-name="top-rated-sub" data-file="components/TopRatedCarousel.js">
                 Negocios con reseñas consistentes y estilo boutique.
               </p>

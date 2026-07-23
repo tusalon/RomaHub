@@ -36,8 +36,8 @@ function HomePage({ initialParams }) {
 
         <section className="mt-10" data-name="province-directory" data-file="pages/home/HomePage.js">
           <div className="container-rr" data-name="province-dir-inner" data-file="pages/home/HomePage.js">
-            <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)] mb-2 inline-flex" data-name="prov-badge" data-file="pages/home/HomePage.js">Directorio por provincia</span>
-            <h2 className="text-xl md:text-2xl font-semibold tracking-tight" data-name="prov-title" data-file="pages/home/HomePage.js">Explora por provincia</h2>
+            <span className="kicker-rr block mb-2" data-name="prov-badge" data-file="pages/home/HomePage.js">Directorio por provincia</span>
+            <h2 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]" data-name="prov-title" data-file="pages/home/HomePage.js">Explora por provincia</h2>
             <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" data-name="prov-grid" data-file="pages/home/HomePage.js">
               {provinceCounts.map((prov) => (
                 <button
@@ -48,11 +48,11 @@ function HomePage({ initialParams }) {
                   data-file="pages/home/HomePage.js"
                 >
                   <div className="flex items-center gap-2 mb-2" data-name="prov-head" data-file="pages/home/HomePage.js">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[rgba(255,20,147,0.08)]" data-name="prov-icon-wrap" data-file="pages/home/HomePage.js">
-                      <div className="icon-map-pin text-base text-[#FF1493]" data-name="prov-icon" data-file="pages/home/HomePage.js"></div>
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[rgba(232,51,135,0.08)]" data-name="prov-icon-wrap" data-file="pages/home/HomePage.js">
+                      <div className="icon-map-pin text-base text-[#e83387]" data-name="prov-icon" data-file="pages/home/HomePage.js"></div>
                     </div>
                   </div>
-                  <p className="text-sm font-semibold group-hover:text-[#FF1493] transition-colors" data-name="prov-name" data-file="pages/home/HomePage.js">{prov.name}</p>
+                  <p className="text-sm font-semibold group-hover:text-[#e83387] transition-colors" data-name="prov-name" data-file="pages/home/HomePage.js">{prov.name}</p>
                   <p className="text-xs text-[var(--text-muted)] mt-1" data-name="prov-count" data-file="pages/home/HomePage.js">{prov.count} {prov.count === 1 ? 'negocio' : 'negocios'}</p>
                 </button>
               ))}
@@ -97,8 +97,8 @@ function HomePage({ initialParams }) {
               </div>
 
               <div className="surface-rr p-5" data-name="trust-2" data-file="pages/home/HomePage.js">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(255,20,147,0.08)]" data-name="trust-2-iw" data-file="pages/home/HomePage.js">
-                  <div className="icon-trophy text-xl text-[#FF1493]" data-name="trust-2-i" data-file="pages/home/HomePage.js"></div>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(232,51,135,0.08)]" data-name="trust-2-iw" data-file="pages/home/HomePage.js">
+                  <div className="icon-trophy text-xl text-[#e83387]" data-name="trust-2-i" data-file="pages/home/HomePage.js"></div>
                 </div>
                 <p className="mt-4 text-sm font-semibold" data-name="trust-2-t" data-file="pages/home/HomePage.js">Ranking competitivo</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed" data-name="trust-2-d" data-file="pages/home/HomePage.js">
@@ -107,8 +107,8 @@ function HomePage({ initialParams }) {
               </div>
 
               <div className="surface-rr p-5" data-name="trust-3" data-file="pages/home/HomePage.js">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(255,20,147,0.08)]" data-name="trust-3-iw" data-file="pages/home/HomePage.js">
-                  <div className="icon-map-pin text-xl text-[#FF1493]" data-name="trust-3-i" data-file="pages/home/HomePage.js"></div>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(232,51,135,0.08)]" data-name="trust-3-iw" data-file="pages/home/HomePage.js">
+                  <div className="icon-map-pin text-xl text-[#e83387]" data-name="trust-3-i" data-file="pages/home/HomePage.js"></div>
                 </div>
                 <p className="mt-4 text-sm font-semibold" data-name="trust-3-t" data-file="pages/home/HomePage.js">Toda Cuba</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed" data-name="trust-3-d" data-file="pages/home/HomePage.js">

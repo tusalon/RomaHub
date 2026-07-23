@@ -6,8 +6,8 @@ function StarRating({ value, total, verified }) {
     if (stars === 0 && t === 0) {
       return (
         <div className="flex items-center gap-2" data-name="star-rating" data-file="components/StarRating.js">
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[rgba(255,20,147,0.08)] border border-[rgba(255,20,147,0.15)]" data-name="new-pill" data-file="components/StarRating.js">
-            <span className="text-xs font-medium text-[#FF1493]" data-name="new-text" data-file="components/StarRating.js">Nuevo en RomaHub</span>
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[rgba(232,51,135,0.08)] border border-[rgba(232,51,135,0.15)]" data-name="new-pill" data-file="components/StarRating.js">
+            <span className="text-xs font-medium text-[#e83387]" data-name="new-text" data-file="components/StarRating.js">Nuevo en RomaHub</span>
           </span>
         </div>
       );

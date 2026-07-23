@@ -1,7 +1,7 @@
 ﻿function BusinessCard({ business, onHover, active }) {
   try {
     const b = business;
-    const border = active ? 'border-[rgba(255,20,147,0.35)] shadow-[0_16px_40px_rgba(255,20,147,0.10)]' : '';
+    const border = active ? 'border-[rgba(232,51,135,0.35)] shadow-[0_16px_40px_rgba(232,51,135,0.10)]' : '';
     const serviceSection = (b.categoriasCatalogo || []).find((section) => section.tipo === 'servicios');
     const productSection = (b.categoriasCatalogo || []).find((section) => section.tipo === 'productos');
     const courseSection = (b.categoriasCatalogo || []).find((section) => section.tipo === 'cursos');
