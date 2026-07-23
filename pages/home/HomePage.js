@@ -2,7 +2,7 @@ function HomePage({ initialParams }) {
   try {
     const top = MockData.listTopRated();
     const featured = MockData.listWeeklyFeatured();
-    const stores = MockData.listRomaStores();
+    const showcase = MockData.listShowcaseProducts(8);
     const allBusinesses = MockData.listBusinesses();
 
     const provinceCounts = React.useMemo(() => {
@@ -71,17 +71,15 @@ function HomePage({ initialParams }) {
 
         <AllBusinessesSection data-name="all-businesses-section" data-file="pages/home/HomePage.js" />
 
-        {stores.length > 0 ? (
-          <BusinessRail
-            title="Marketplace"
-            subtitle=""
-            badge="Productos y cursos"
-            items={stores}
-            emptyText="Aun no hay tiendas publicadas."
-            data-name="roma-stores"
-            data-file="pages/home/HomePage.js"
-          />
-        ) : null}
+        <ProductShowcase
+          title="Marketplace"
+          badge="Productos y cursos"
+          subtitle="Compra directo por WhatsApp con el negocio."
+          items={showcase}
+          verTodosHref="search.html"
+          data-name="marketplace-showcase"
+          data-file="pages/home/HomePage.js"
+        />
 
         <section className="mt-12" data-name="home-trust" data-file="pages/home/HomePage.js">
           <div className="container-rr" data-name="home-trust-inner" data-file="pages/home/HomePage.js">

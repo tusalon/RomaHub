@@ -20,36 +20,38 @@ function BusinessCatalog({ business, onAddToCart }) {
       );
     }
 
-    const StoreItem = ({ item, type }) => {
+    const StoreCard = ({ item, type }) => {
       try {
-        const label = type === 'curso' ? 'Agregar curso' : 'Agregar';
+        const esCurso = type === 'curso';
         return (
-          <div className="p-4 md:p-5 grid grid-cols-[72px_1fr_auto] gap-3 items-start hover:bg-[#F9FAFB]" data-name="store-row" data-file="pages/business/BusinessCatalog.js">
-            <div className="w-[72px] h-[72px] rounded-lg bg-white border border-[var(--border)] overflow-hidden flex items-center justify-center" data-name="store-image" data-file="pages/business/BusinessCatalog.js">
+          <div className="surface-rr overflow-hidden flex flex-col" data-name="store-card" data-file="pages/business/BusinessCatalog.js">
+            <div className="relative aspect-square bg-[#F3F4F6]" data-name="store-image" data-file="pages/business/BusinessCatalog.js">
               {item.imagen ? (
-                <img loading="lazy" decoding="async" src={item.imagen} alt={item.nombre} className="w-full h-full object-cover" data-name="store-img" data-file="pages/business/BusinessCatalog.js" />
+                <img loading="lazy" decoding="async" src={item.imagen} alt={item.nombre} className="absolute inset-0 w-full h-full object-cover" data-name="store-img" data-file="pages/business/BusinessCatalog.js" />
               ) : (
-                <div className="icon-shopping-bag text-2xl text-[var(--primary-color)]" data-name="store-fallback" data-file="pages/business/BusinessCatalog.js"></div>
+                <div className="absolute inset-0 flex items-center justify-center" data-name="store-fallback" data-file="pages/business/BusinessCatalog.js">
+                  <div className={`${esCurso ? 'icon-graduation-cap' : 'icon-shopping-bag'} text-3xl text-[var(--primary-color)] opacity-40`}></div>
+                </div>
               )}
+              {esCurso ? <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#111827] text-white text-[10px] font-bold" data-name="store-type" data-file="pages/business/BusinessCatalog.js">Curso</span> : null}
             </div>
-            <div className="min-w-0" data-name="store-copy" data-file="pages/business/BusinessCatalog.js">
-              <p className="text-sm md:text-base font-semibold leading-snug" data-name="store-name" data-file="pages/business/BusinessCatalog.js">{item.nombre}</p>
-              {item.descripcion ? <p className="text-sm text-[var(--text-muted)] mt-1 leading-relaxed" data-name="store-description" data-file="pages/business/BusinessCatalog.js">{item.descripcion}</p> : null}
-              <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]" data-name="store-meta" data-file="pages/business/BusinessCatalog.js">
-                {type === 'curso' && item.ubicacion ? <span data-name="course-place" data-file="pages/business/BusinessCatalog.js">{item.ubicacion}</span> : null}
+            <div className="p-3 flex flex-col flex-1" data-name="store-copy" data-file="pages/business/BusinessCatalog.js">
+              <p className="text-sm font-bold text-[#111827] leading-snug line-clamp-2" data-name="store-name" data-file="pages/business/BusinessCatalog.js">{item.nombre}</p>
+              {item.descripcion ? <p className="text-xs text-[var(--text-muted)] mt-1 leading-relaxed line-clamp-2" data-name="store-description" data-file="pages/business/BusinessCatalog.js">{item.descripcion}</p> : null}
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-[var(--text-muted)]" data-name="store-meta" data-file="pages/business/BusinessCatalog.js">
+                {esCurso && item.ubicacion ? <span data-name="course-place" data-file="pages/business/BusinessCatalog.js">{item.ubicacion}</span> : null}
                 {type === 'producto' && Number(item.stock) > 0 ? <span data-name="product-stock" data-file="pages/business/BusinessCatalog.js">Stock: {item.stock}</span> : null}
               </div>
-            </div>
-            <div className="shrink-0 text-right" data-name="store-actions" data-file="pages/business/BusinessCatalog.js">
-              <p className="text-sm md:text-base font-semibold whitespace-nowrap" data-name="store-price" data-file="pages/business/BusinessCatalog.js">{Format.formatPrecioCUP(item.precio)}</p>
-              <button type="button" className="mt-2 btn-rr btn-primary-rr py-2 px-3 text-xs inline-flex items-center gap-2" onClick={() => onAddToCart?.(item, type)} data-name="store-add" data-file="pages/business/BusinessCatalog.js">
-                {label}
+              <p className="mt-2 text-base font-extrabold text-[var(--primary-color)]" data-name="store-price" data-file="pages/business/BusinessCatalog.js">{Format.formatPrecioCUP(item.precio)}</p>
+              <button type="button" className="mt-3 btn-rr btn-primary-rr w-full py-2 text-xs inline-flex items-center justify-center gap-1.5" onClick={() => onAddToCart?.(item, type)} data-name="store-add" data-file="pages/business/BusinessCatalog.js">
+                <div className="icon-shopping-bag text-sm text-white"></div>
+                {esCurso ? 'Agregar curso' : 'Agregar'}
               </button>
             </div>
           </div>
         );
       } catch (error) {
-        console.error('BusinessCatalog.StoreItem error:', error);
+        console.error('BusinessCatalog.StoreCard error:', error);
         return null;
       }
     };
@@ -88,23 +90,25 @@ function BusinessCatalog({ business, onAddToCart }) {
         ) : null}
 
         {products.length ? (
-          <div className="surface-rr overflow-hidden" data-name="business-products" data-file="pages/business/BusinessCatalog.js">
-            <div className="p-4 md:p-5 border-b border-[var(--border)]" data-name="products-head" data-file="pages/business/BusinessCatalog.js">
+          <div data-name="business-products" data-file="pages/business/BusinessCatalog.js">
+            <div className="flex items-center gap-2 mb-3" data-name="products-head" data-file="pages/business/BusinessCatalog.js">
               <h2 className="text-lg font-semibold" data-name="products-title" data-file="pages/business/BusinessCatalog.js">Productos</h2>
+              <span className="chip-rr px-2 py-0.5 text-[11px] text-[var(--text-muted)]" data-name="products-count" data-file="pages/business/BusinessCatalog.js">{products.length}</span>
             </div>
-            <div className="divide-y divide-[var(--border)]" data-name="products-list" data-file="pages/business/BusinessCatalog.js">
-              {products.map((item, index) => <StoreItem key={`${item.id || item.nombre}-${index}`} item={item} type="producto" />)}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3" data-name="products-list" data-file="pages/business/BusinessCatalog.js">
+              {products.map((item, index) => <StoreCard key={`${item.id || item.nombre}-${index}`} item={item} type="producto" />)}
             </div>
           </div>
         ) : null}
 
         {courses.length ? (
-          <div className="surface-rr overflow-hidden" data-name="business-courses" data-file="pages/business/BusinessCatalog.js">
-            <div className="p-4 md:p-5 border-b border-[var(--border)]" data-name="courses-head" data-file="pages/business/BusinessCatalog.js">
+          <div data-name="business-courses" data-file="pages/business/BusinessCatalog.js">
+            <div className="flex items-center gap-2 mb-3" data-name="courses-head" data-file="pages/business/BusinessCatalog.js">
               <h2 className="text-lg font-semibold" data-name="courses-title" data-file="pages/business/BusinessCatalog.js">Cursos</h2>
+              <span className="chip-rr px-2 py-0.5 text-[11px] text-[var(--text-muted)]" data-name="courses-count" data-file="pages/business/BusinessCatalog.js">{courses.length}</span>
             </div>
-            <div className="divide-y divide-[var(--border)]" data-name="courses-list" data-file="pages/business/BusinessCatalog.js">
-              {courses.map((item, index) => <StoreItem key={`${item.id || item.nombre}-${index}`} item={item} type="curso" />)}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3" data-name="courses-list" data-file="pages/business/BusinessCatalog.js">
+              {courses.map((item, index) => <StoreCard key={`${item.id || item.nombre}-${index}`} item={item} type="curso" />)}
             </div>
           </div>
         ) : null}

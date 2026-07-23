@@ -1,5 +1,6 @@
 const MockData = (() => {
   let businesses = [];
+  let showcaseItems = [];
   let loadPromise = null;
   let loadedFromSupabase = false;
   let loadError = null;
@@ -406,9 +407,41 @@ const MockData = (() => {
             return business;
           })
           .filter((business) => business.id);
+
+        // Escaparate: productos y cursos individuales de todos los negocios,
+        // enriquecidos con el negocio dueño para poder enlazar a su perfil.
+        const negocioPorId = {};
+        businesses.forEach((negocio) => { negocioPorId[negocio.id] = negocio; });
+        const enrichStoreItem = (item, tipo) => {
+          const negocio = negocioPorId[item.negocio_id || item.negocioId];
+          if (!negocio) return null;
+          return {
+            id: `${tipo}-${item.id}`,
+            tipo,
+            nombre: item.nombre || '',
+            descripcion: item.descripcion || '',
+            precio: Number(item.precio || 0),
+            imagen: item.imagen_url || '',
+            categoria: item.categoria || '',
+            destacado: item.destacado === true,
+            stock: item.stock,
+            fecha: item.fecha || null,
+            negocioId: negocio.id,
+            negocioNombre: negocio.nombre,
+            negocioSlug: negocio.slug,
+            negocioLogo: negocio.logoUrl,
+            negocioReservaUrl: negocio.reservaUrl,
+            negocioWhatsapp: negocio.whatsapp
+          };
+        };
+        showcaseItems = [
+          ...(productosTiendaRows || []).map((item) => enrichStoreItem(item, 'producto')),
+          ...(cursosTiendaRows || []).map((item) => enrichStoreItem(item, 'curso'))
+        ].filter(Boolean);
+
         loadedFromSupabase = true;
         loadError = null;
-        console.log(`RomaHub cargo ${businesses.length} negocios desde Supabase (${Object.keys(ratingData).length} con valoraciones verificadas)`);
+        console.log(`RomaHub cargo ${businesses.length} negocios desde Supabase (${showcaseItems.length} productos/cursos, ${Object.keys(ratingData).length} con valoraciones verificadas)`);
         return businesses.slice();
       } catch (error) {
         businesses = [];
@@ -495,6 +528,28 @@ const MockData = (() => {
       .filter((business) => business.tieneTienda)
       .sort((a, b) => a.nombre.localeCompare(b.nombre))
       .slice(0, 12);
+  }
+
+  // Orden del escaparate: destacados primero, luego los que tienen foto
+  // (una tienda entra por la vista, no por el texto), y dentro de eso los
+  // productos antes que los cursos.
+  function ordenarShowcase(items) {
+    const peso = (item) => (item.destacado ? 0 : 2) + (item.imagen ? 0 : 1);
+    return items.slice().sort((a, b) => {
+      const d = peso(a) - peso(b);
+      if (d !== 0) return d;
+      if (a.tipo !== b.tipo) return a.tipo === 'producto' ? -1 : 1;
+      return String(a.nombre).localeCompare(String(b.nombre));
+    });
+  }
+
+  function listShowcaseProducts(limit) {
+    const items = ordenarShowcase(showcaseItems);
+    return limit ? items.slice(0, limit) : items;
+  }
+
+  function getShowcaseCount() {
+    return showcaseItems.length;
   }
 
   function listRomaReviews() {
@@ -590,5 +645,5 @@ const MockData = (() => {
     });
   }
 
-  return { listBusinesses, listTopRated, listWeeklyFeatured, listRomaStores, listRomaReviews, searchBusinesses, getBusinessById, loadBusinesses, loadBusinessDetails, getLoadError, getTodayReservations, addReview, addOrder };
+  return { listBusinesses, listTopRated, listWeeklyFeatured, listRomaStores, listShowcaseProducts, getShowcaseCount, listRomaReviews, searchBusinesses, getBusinessById, loadBusinesses, loadBusinessDetails, getLoadError, getTodayReservations, addReview, addOrder };
 })();

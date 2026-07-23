@@ -19,6 +19,8 @@ const bundles = {
     'components/SearchBar.js',
     'components/BusinessLogoCard.js',
     'components/BusinessRail.js',
+    'components/ProductCard.js',
+    'components/ProductShowcase.js',
     'components/RomaReviewsRail.js',
     'components/TopRatedCarousel.js',
     'pages/home/HomeHero.js',
