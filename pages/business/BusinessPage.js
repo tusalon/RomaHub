@@ -209,8 +209,8 @@
                 <a
                   className="btn-rr btn-primary-rr w-full flex items-center justify-center gap-2"
                   href={b.reservaUrl || `https://wa.me/${String(b.whatsapp||'').replace('+','')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}.`)}`}
-                  target="_self"
-                  rel="noreferrer"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   data-name="sticky-wa"
                   data-file="pages/business/BusinessPage.js"
                 >

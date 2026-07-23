@@ -5,7 +5,11 @@ function MobileWhatsAppBar({ whatsapp, nombre, reservaUrl }) {
         const wa = String(whatsapp || '').replace(/\s+/g, '');
         const msg = encodeURIComponent(`Hola, quiero reservar en ${nombre}. ¿Me ayudas con disponibilidad y precios?`);
         const url = reservaUrl || `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
-        window.location.href = url;
+        // _blank y no window.location: navegar en el mismo contexto deja que
+        // Android entregue el enlace a la PWA/APK de clientas instalada, que lo
+        // abre en SU negocio (con el que se instaló), no en el que se tocó.
+        // Abrir en pestaña nueva del navegador preserva el ?s=slug correcto.
+        window.open(url, '_blank', 'noopener,noreferrer');
       } catch (error) {
         console.error('MobileWhatsAppBar.onWhatsApp error:', error);
       }
