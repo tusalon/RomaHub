@@ -17,4 +17,4 @@ window.NEGOCIO_ID_POR_DEFECTO = window.NEGOCIO_ID_POR_DEFECTO || '08638828-1a42-
 // Supabase para un catalogo con fotos de muchos negocios.
 // Requiere ademas un upload preset SIN FIRMA llamado "romahub_productos"
 // (Settings > Upload > Upload presets > Add > Signing Mode: Unsigned).
-window.CLOUDINARY_CLOUD_NAME = window.CLOUDINARY_CLOUD_NAME || 'CONFIGURAR_CLOUD_NAME';
+window.CLOUDINARY_CLOUD_NAME = window.CLOUDINARY_CLOUD_NAME || 'uyvla7fj';
