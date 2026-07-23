@@ -190,12 +190,22 @@
   .hero-blob-rr {
     position: absolute;
     pointer-events: none;
-    width: 520px;
-    height: 520px;
+    width: 320px;
+    height: 320px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(232, 51, 135, 0.14), rgba(232, 51, 135, 0) 65%);
-    filter: blur(20px);
-    animation: float-rr 9s ease-in-out infinite alternate;
+    /* En móvil: estático y sin blur animado — los Android de gama baja
+       pagan caro un blur repintándose 60 veces por segundo. */
+  }
+
+  @media (min-width: 768px) {
+    .hero-blob-rr {
+      width: 520px;
+      height: 520px;
+      filter: blur(20px);
+      animation: float-rr 9s ease-in-out infinite alternate;
+      will-change: transform;
+    }
   }
 
   @keyframes float-rr {
