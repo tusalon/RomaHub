@@ -480,12 +480,18 @@ const MockData = (() => {
     if (current?.detallesCargados && !forceRefresh) return current;
 
     const encodedId = encodeURIComponent(negocioId);
-    const [rows, ratingData] = await Promise.all([
-      optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,suscripciones!inner(estado)`),
+    const CAMPOS_DETALLE = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa';
+    const [rowsRserva, rowsExterna, ratingData] = await Promise.all([
+      // Negocio rservasroma: exige suscripción activa (inner join la excluye si no).
+      optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&suscripciones.estado=eq.activa&select=${CAMPOS_DETALLE},suscripciones!inner(estado)`),
+      // Tienda externa: sin suscripción, por flag. Sin esto su propio perfil
+      // nunca cargaba (el inner join de arriba la excluye siempre).
+      optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&es_tienda_externa=eq.true&select=${CAMPOS_DETALLE}`),
       fetchVerifiedRatings()
     ]);
-    const row = rows?.[0] || current || { id: negocioId };
-    if (!rows?.[0] && !current) return null;
+    const rows = [...(rowsRserva || []), ...(rowsExterna || [])];
+    const row = rows[0] || current || { id: negocioId };
+    if (!rows[0] && !current) return null;
     const serviciosRows = await optionalSupabaseFetch(`servicios?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,duracion,precio,descripcion,activo,imagen,categoria&order=nombre.asc`);
     const resenasRows = await optionalSupabaseFetch(`resenas?negocio_id=eq.${encodedId}&select=*&order=fecha.desc&limit=50`);
     const productosRows = tiendaTablesEnabled()

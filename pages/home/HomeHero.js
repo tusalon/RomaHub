@@ -40,6 +40,10 @@ function HomeHero({ initialParams }) {
                 Registrar mi negocio
                 <div className="icon-sparkles text-xl text-[#e83387]" data-name="hero-list-i" data-file="pages/home/HomeHero.js"></div>
               </a>
+              <a className="btn-rr btn-ghost-rr flex items-center justify-center gap-2" href="crear-tienda.html" data-name="hero-store" data-file="pages/home/HomeHero.js">
+                Abrir tienda gratis
+                <div className="icon-shopping-bag text-xl text-[#e83387]" data-name="hero-store-i" data-file="pages/home/HomeHero.js"></div>
+              </a>
             </div>
 
             <div className="mt-7 flex gap-1" data-name="hero-stats" data-file="pages/home/HomeHero.js">

@@ -24,6 +24,9 @@ function Footer() {
               <a className="text-xs text-gray-400 hover:text-[#e83387] transition-colors" href="register.html" data-name="footer-register" data-file="components/Footer.js">
                 Registrar negocio
               </a>
+              <a className="text-xs text-gray-400 hover:text-[#e83387] transition-colors" href="crear-tienda.html" data-name="footer-store" data-file="components/Footer.js">
+                Abrir tienda gratis
+              </a>
               <span className="text-xs text-gray-500" data-name="footer-copy" data-file="components/Footer.js">&copy; 2026 RomaHub</span>
             </div>
           </div>
