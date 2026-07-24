@@ -2,6 +2,8 @@
   try {
     const [negocioId, setNegocioId] = React.useState('');
     const [businessName, setBusinessName] = React.useState('');
+    const [esTiendaExterna, setEsTiendaExterna] = React.useState(false);
+    const LIMITE_TIENDA_EXTERNA = 40;
     const [authLoading, setAuthLoading] = React.useState(true);
     const [tab, setTab] = React.useState('productos');
     const [items, setItems] = React.useState({ productos: [], cursos: [] });
@@ -56,6 +58,7 @@
           localStorage.setItem('negocioId', access.negocio_id);
           setNegocioId(access.negocio_id);
           setBusinessName(access.negocios?.nombre || 'Tu negocio');
+          setEsTiendaExterna(access.negocios?.es_tienda_externa === true);
         } catch (error) {
           console.error('BusinessPanelPage.initPanel error:', error);
           setMessage(error.message || 'No se pudo abrir el panel.');
@@ -139,6 +142,18 @@
         setMessage('');
         if (!negocioId) throw new Error('Falta negocio_id.');
         if (!form.nombre.trim()) throw new Error('Escribe el nombre.');
+
+        // Aviso amable antes de que lo bloquee el trigger de la base de datos
+        // (esa es la barrera real; esto solo evita el error crudo de Postgres).
+        if (!form.id && esTiendaExterna) {
+          const totalActivos = (items.productos || []).filter((p) => p.activo !== false).length
+            + (items.cursos || []).filter((c) => c.activo !== false).length;
+          if (totalActivos >= LIMITE_TIENDA_EXTERNA) {
+            setMessage(`Llegaste al máximo de ${LIMITE_TIENDA_EXTERNA} productos/cursos activos para tiendas gratis. Oculta alguno para publicar uno nuevo.`);
+            return;
+          }
+        }
+
         setSaving(true);
 
         const isProduct = tab === 'productos';
@@ -225,6 +240,8 @@
 
     const currentItems = items[tab] || [];
     const isProduct = tab === 'productos';
+    const totalActivosExterna = (items.productos || []).filter((p) => p.activo !== false).length
+      + (items.cursos || []).filter((c) => c.activo !== false).length;
 
     if (authLoading) {
       return <div className="container-rr py-16 text-sm text-[var(--text-muted)]">Abriendo panel...</div>;
@@ -243,6 +260,11 @@
             </div>
             <div className="flex flex-col sm:flex-row gap-2" data-name="panel-actions" data-file="pages/panel/BusinessPanelPage.js">
               <span className="chip-rr px-3 py-2 text-xs text-[var(--text-muted)]" data-name="panel-id" data-file="pages/panel/BusinessPanelPage.js">ID: {negocioId || 'sin negocio'}</span>
+              {esTiendaExterna ? (
+                <span className={`chip-rr px-3 py-2 text-xs ${totalActivosExterna >= LIMITE_TIENDA_EXTERNA ? 'text-red-600' : 'text-[var(--text-muted)]'}`} data-name="panel-limite" data-file="pages/panel/BusinessPanelPage.js">
+                  {totalActivosExterna}/{LIMITE_TIENDA_EXTERNA} activos
+                </span>
+              ) : null}
               <a className="btn-rr btn-ghost-rr flex items-center justify-center gap-2" href={`business.html?id=${encodeURIComponent(negocioId)}`} data-name="view-business" data-file="pages/panel/BusinessPanelPage.js">Ver ficha</a>
               <button className="btn-rr btn-ghost-rr" type="button" onClick={signOut} data-name="logout" data-file="pages/panel/BusinessPanelPage.js">Salir</button>
             </div>

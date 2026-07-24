@@ -104,7 +104,7 @@
 
   const getBusinessAccess = async () => {
     const rows = await request(
-      'usuarios_negocio?activo=eq.true&select=negocio_id,rol,negocios(id,nombre,slug,logo_url,sitio_web)&limit=1',
+      'usuarios_negocio?activo=eq.true&select=negocio_id,rol,negocios(id,nombre,slug,logo_url,sitio_web,es_tienda_externa)&limit=1',
       {},
       { requireAuth: true }
     );

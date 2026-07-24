@@ -81,7 +81,10 @@
           <div className="min-w-0" data-name="content" data-file="components/BusinessCard.js">
             <div className="flex items-start gap-3" data-name="top" data-file="components/BusinessCard.js">
               <div className="min-w-0" data-name="title" data-file="components/BusinessCard.js">
-                <p className="text-base font-semibold leading-snug truncate" data-name="name" data-file="components/BusinessCard.js">{b.nombre}</p>
+                <p className="text-base font-semibold leading-snug truncate flex items-center gap-1" data-name="name" data-file="components/BusinessCard.js">
+                  <span className="truncate">{b.nombre}</span>
+                  {b.esRservasroma ? <span className="shrink-0" title="Negocio verificado Rservasroma" data-name="diamond-badge" data-file="components/BusinessCard.js">💎</span> : null}
+                </p>
                 <p className="text-xs text-[var(--text-muted)] mt-1 truncate" data-name="meta" data-file="components/BusinessCard.js">
                   {[b.categoria, b.ubicacionCorta || b.ubicacion?.zona].filter(Boolean).join(' · ')}
                 </p>

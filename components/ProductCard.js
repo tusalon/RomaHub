@@ -57,6 +57,7 @@ function ProductCard({ item }) {
               )}
             </div>
             <span className="text-xs text-[var(--text-muted)] truncate" data-name="product-biz-name" data-file="components/ProductCard.js">{it.negocioNombre}</span>
+            {it.negocioEsRservasroma ? <span className="text-xs shrink-0" title="Negocio verificado Rservasroma" data-name="diamond-badge" data-file="components/ProductCard.js">💎</span> : null}
           </div>
         </div>
       </div>

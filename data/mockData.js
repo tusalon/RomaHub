@@ -275,8 +275,11 @@ const MockData = (() => {
     const logoUrl = valueFrom(row, ['logo_url', 'logo', 'avatar_url'], defaultLogoUrl);
     const fotos = [coverUrl, logoUrl].filter(Boolean);
     const slug = valueFrom(row, ['slug'], '');
+    const esTiendaExterna = boolFrom(row, ['es_tienda_externa'], false);
     const externalUrl = normalizeExternalUrl(valueFrom(row, ['reserva_url', 'booking_url', 'url_reserva', 'url_negocio', 'negocio_url', 'sitio_web', 'url', 'link'], ''));
-    const reservaUrl = slug
+    // Las tiendas externas tienen slug (para su propio perfil) pero NO tienen
+    // agenda de citas en rservasroma: mandarlas ahi seria un enlace muerto.
+    const reservaUrl = (slug && !esTiendaExterna)
       ? `https://tusalon.github.io/rservasroma/?s=${encodeURIComponent(slug)}`
       : externalUrl;
 
@@ -315,10 +318,10 @@ const MockData = (() => {
       totalValoraciones,
       totalResenas: totalValoraciones,
       enRanking,
-      esTiendaExterna: boolFrom(row, ['es_tienda_externa'], false),
+      esTiendaExterna,
       // El diamante 💎 y la prioridad los tiene quien NO es tienda externa
       // (un negocio rservasroma con suscripción activa).
-      esRservasroma: !boolFrom(row, ['es_tienda_externa'], false),
+      esRservasroma: !esTiendaExterna,
       portadaUrl: coverUrl,
       portadaEsPropia: Boolean(coverUrlPropia),
       logoUrl,

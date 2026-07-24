@@ -43,7 +43,10 @@ function BusinessLogoCard({ business, onOpen }) {
             )}
           </div>
 
-          <p className="mt-2.5 text-sm font-bold text-[#111827] leading-snug line-clamp-2" data-name="name" data-file="components/BusinessLogoCard.js">{b.nombre}</p>
+          <p className="mt-2.5 text-sm font-bold text-[#111827] leading-snug line-clamp-2 flex items-center gap-1" data-name="name" data-file="components/BusinessLogoCard.js">
+            <span className="truncate">{b.nombre}</span>
+            {b.esRservasroma ? <span className="shrink-0" title="Negocio verificado Rservasroma" data-name="diamond-badge" data-file="components/BusinessLogoCard.js">💎</span> : null}
+          </p>
           <p className="text-xs text-[var(--text-muted)] mt-1" data-name="category" data-file="components/BusinessLogoCard.js">{[b.categoria, b.ubicacionCorta || b.ubicacion?.zona].filter(Boolean).join(' · ')}</p>
 
           {(productCount || courseCount) ? (

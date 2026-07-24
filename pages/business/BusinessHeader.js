@@ -37,6 +37,7 @@
             <div className="min-w-0" data-name="header-copy" data-file="pages/business/BusinessHeader.js">
               <div className="flex flex-wrap items-center gap-2" data-name="title-row" data-file="pages/business/BusinessHeader.js">
                 <h1 className="text-2xl md:text-3xl font-semibold tracking-tight leading-tight" data-name="name" data-file="pages/business/BusinessHeader.js">{b.nombre}</h1>
+                {b.esRservasroma ? <span className="text-xl" title="Negocio verificado Rservasroma" data-name="diamond-badge" data-file="pages/business/BusinessHeader.js">💎</span> : null}
                 {b.vip ? <Badge type="vip" text="VIP" data-name="vip" data-file="pages/business/BusinessHeader.js" /> : null}
               </div>
               <p className="text-sm text-[var(--text-muted)] mt-2" data-name="meta" data-file="pages/business/BusinessHeader.js">
@@ -53,12 +54,14 @@
               </div>
             </div>
 
-            <div className="w-full lg:w-[230px]" data-name="header-action" data-file="pages/business/BusinessHeader.js">
-              <a className="btn-rr btn-primary-rr w-full flex items-center justify-center gap-2" href={b.reservaUrl || `https://wa.me/${String(b.whatsapp||'').replace('+','')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}. Tienen disponibilidad?`)}`} target="_blank" rel="noopener noreferrer" data-name="cta-wa" data-file="pages/business/BusinessHeader.js">
-                <div className="icon-message-circle text-xl text-white" data-name="cta-wa-i" data-file="pages/business/BusinessHeader.js"></div>
-                Reservar
-              </a>
-            </div>
+            {!b.esTiendaExterna ? (
+              <div className="w-full lg:w-[230px]" data-name="header-action" data-file="pages/business/BusinessHeader.js">
+                <a className="btn-rr btn-primary-rr w-full flex items-center justify-center gap-2" href={b.reservaUrl || `https://wa.me/${String(b.whatsapp||'').replace('+','')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}. Tienen disponibilidad?`)}`} target="_blank" rel="noopener noreferrer" data-name="cta-wa" data-file="pages/business/BusinessHeader.js">
+                  <div className="icon-message-circle text-xl text-white" data-name="cta-wa-i" data-file="pages/business/BusinessHeader.js"></div>
+                  Reservar
+                </a>
+              </div>
+            ) : null}
           </div>
         </div>
       </section>
