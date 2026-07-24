@@ -42,7 +42,7 @@ function BusinessCatalog({ business, onAddToCart }) {
                 {esCurso && item.ubicacion ? <span data-name="course-place" data-file="pages/business/BusinessCatalog.js">{item.ubicacion}</span> : null}
                 {type === 'producto' && Number(item.stock) > 0 ? <span data-name="product-stock" data-file="pages/business/BusinessCatalog.js">Stock: {item.stock}</span> : null}
               </div>
-              <p className="mt-2 text-base font-extrabold text-[var(--primary-color)]" data-name="store-price" data-file="pages/business/BusinessCatalog.js">{Format.formatPrecioCUP(item.precio)}</p>
+              <p className="mt-2 text-base font-extrabold text-[var(--primary-color)]" data-name="store-price" data-file="pages/business/BusinessCatalog.js">{Format.formatPrecioCUP(item.precio, item.moneda)}</p>
               <button type="button" className="mt-3 btn-rr btn-primary-rr w-full py-2 text-xs inline-flex items-center justify-center gap-1.5" onClick={() => onAddToCart?.(item, type)} data-name="store-add" data-file="pages/business/BusinessCatalog.js">
                 <div className="icon-shopping-bag text-sm text-white"></div>
                 {esCurso ? 'Agregar curso' : 'Agregar'}
@@ -78,7 +78,7 @@ function BusinessCatalog({ business, onAddToCart }) {
                     ) : null}
                   </div>
                   <div className="shrink-0 text-right" data-name="service-price-wrap" data-file="pages/business/BusinessCatalog.js">
-                    <p className="text-sm md:text-base font-semibold whitespace-nowrap" data-name="service-price" data-file="pages/business/BusinessCatalog.js">{Format.formatPrecioCUP(service.precio)}</p>
+                    <p className="text-sm md:text-base font-semibold whitespace-nowrap" data-name="service-price" data-file="pages/business/BusinessCatalog.js">{Format.formatPrecioCUP(service.precio, service.moneda)}</p>
                     <a className="mt-2 btn-rr btn-ghost-rr py-2 px-3 text-xs inline-flex items-center gap-2" href={b.reservaUrl || `https://wa.me/${String(b.whatsapp||'').replace('+','')}?text=${encodeURIComponent(`Hola, quiero reservar ${service.nombre} en ${b.nombre}.`)}`} target="_blank" rel="noopener noreferrer" data-name="service-book" data-file="pages/business/BusinessCatalog.js">
                       Reservar
                     </a>

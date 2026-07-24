@@ -9,6 +9,17 @@
     const [cartMessage, setCartMessage] = React.useState('');
     const [sendingOrder, setSendingOrder] = React.useState(false);
     const total = cart.reduce((sum, entry) => sum + (Number(entry.precio || 0) * entry.qty), 0);
+    // Un pedido puede mezclar productos de monedas distintas (ej. un
+    // producto en CUP y un curso en USD): sumar todo bajo una sola etiqueta
+    // seria enganoso, asi que el total se agrupa por moneda para mostrar.
+    const totalesPorMoneda = cart.reduce((acc, entry) => {
+      const moneda = entry.moneda || 'CUP';
+      acc[moneda] = (acc[moneda] || 0) + (Number(entry.precio || 0) * entry.qty);
+      return acc;
+    }, {});
+    const totalFormateado = Object.entries(totalesPorMoneda)
+      .map(([moneda, valor]) => Format.formatPrecio(valor, moneda))
+      .join(' + ') || Format.formatPrecio(0);
 
     const addToCart = (item, type) => {
       try {
@@ -16,7 +27,7 @@
         setCart((prev) => {
           const found = prev.find((entry) => entry.id === id);
           if (found) return prev.map((entry) => entry.id === id ? { ...entry, qty: entry.qty + 1 } : entry);
-          return [...prev, { id, type, nombre: item.nombre, precio: Number(item.precio || 0), qty: 1 }];
+          return [...prev, { id, type, nombre: item.nombre, precio: Number(item.precio || 0), moneda: String(item.moneda || 'CUP').toUpperCase(), qty: 1 }];
         });
       } catch (error) {
         console.error('BusinessPage.addToCart error:', error);
@@ -59,9 +70,9 @@
         const lines = [
           `Hola, quiero hacer un pedido en ${b.nombre}.`,
           '',
-          ...cart.map((entry) => `- ${entry.nombre} x${entry.qty}: ${Format.formatPrecioCUP(entry.precio * entry.qty)}`),
+          ...cart.map((entry) => `- ${entry.nombre} x${entry.qty}: ${Format.formatPrecioCUP(entry.precio * entry.qty, entry.moneda)}`),
           '',
-          `Total: ${Format.formatPrecioCUP(total)}`,
+          `Total: ${totalFormateado}`,
           '',
           `Cliente: ${nombre}`,
           `WhatsApp: ${whatsappCliente}`,
@@ -78,6 +89,7 @@
               tipo: entry.type,
               nombre: entry.nombre,
               precio: entry.precio,
+              moneda: entry.moneda,
               cantidad: entry.qty,
               subtotal: entry.precio * entry.qty
             })),
@@ -113,7 +125,7 @@
               <div key={entry.id} className="flex items-start justify-between gap-3" data-name="cart-item" data-file="pages/business/BusinessPage.js">
                 <div className="min-w-0" data-name="cart-item-copy" data-file="pages/business/BusinessPage.js">
                   <p className="text-sm font-medium leading-snug" data-name="cart-item-name" data-file="pages/business/BusinessPage.js">{entry.nombre}</p>
-                  <p className="text-xs text-[var(--text-muted)] mt-1" data-name="cart-item-meta" data-file="pages/business/BusinessPage.js">x{entry.qty} - {Format.formatPrecioCUP(entry.precio * entry.qty)}</p>
+                  <p className="text-xs text-[var(--text-muted)] mt-1" data-name="cart-item-meta" data-file="pages/business/BusinessPage.js">x{entry.qty} - {Format.formatPrecioCUP(entry.precio * entry.qty, entry.moneda)}</p>
                 </div>
                 <button type="button" className="w-8 h-8 rounded-lg border border-[var(--border)] flex items-center justify-center" onClick={() => removeFromCart(entry.id)} aria-label="Quitar" data-name="cart-remove" data-file="pages/business/BusinessPage.js">
                   <div className="icon-x text-base text-[var(--primary-color)]" data-name="cart-remove-icon" data-file="pages/business/BusinessPage.js"></div>
@@ -123,7 +135,7 @@
             <div className="divider-rr" data-name="cart-divider" data-file="pages/business/BusinessPage.js"></div>
             <div className="flex items-center justify-between" data-name="cart-total" data-file="pages/business/BusinessPage.js">
               <span className="text-sm text-[var(--text-muted)]" data-name="cart-total-label" data-file="pages/business/BusinessPage.js">Total</span>
-              <span className="text-base font-semibold" data-name="cart-total-value" data-file="pages/business/BusinessPage.js">{Format.formatPrecioCUP(total)}</span>
+              <span className="text-base font-semibold" data-name="cart-total-value" data-file="pages/business/BusinessPage.js">{totalFormateado}</span>
             </div>
             <div className="space-y-2" data-name="cart-form" data-file="pages/business/BusinessPage.js">
               <input

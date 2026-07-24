@@ -17,6 +17,7 @@
       nombre: '',
       descripcion: '',
       precio: '',
+      moneda: 'CUP',
       imagen_url: '',
       categoria: '',
       stock: '',
@@ -100,6 +101,7 @@
         nombre: '',
         descripcion: '',
         precio: '',
+        moneda: 'CUP',
         imagen_url: '',
         categoria: '',
         stock: '',
@@ -123,6 +125,7 @@
         nombre: item.nombre || '',
         descripcion: item.descripcion || '',
         precio: item.precio != null ? String(item.precio) : '',
+        moneda: item.moneda || 'CUP',
         imagen_url: item.imagen_url || '',
         categoria: item.categoria || '',
         stock: item.stock != null ? String(item.stock) : '',
@@ -163,6 +166,7 @@
           nombre: form.nombre.trim(),
           descripcion: form.descripcion.trim() || null,
           precio: Number(form.precio || 0),
+          moneda: ['CUP', 'USD', 'EUR', 'MXN'].includes(form.moneda) ? form.moneda : 'CUP',
           imagen_url: form.imagen_url.trim() || null,
           categoria: form.categoria.trim() || null,
           activo: form.activo,
@@ -281,7 +285,15 @@
             <input className="input-rr" value={form.nombre} onChange={(e) => updateForm('nombre', e.target.value)} placeholder={isProduct ? 'Nombre del producto' : 'Nombre del curso'} data-name="item-name" data-file="pages/panel/BusinessPanelPage.js" />
             <textarea className="input-rr min-h-[92px] resize-y" value={form.descripcion} onChange={(e) => updateForm('descripcion', e.target.value)} placeholder="Descripción" data-name="item-description" data-file="pages/panel/BusinessPanelPage.js" />
             <div className="grid grid-cols-2 gap-2" data-name="price-category" data-file="pages/panel/BusinessPanelPage.js">
-              <input className="input-rr" value={form.precio} onChange={(e) => updateForm('precio', e.target.value)} inputMode="decimal" placeholder="Precio CUP" data-name="item-price" data-file="pages/panel/BusinessPanelPage.js" />
+              <div className="flex gap-1.5" data-name="item-price-wrap" data-file="pages/panel/BusinessPanelPage.js">
+                <input className="input-rr flex-1 min-w-0" value={form.precio} onChange={(e) => updateForm('precio', e.target.value)} inputMode="decimal" placeholder="Precio" data-name="item-price" data-file="pages/panel/BusinessPanelPage.js" />
+                <select className="input-rr w-[84px] shrink-0 bg-white" value={form.moneda} onChange={(e) => updateForm('moneda', e.target.value)} data-name="item-moneda" data-file="pages/panel/BusinessPanelPage.js">
+                  <option value="CUP">CUP</option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="MXN">MXN</option>
+                </select>
+              </div>
               <input className="input-rr" value={form.categoria} onChange={(e) => updateForm('categoria', e.target.value)} placeholder="Categoría" data-name="item-category" data-file="pages/panel/BusinessPanelPage.js" />
             </div>
             <div className="flex items-center gap-3" data-name="item-image-uploader" data-file="pages/panel/BusinessPanelPage.js">
@@ -357,7 +369,7 @@
                     </div>
                     <div className="min-w-0" data-name="item-copy" data-file="pages/panel/BusinessPanelPage.js">
                       <p className="text-sm font-semibold leading-snug" data-name="item-title" data-file="pages/panel/BusinessPanelPage.js">{item.nombre}</p>
-                      <p className="text-xs text-[var(--text-muted)] mt-1" data-name="item-meta" data-file="pages/panel/BusinessPanelPage.js">{Format.formatPrecioCUP(item.precio)} · {item.activo === false ? 'Inactivo' : 'Activo'}</p>
+                      <p className="text-xs text-[var(--text-muted)] mt-1" data-name="item-meta" data-file="pages/panel/BusinessPanelPage.js">{Format.formatPrecioCUP(item.precio, item.moneda)} · {item.activo === false ? 'Inactivo' : 'Activo'}</p>
                       {item.descripcion ? <p className="text-xs text-[var(--text-muted)] mt-2 line-clamp-2" data-name="item-desc" data-file="pages/panel/BusinessPanelPage.js">{item.descripcion}</p> : null}
                     </div>
                     <div className="flex flex-col gap-2" data-name="item-actions" data-file="pages/panel/BusinessPanelPage.js">

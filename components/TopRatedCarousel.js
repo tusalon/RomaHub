@@ -80,7 +80,7 @@
                         <span className="text-xs text-[var(--text-muted)]" data-name="count" data-file="components/TopRatedCarousel.js">({b.totalResenas})</span>
                       </div>
                       <span className="text-xs text-[var(--text-muted)]" data-name="price" data-file="components/TopRatedCarousel.js">
-                        {Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max)}
+                        {Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max, b.rangoPrecio?.moneda)}
                       </span>
                     </div>
                   </div>

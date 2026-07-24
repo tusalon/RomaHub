@@ -6,7 +6,7 @@
     const services = catalog.find((section) => section.tipo === 'servicios')?.items || [];
     const products = catalog.find((section) => section.tipo === 'productos')?.items || [];
     const courses = catalog.find((section) => section.tipo === 'cursos')?.items || [];
-    const firstPrice = services[0] ? Format.formatPrecioCUP(services[0].precio) : Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max);
+    const firstPrice = services[0] ? Format.formatPrecioCUP(services[0].precio, services[0].moneda) : Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max, b.rangoPrecio?.moneda);
     const initials = String(b.nombre || 'N').trim().slice(0, 2).toUpperCase();
 
     return (

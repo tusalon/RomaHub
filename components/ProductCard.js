@@ -46,7 +46,7 @@ function ProductCard({ item }) {
 
         <div className="p-3 flex flex-col flex-1" data-name="product-body" data-file="components/ProductCard.js">
           <p className="text-sm font-bold text-[#111827] leading-snug line-clamp-2" data-name="product-name" data-file="components/ProductCard.js">{it.nombre}</p>
-          <p className="mt-1 text-base font-extrabold text-[var(--primary-color)]" data-name="product-price" data-file="components/ProductCard.js">{Format.formatPrecioCUP(it.precio)}</p>
+          <p className="mt-1 text-base font-extrabold text-[var(--primary-color)]" data-name="product-price" data-file="components/ProductCard.js">{Format.formatPrecioCUP(it.precio, it.moneda)}</p>
 
           <div className="mt-auto pt-3 flex items-center gap-2" data-name="product-business" data-file="components/ProductCard.js">
             <div className="w-6 h-6 rounded-lg overflow-hidden bg-white border border-[var(--border)] shrink-0" data-name="product-biz-logo" data-file="components/ProductCard.js">

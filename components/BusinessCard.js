@@ -112,7 +112,7 @@
 
             <div className="mt-4 flex items-center justify-between gap-3" data-name="bottom" data-file="components/BusinessCard.js">
               <span className="text-xs text-[var(--text-muted)] truncate" data-name="price" data-file="components/BusinessCard.js">
-                {firstService ? `${firstService.nombre} - ${Format.formatPrecioCUP(firstService.precio)}` : Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max)}
+                {firstService ? `${firstService.nombre} - ${Format.formatPrecioCUP(firstService.precio, firstService.moneda)}` : Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max, b.rangoPrecio?.moneda)}
               </span>
 
               <button

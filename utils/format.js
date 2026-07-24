@@ -1,20 +1,27 @@
 const Format = (() => {
-  function formatPrecioCUP(value) {
+  function formatPrecio(value, moneda) {
     try {
       const n = Number(value);
       if (Number.isNaN(n)) return '—';
-      return `${Math.round(n).toLocaleString('es-ES')} CUP`;
+      const codigo = String(moneda || 'CUP').toUpperCase();
+      return `${Math.round(n).toLocaleString('es-ES')} ${codigo}`;
     } catch (error) {
-      console.error('Format.formatPrecioCUP error:', error);
+      console.error('Format.formatPrecio error:', error);
       return '—';
     }
   }
 
-  function formatRangoPrecio(min, max) {
+  // Alias historico: mismo formateador, ahora acepta la moneda real del
+  // item (CUP, USD, EUR, MXN...) en vez de asumir siempre CUP.
+  function formatPrecioCUP(value, moneda) {
+    return formatPrecio(value, moneda);
+  }
+
+  function formatRangoPrecio(min, max, moneda) {
     try {
       if (min == null && max == null) return '—';
-      if (min != null && max != null) return `${Format.formatPrecioCUP(min)} – ${Format.formatPrecioCUP(max)}`;
-      return min != null ? Format.formatPrecioCUP(min) : Format.formatPrecioCUP(max);
+      if (min != null && max != null) return `${formatPrecio(min, moneda)} – ${formatPrecio(max, moneda)}`;
+      return min != null ? formatPrecio(min, moneda) : formatPrecio(max, moneda);
     } catch (error) {
       console.error('Format.formatRangoPrecio error:', error);
       return '—';
@@ -32,5 +39,5 @@ const Format = (() => {
     }
   }
 
-  return { formatPrecioCUP, formatRangoPrecio, clampText };
+  return { formatPrecio, formatPrecioCUP, formatRangoPrecio, clampText };
 })();

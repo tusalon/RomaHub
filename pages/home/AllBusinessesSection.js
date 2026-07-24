@@ -102,7 +102,7 @@
                       <div className="divider-rr my-4" data-name="intrigue-div" data-file="pages/home/AllBusinessesSection.js"></div>
                       <div className="flex items-center justify-between gap-3" data-name="intrigue-price" data-file="pages/home/AllBusinessesSection.js">
                         <span className="text-xs text-[var(--text-muted)]" data-name="intrigue-price-l" data-file="pages/home/AllBusinessesSection.js">Rango de precio</span>
-                        <span className="text-sm font-semibold" data-name="intrigue-price-v" data-file="pages/home/AllBusinessesSection.js">{Format.formatRangoPrecio(business.rangoPrecio?.min, business.rangoPrecio?.max)}</span>
+                        <span className="text-sm font-semibold" data-name="intrigue-price-v" data-file="pages/home/AllBusinessesSection.js">{Format.formatRangoPrecio(business.rangoPrecio?.min, business.rangoPrecio?.max, business.rangoPrecio?.moneda)}</span>
                       </div>
                     </div>
 

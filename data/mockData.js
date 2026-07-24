@@ -219,6 +219,7 @@ const MockData = (() => {
           nombre: valueFrom(item, ['nombre', 'titulo', 'servicio'], 'Servicio'),
           duracionMin: numberFrom(item, ['duracion_min', 'duracionMin', 'duracion', 'minutos'], 60),
           precio: numberFrom(item, ['precio', 'precio_cup', 'monto'], 0),
+          moneda: String(valueFrom(item, ['precio_moneda', 'moneda'], 'CUP')).toUpperCase(),
           descripcion: valueFrom(item, ['descripcion', 'description', 'detalle'], ''),
           destacado: boolFrom(item, ['destacado', 'recomendado'], false)
         }))
@@ -234,6 +235,7 @@ const MockData = (() => {
           nombre: valueFrom(item, ['nombre', 'titulo', 'producto'], 'Producto'),
           stock: numberFrom(item, ['stock', 'cantidad'], 0),
           precio: numberFrom(item, ['precio', 'precio_cup', 'monto'], 0),
+          moneda: String(valueFrom(item, ['precio_moneda', 'moneda'], 'CUP')).toUpperCase(),
           descripcion: valueFrom(item, ['descripcion', 'description', 'detalle'], ''),
           imagen: valueFrom(item, ['imagen', 'imagen_url', 'foto_url'], '')
         }))
@@ -250,6 +252,7 @@ const MockData = (() => {
           fecha: valueFrom(item, ['fecha', 'fecha_inicio', 'created_at'], new Date().toISOString()),
           ubicacion: valueFrom(item, ['ubicacion', 'direccion', 'lugar'], ''),
           precio: numberFrom(item, ['precio', 'precio_cup', 'monto'], 0),
+          moneda: String(valueFrom(item, ['precio_moneda', 'moneda'], 'CUP')).toUpperCase(),
           descripcion: valueFrom(item, ['descripcion', 'description', 'detalle'], ''),
           imagen: valueFrom(item, ['imagen', 'imagen_url', 'foto_url'], '')
         }))
@@ -288,9 +291,23 @@ const MockData = (() => {
     const cursos = relations.cursos[id] || [];
     const resenas = relations.resenas[id] || [];
 
-    const precios = [...servicios, ...productos, ...cursos]
-      .map((item) => numberFrom(item, ['precio', 'precio_cup', 'monto'], null))
-      .filter((value) => value != null && Number.isFinite(value) && value > 0);
+    // El rango de precio del negocio mezcla servicios+productos+cursos, que
+    // pueden estar en monedas distintas (hay negocios con servicios en USD).
+    // Se calcula solo sobre la moneda MAS FRECUENTE de ese negocio, para no
+    // mostrar un rango "100 - 5000" mezclando CUP con USD bajo una sola
+    // etiqueta enganosa.
+    const preciosConMoneda = [...servicios, ...productos, ...cursos]
+      .map((item) => ({
+        valor: numberFrom(item, ['precio', 'precio_cup', 'monto'], null),
+        moneda: String(valueFrom(item, ['precio_moneda', 'moneda'], 'CUP')).toUpperCase()
+      }))
+      .filter((p) => p.valor != null && Number.isFinite(p.valor) && p.valor > 0);
+
+    const conteoMonedas = {};
+    preciosConMoneda.forEach((p) => { conteoMonedas[p.moneda] = (conteoMonedas[p.moneda] || 0) + 1; });
+    const monedaDominante = Object.keys(conteoMonedas).sort((a, b) => conteoMonedas[b] - conteoMonedas[a])[0]
+      || String(valueFrom(row, ['whatsapp_moneda'], 'CUP')).toUpperCase();
+    const precios = preciosConMoneda.filter((p) => p.moneda === monedaDominante).map((p) => p.valor);
 
     const rating = ratingData?.[id];
     const estrellas = rating ? rating.promedio : 0;
@@ -312,7 +329,8 @@ const MockData = (() => {
       coordenadas: { lat, lng },
       rangoPrecio: {
         min: precios.length ? Math.min(...precios) : numberFrom(row, ['precio_min', 'precio_desde'], 0),
-        max: precios.length ? Math.max(...precios) : numberFrom(row, ['precio_max', 'precio_hasta'], 0)
+        max: precios.length ? Math.max(...precios) : numberFrom(row, ['precio_max', 'precio_hasta'], 0),
+        moneda: monedaDominante
       },
       estrellas,
       totalValoraciones,
@@ -381,7 +399,7 @@ const MockData = (() => {
       }
 
       try {
-        const CAMPOS_NEGOCIO = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa';
+        const CAMPOS_NEGOCIO = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,whatsapp_moneda';
         const [rowsRserva, rowsExternas, ratingData] = await Promise.all([
           // Negocios rservasroma: exigen suscripción activa (llevan diamante).
           supabaseFetch(`negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=${CAMPOS_NEGOCIO},suscripciones!inner(estado)&order=nombre.asc`),
@@ -399,13 +417,13 @@ const MockData = (() => {
         ];
 
         totalReservasHoy = await optionalSupabaseCount('reservas?created_at=gte.' + encodeURIComponent(getTodayStartIso()) + '&select=id');
-        const serviciosRows = await optionalSupabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,descripcion,activo,imagen,categoria&order=nombre.asc&limit=5000');
+        const serviciosRows = await optionalSupabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,precio_moneda,descripcion,activo,imagen,categoria&order=nombre.asc&limit=5000');
         const reservasSemanaRows = await optionalSupabaseFetch('reservas?created_at=gte.' + encodeURIComponent(getWeekStartIso()) + '&select=*&limit=5000');
         const productosTiendaRows = tiendaTablesEnabled()
-          ? await optionalSupabaseFetch('productos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,imagen_url,categoria,stock,activo,destacado,orden&order=destacado.desc,orden.asc,nombre.asc&limit=5000')
+          ? await optionalSupabaseFetch('productos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,stock,activo,destacado,orden&order=destacado.desc,orden.asc,nombre.asc&limit=5000')
           : [];
         const cursosTiendaRows = tiendaTablesEnabled()
-          ? await optionalSupabaseFetch('cursos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=destacado.desc,orden.asc,fecha.asc,nombre.asc&limit=5000')
+          ? await optionalSupabaseFetch('cursos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=destacado.desc,orden.asc,fecha.asc,nombre.asc&limit=5000')
           : [];
         const tiendasIds = new Set([...businessIdSet(productosTiendaRows), ...businessIdSet(cursosTiendaRows)]);
         const reservasSemanaPorNegocio = countWeeklyReservations(reservasSemanaRows);
@@ -440,6 +458,7 @@ const MockData = (() => {
             nombre: item.nombre || '',
             descripcion: item.descripcion || '',
             precio: Number(item.precio || 0),
+            moneda: String(item.moneda || 'CUP').toUpperCase(),
             imagen: item.imagen_url || '',
             categoria: item.categoria || '',
             destacado: item.destacado === true,
@@ -483,7 +502,7 @@ const MockData = (() => {
     if (current?.detallesCargados && !forceRefresh) return current;
 
     const encodedId = encodeURIComponent(negocioId);
-    const CAMPOS_DETALLE = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa';
+    const CAMPOS_DETALLE = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,whatsapp_moneda';
     const [rowsRserva, rowsExterna, ratingData] = await Promise.all([
       // Negocio rservasroma: exige suscripción activa (inner join la excluye si no).
       optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&suscripciones.estado=eq.activa&select=${CAMPOS_DETALLE},suscripciones!inner(estado)`),
@@ -495,13 +514,13 @@ const MockData = (() => {
     const rows = [...(rowsRserva || []), ...(rowsExterna || [])];
     const row = rows[0] || current || { id: negocioId };
     if (!rows[0] && !current) return null;
-    const serviciosRows = await optionalSupabaseFetch(`servicios?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,duracion,precio,descripcion,activo,imagen,categoria&order=nombre.asc`);
+    const serviciosRows = await optionalSupabaseFetch(`servicios?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,duracion,precio,precio_moneda,descripcion,activo,imagen,categoria&order=nombre.asc`);
     const resenasRows = await optionalSupabaseFetch(`resenas?negocio_id=eq.${encodedId}&select=*&order=fecha.desc&limit=50`);
     const productosRows = tiendaTablesEnabled()
-      ? await optionalSupabaseFetch(`productos?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,descripcion,precio,imagen_url,categoria,stock,activo,destacado,orden&order=destacado.desc,orden.asc,nombre.asc&limit=200`)
+      ? await optionalSupabaseFetch(`productos?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,stock,activo,destacado,orden&order=destacado.desc,orden.asc,nombre.asc&limit=200`)
       : [];
     const cursosRows = tiendaTablesEnabled()
-      ? await optionalSupabaseFetch(`cursos?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,descripcion,precio,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=destacado.desc,orden.asc,fecha.asc,nombre.asc&limit=200`)
+      ? await optionalSupabaseFetch(`cursos?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=destacado.desc,orden.asc,fecha.asc,nombre.asc&limit=200`)
       : [];
 
     const detailed = normalizeBusiness(row, {
