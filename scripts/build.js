@@ -81,6 +81,17 @@ const bundles = {
     'pages/panel/LoginBusinessPage.js',
     'login-app.js'
   ],
+  'tienda.bundle.js': [
+    'utils/navigation.js',
+    'utils/format.js',
+    'data/mockData.js',
+    'components/ToastProvider.js',
+    'components/Header.js',
+    'components/Footer.js',
+    'components/ProductCard.js',
+    'pages/tienda/TiendaPage.js',
+    'tienda-app.js'
+  ],
   'crear-tienda.bundle.js': [
     'utils/navigation.js',
     'components/ToastProvider.js',

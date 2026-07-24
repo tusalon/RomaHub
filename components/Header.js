@@ -52,8 +52,16 @@ function Header({ currentParams }) {
                 data-name="nav-search"
                 data-file="components/Header.js"
               >
-                Directorio
+                Reservas
               </button>
+              <a
+                className={`btn-rr ${page === 'tienda.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+                href="tienda.html"
+                data-name="nav-tienda"
+                data-file="components/Header.js"
+              >
+                Tienda
+              </a>
               <a
                 className={`btn-rr ${page === 'register.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 href="register.html"
@@ -91,10 +99,14 @@ function Header({ currentParams }) {
                     <span data-name="m-home-text" data-file="components/Header.js">Inicio</span>
                     <div className="icon-arrow-right text-xl text-[#e83387]" data-name="m-home-icon" data-file="components/Header.js"></div>
                   </button>
-                  <button className="btn-rr btn-primary-rr w-full flex items-center justify-between" onClick={onGoSearch} data-name="m-search" data-file="components/Header.js">
-                    <span data-name="m-search-text" data-file="components/Header.js">Directorio</span>
-                    <div className="icon-arrow-right text-xl text-white" data-name="m-search-icon" data-file="components/Header.js"></div>
+                  <button className={`btn-rr w-full flex items-center justify-between ${page === 'search.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`} onClick={onGoSearch} data-name="m-search" data-file="components/Header.js">
+                    <span data-name="m-search-text" data-file="components/Header.js">Reservas</span>
+                    <div className={`icon-calendar text-xl ${page === 'search.html' ? 'text-white' : 'text-[#e83387]'}`} data-name="m-search-icon" data-file="components/Header.js"></div>
                   </button>
+                  <a className={`btn-rr w-full flex items-center justify-between ${page === 'tienda.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`} href="tienda.html" data-name="m-tienda" data-file="components/Header.js">
+                    <span data-name="m-tienda-text" data-file="components/Header.js">Tienda</span>
+                    <div className={`icon-shopping-bag text-xl ${page === 'tienda.html' ? 'text-white' : 'text-[#e83387]'}`} data-name="m-tienda-icon" data-file="components/Header.js"></div>
+                  </a>
                   <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="register.html" data-name="m-register" data-file="components/Header.js">
                     <span data-name="m-register-text" data-file="components/Header.js">Registrar negocio</span>
                     <div className="icon-arrow-right text-xl text-[#e83387]" data-name="m-register-icon" data-file="components/Header.js"></div>
