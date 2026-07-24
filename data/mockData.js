@@ -315,6 +315,10 @@ const MockData = (() => {
       totalValoraciones,
       totalResenas: totalValoraciones,
       enRanking,
+      esTiendaExterna: boolFrom(row, ['es_tienda_externa'], false),
+      // El diamante 💎 y la prioridad los tiene quien NO es tienda externa
+      // (un negocio rservasroma con suscripción activa).
+      esRservasroma: !boolFrom(row, ['es_tienda_externa'], false),
       portadaUrl: coverUrl,
       portadaEsPropia: Boolean(coverUrlPropia),
       logoUrl,
@@ -374,10 +378,22 @@ const MockData = (() => {
       }
 
       try {
-        const [rows, ratingData] = await Promise.all([
-          supabaseFetch('negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,suscripciones!inner(estado)&order=nombre.asc'),
+        const CAMPOS_NEGOCIO = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa';
+        const [rowsRserva, rowsExternas, ratingData] = await Promise.all([
+          // Negocios rservasroma: exigen suscripción activa (llevan diamante).
+          supabaseFetch(`negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=${CAMPOS_NEGOCIO},suscripciones!inner(estado)&order=nombre.asc`),
+          // Tiendas externas: sin suscripción, se identifican por el flag.
+          optionalSupabaseFetch(`negocios?configurado=eq.true&es_tienda_externa=eq.true&select=${CAMPOS_NEGOCIO}&order=nombre.asc`),
           fetchVerifiedRatings()
         ]);
+
+        // Combinar sin duplicar: un negocio con suscripción manda sobre su
+        // posible marca de externa (no debería pasar, pero por seguridad).
+        const idsRserva = new Set((rowsRserva || []).map((r) => r.id));
+        const rows = [
+          ...(rowsRserva || []),
+          ...(rowsExternas || []).filter((r) => !idsRserva.has(r.id))
+        ];
 
         totalReservasHoy = await optionalSupabaseCount('reservas?created_at=gte.' + encodeURIComponent(getTodayStartIso()) + '&select=id');
         const serviciosRows = await optionalSupabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,descripcion,activo,imagen,categoria&order=nombre.asc&limit=5000');
@@ -431,7 +447,9 @@ const MockData = (() => {
             negocioSlug: negocio.slug,
             negocioLogo: negocio.logoUrl,
             negocioReservaUrl: negocio.reservaUrl,
-            negocioWhatsapp: negocio.whatsapp
+            negocioWhatsapp: negocio.whatsapp,
+            negocioEsRservasroma: negocio.esRservasroma,
+            negocioEsTiendaExterna: negocio.esTiendaExterna
           };
         };
         showcaseItems = [
@@ -496,8 +514,14 @@ const MockData = (() => {
     return detailed;
   }
 
+  // Los negocios rservasroma van primero; las tiendas externas, más abajo.
+  function ordenNegocio(a, b) {
+    if (a.esRservasroma !== b.esRservasroma) return a.esRservasroma ? -1 : 1;
+    return String(a.nombre).localeCompare(String(b.nombre));
+  }
+
   function listBusinesses() {
-    return businesses.slice();
+    return businesses.slice().sort(ordenNegocio);
   }
 
   function getLoadError() {
@@ -530,12 +554,13 @@ const MockData = (() => {
       .slice(0, 12);
   }
 
-  // Orden del escaparate: destacados primero, luego los que tienen foto
-  // (una tienda entra por la vista, no por el texto), y dentro de eso los
-  // productos antes que los cursos.
+  // Orden del escaparate: primero los productos de negocios rservasroma
+  // (las tiendas externas van más abajo), y dentro de cada grupo los
+  // destacados, luego los que tienen foto, y productos antes que cursos.
   function ordenarShowcase(items) {
     const peso = (item) => (item.destacado ? 0 : 2) + (item.imagen ? 0 : 1);
     return items.slice().sort((a, b) => {
+      if (a.negocioEsRservasroma !== b.negocioEsRservasroma) return a.negocioEsRservasroma ? -1 : 1;
       const d = peso(a) - peso(b);
       if (d !== 0) return d;
       if (a.tipo !== b.tipo) return a.tipo === 'producto' ? -1 : 1;
