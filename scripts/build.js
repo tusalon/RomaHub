@@ -56,6 +56,7 @@ const bundles = {
     'components/MasonryGrid.js',
     'components/ReviewCard.js',
     'components/MobileWhatsAppBar.js',
+    'components/ReportarNegocio.js',
     'pages/business/BusinessHeader.js',
     'pages/business/BusinessTabs.js',
     'pages/business/BusinessCatalog.js',

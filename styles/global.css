@@ -44,6 +44,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .icon-info::before { content: "i"; }
 .icon-database-zap::before { content: "DB"; font-size: 0.65em; }
 .icon-triangle-alert::before { content: "!"; }
+.icon-flag::before { content: "\2691"; }
 .icon-chart-no-axes-column::before { content: "\25A5"; }
 
 .rr-leaflet-map,

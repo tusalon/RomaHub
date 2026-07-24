@@ -198,6 +198,9 @@
                 {renderCartCard()}
               </div> : null}
               <BusinessReviews business={b} data-name="reviews" data-file="pages/business/BusinessPage.js" />
+              <div className="mt-4 text-center lg:hidden" data-name="mobile-report" data-file="pages/business/BusinessPage.js">
+                <ReportarNegocio negocioId={b.id} negocioNombre={b.nombre} data-name="reportar-mobile" data-file="pages/business/BusinessPage.js" />
+              </div>
             </div>
 
             <aside className="hidden lg:block sticky top-[92px]" data-name="right" data-file="pages/business/BusinessPage.js">
@@ -232,6 +235,10 @@
                     </a>
                   </React.Fragment>
                 ) : null}
+
+                <div className="mt-4 pt-4 border-t border-[var(--border)] text-center" data-name="contact-report" data-file="pages/business/BusinessPage.js">
+                  <ReportarNegocio negocioId={b.id} negocioNombre={b.nombre} data-name="reportar" data-file="pages/business/BusinessPage.js" />
+                </div>
               </div>
               {hasStore ? <div className="mt-4" data-name="desktop-cart" data-file="pages/business/BusinessPage.js">
                 {renderCartCard()}
