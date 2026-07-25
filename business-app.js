@@ -78,7 +78,7 @@ function BusinessApp() {
       <div className="min-h-screen bg-[var(--bg)]" data-name="business-app" data-file="business-app.js">
         <ToastProvider data-name="toast-provider" data-file="business-app.js">
           <Header currentParams={null} data-name="header-wrap" data-file="business-app.js" />
-          <main className="pt-0 pb-24" data-name="main" data-file="business-app.js">
+          <main className="flex-1 pt-0 pb-24" data-name="main" data-file="business-app.js">
             {dataError ? (
               <DataSourceError message={dataError} data-name="data-source-error" data-file="business-app.js" />
             ) : !dataReady ? (

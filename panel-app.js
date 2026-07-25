@@ -26,7 +26,7 @@ function PanelApp() {
       <div className="min-h-screen bg-[var(--bg)]" data-name="panel-app" data-file="panel-app.js">
         <ToastProvider data-name="toast-provider" data-file="panel-app.js">
           <Header data-name="header-wrap" data-file="panel-app.js" />
-          <main className="pb-16" data-name="main" data-file="panel-app.js">
+          <main className="flex-1 pb-16" data-name="main" data-file="panel-app.js">
             <BusinessPanelPage data-name="business-panel-page" data-file="panel-app.js" />
           </main>
           <Footer data-name="footer" data-file="panel-app.js" />

@@ -33,7 +33,7 @@ function RegisterApp() {
       <div className="min-h-screen bg-[var(--bg)]" data-name="register-app" data-file="register-app.js">
         <ToastProvider data-name="toast-provider" data-file="register-app.js">
           <Header data-name="header-wrap" data-file="register-app.js" />
-          <main className="pt-6 pb-16" data-name="main" data-file="register-app.js">
+          <main className="flex-1 pt-6 pb-16" data-name="main" data-file="register-app.js">
             <RegisterBusinessPage data-name="register-business-page" data-file="register-app.js" />
           </main>
           <Footer data-name="footer" data-file="register-app.js" />

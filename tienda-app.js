@@ -50,7 +50,7 @@ function TiendaApp() {
       <div className="min-h-screen bg-[var(--bg)]" data-name="tienda-app" data-file="tienda-app.js">
         <ToastProvider data-name="toast-provider" data-file="tienda-app.js">
           <Header data-name="header-wrap" data-file="tienda-app.js" />
-          <main data-name="main" data-file="tienda-app.js">
+          <main className="flex-1" data-name="main" data-file="tienda-app.js">
             {!dataReady ? (
               <div className="container-rr py-16 text-center text-sm text-[var(--text-muted)]" data-name="tienda-loading" data-file="tienda-app.js">Cargando tienda...</div>
             ) : dataError ? (

@@ -21,7 +21,7 @@ function ToastProvider({ children }) {
 
     return (
       <ToastContext.Provider value={api} data-name="toast-provider" data-file="components/ToastProvider.js">
-        <div data-name="toast-provider-inner" data-file="components/ToastProvider.js">
+        <div className="flex flex-col min-h-screen" data-name="toast-provider-inner" data-file="components/ToastProvider.js">
           {children}
           <div className="fixed top-4 right-4 z-[70] space-y-2 w-[320px] max-w-[calc(100vw-32px)]" data-name="toast-stack" data-file="components/ToastProvider.js">
             {toasts.map((t) => (

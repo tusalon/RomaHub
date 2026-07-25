@@ -9,6 +9,39 @@ const MockData = (() => {
   const defaultCoverUrl = '';
   const defaultLogoUrl = '';
 
+  // RomaHub son paginas separadas (index/search/tienda/business...), asi que
+  // cambiar de seccion recarga toda la app y volvia a pedirlo todo a Supabase:
+  // de ahi el "Cargando negocios..." en cada clic. Guardamos el resultado ya
+  // normalizado en sessionStorage para pintar al instante y refrescar detras.
+  const CACHE_KEY = 'romahub-negocios-v1';
+  const CACHE_TTL_MS = 5 * 60 * 1000;
+
+  function leerCache() {
+    try {
+      const crudo = sessionStorage.getItem(CACHE_KEY);
+      if (!crudo) return null;
+      const guardado = JSON.parse(crudo);
+      if (!guardado || !Array.isArray(guardado.businesses)) return null;
+      if (Date.now() - Number(guardado.guardadoEn || 0) > CACHE_TTL_MS) return null;
+      return guardado;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function guardarCache() {
+    try {
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify({
+        guardadoEn: Date.now(),
+        businesses,
+        showcaseItems,
+        totalReservasHoy
+      }));
+    } catch (error) {
+      // sessionStorage lleno o bloqueado: seguimos sin cache, no es critico.
+    }
+  }
+
   // Fotos de stock por categoria (mismas que usa rservasroma en
   // utils/hero-backgrounds.js). imagen_fondo_url casi siempre esta vacia en
   // negocios: el dueno solo elige una categoria (imagen_fondo_tipo) y
@@ -390,6 +423,21 @@ const MockData = (() => {
     if (loadedFromSupabase && !forceRefresh) return businesses.slice();
     if (loadPromise && !forceRefresh) return loadPromise;
 
+    // Con cache fresca se pinta de inmediato y se refresca por detras, para
+    // que cambiar de seccion no muestre "Cargando..." otra vez.
+    if (!forceRefresh) {
+      const guardado = leerCache();
+      if (guardado) {
+        businesses = guardado.businesses || [];
+        showcaseItems = guardado.showcaseItems || [];
+        totalReservasHoy = guardado.totalReservasHoy || 0;
+        loadedFromSupabase = true;
+        loadError = null;
+        setTimeout(() => { loadBusinesses(true).catch(() => {}); }, 0);
+        return businesses.slice();
+      }
+    }
+
     loadPromise = (async () => {
       const config = getSupabaseConfig();
       if (!config) {
@@ -416,15 +464,30 @@ const MockData = (() => {
           ...(rowsExternas || []).filter((r) => !idsRserva.has(r.id))
         ];
 
-        totalReservasHoy = await optionalSupabaseCount('reservas?created_at=gte.' + encodeURIComponent(getTodayStartIso()) + '&select=id');
-        const serviciosRows = await optionalSupabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,precio_moneda,descripcion,activo,imagen,categoria&order=nombre.asc&limit=5000');
-        const reservasSemanaRows = await optionalSupabaseFetch('reservas?created_at=gte.' + encodeURIComponent(getWeekStartIso()) + '&select=*&limit=5000');
-        const productosTiendaRows = tiendaTablesEnabled()
-          ? await optionalSupabaseFetch('productos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,stock,activo,destacado,orden&order=destacado.desc,orden.asc,nombre.asc&limit=5000')
-          : [];
-        const cursosTiendaRows = tiendaTablesEnabled()
-          ? await optionalSupabaseFetch('cursos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=destacado.desc,orden.asc,fecha.asc,nombre.asc&limit=5000')
-          : [];
+        // Estas cinco consultas son independientes entre si: encadenarlas con
+        // await sumaba cinco viajes de ida y vuelta antes de pintar nada, que
+        // con internet lento es justo lo que hacia eterno el "Cargando...".
+        // De la tabla reservas solo se piden las tres columnas que se usan
+        // para contar: traer select=* exponia datos privados de las clientas
+        // (nombre, WhatsApp, precios, notas de cobro) a cualquier visitante.
+        const [
+          reservasHoyCount,
+          serviciosRows,
+          reservasSemanaRows,
+          productosTiendaRows,
+          cursosTiendaRows
+        ] = await Promise.all([
+          optionalSupabaseCount('reservas?created_at=gte.' + encodeURIComponent(getTodayStartIso()) + '&select=id'),
+          optionalSupabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,precio_moneda,descripcion,activo,imagen,categoria&order=nombre.asc&limit=5000'),
+          optionalSupabaseFetch('reservas?created_at=gte.' + encodeURIComponent(getWeekStartIso()) + '&select=negocio_id,created_at,estado&limit=5000'),
+          tiendaTablesEnabled()
+            ? optionalSupabaseFetch('productos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,stock,activo,destacado,orden&order=destacado.desc,orden.asc,nombre.asc&limit=5000')
+            : Promise.resolve([]),
+          tiendaTablesEnabled()
+            ? optionalSupabaseFetch('cursos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=destacado.desc,orden.asc,fecha.asc,nombre.asc&limit=5000')
+            : Promise.resolve([])
+        ]);
+        totalReservasHoy = reservasHoyCount;
         const tiendasIds = new Set([...businessIdSet(productosTiendaRows), ...businessIdSet(cursosTiendaRows)]);
         const reservasSemanaPorNegocio = countWeeklyReservations(reservasSemanaRows);
 
@@ -481,6 +544,7 @@ const MockData = (() => {
 
         loadedFromSupabase = true;
         loadError = null;
+        guardarCache();
         console.log(`RomaHub cargo ${businesses.length} negocios desde Supabase (${showcaseItems.length} productos/cursos, ${Object.keys(ratingData).length} con valoraciones verificadas)`);
         return businesses.slice();
       } catch (error) {

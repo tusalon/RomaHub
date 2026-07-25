@@ -92,7 +92,7 @@ function App() {
       <div className="min-h-screen bg-[var(--bg)]" data-name="app" data-file="app.js">
         <ToastProvider data-name="toast-provider" data-file="app.js">
           <Header currentParams={params} data-name="header-wrap" data-file="app.js" />
-          <main className="pt-6 pb-16" data-name="main" data-file="app.js">
+          <main className="flex-1 pt-6 pb-16" data-name="main" data-file="app.js">
             {dataError ? (
               <DataSourceError message={dataError} data-name="data-source-error" data-file="app.js" />
             ) : dataReady ? (

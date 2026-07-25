@@ -26,7 +26,7 @@ function LoginApp() {
       <div className="min-h-screen bg-[var(--bg)]" data-name="login-app" data-file="login-app.js">
         <ToastProvider data-name="toast-provider" data-file="login-app.js">
           <Header data-name="header-wrap" data-file="login-app.js" />
-          <main className="pt-6 pb-16" data-name="main" data-file="login-app.js">
+          <main className="flex-1 pt-6 pb-16" data-name="main" data-file="login-app.js">
             <LoginBusinessPage data-name="login-business-page" data-file="login-app.js" />
           </main>
           <Footer data-name="footer" data-file="login-app.js" />

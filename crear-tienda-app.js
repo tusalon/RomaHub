@@ -26,7 +26,7 @@ function CrearTiendaApp() {
       <div className="min-h-screen bg-[var(--bg)]" data-name="crear-tienda-app" data-file="crear-tienda-app.js">
         <ToastProvider data-name="toast-provider" data-file="crear-tienda-app.js">
           <Header data-name="header-wrap" data-file="crear-tienda-app.js" />
-          <main className="pt-6 pb-16" data-name="main" data-file="crear-tienda-app.js">
+          <main className="flex-1 pt-6 pb-16" data-name="main" data-file="crear-tienda-app.js">
             <CrearTiendaPage data-name="crear-tienda-page" data-file="crear-tienda-app.js" />
           </main>
           <Footer data-name="footer" data-file="crear-tienda-app.js" />

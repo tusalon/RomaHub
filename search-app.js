@@ -88,7 +88,7 @@ function SearchApp() {
       <div className="min-h-screen bg-[var(--bg)]" data-name="search-app" data-file="search-app.js">
         <ToastProvider data-name="toast-provider" data-file="search-app.js">
           <Header currentParams={query} data-name="header-wrap" data-file="search-app.js" />
-          <main className="pt-4 pb-16" data-name="main" data-file="search-app.js">
+          <main className="flex-1 pt-4 pb-16" data-name="main" data-file="search-app.js">
             {dataError ? (
               <DataSourceError message={dataError} data-name="data-source-error" data-file="search-app.js" />
             ) : dataReady ? (
