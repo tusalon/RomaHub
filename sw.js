@@ -1,4 +1,4 @@
-const CACHE_NAME = 'romahub-v9';
+const CACHE_NAME = 'romahub-v10';
 const APP_SHELL = [
   './index.html',
   './manifest.webmanifest',
@@ -50,6 +50,27 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => caches.match(request).then((cached) => cached || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // El codigo (JS/CSS) va primero a la red: con stale-while-revalidate cada
+  // despliegue se veia una carga tarde, porque la primera visita seguia
+  // recibiendo el bundle viejo de cache. Las imagenes e iconos si pueden
+  // servirse de cache primero, que casi nunca cambian y pesan mas.
+  const esCodigo = /\.(js|css)$/i.test(url.pathname);
+
+  if (esCodigo) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response && response.status === 200 && response.type !== 'opaque') {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)).catch(() => {});
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
     );
     return;
   }
