@@ -1,24 +1,7 @@
 function RegisterBusinessPage() {
   try {
     const ROMA_WHATSAPP = '15154650340';
-    const provincias = [
-      'Pinar del Río',
-      'Artemisa',
-      'La Habana',
-      'Mayabeque',
-      'Matanzas',
-      'Cienfuegos',
-      'Villa Clara',
-      'Sancti Spíritus',
-      'Ciego de Ávila',
-      'Camagüey',
-      'Las Tunas',
-      'Holguín',
-      'Granma',
-      'Santiago de Cuba',
-      'Guantánamo',
-      'Isla de la Juventud'
-    ];
+    const provincias = window.CUBA_PROVINCIAS || [];
 
     const [form, setForm] = React.useState({
       plan: 'VIP',
@@ -213,7 +196,17 @@ function RegisterBusinessPage() {
 
                 <label className="block" data-name="field-province" data-file="pages/register/RegisterBusinessPage.js">
                   <span className="text-xs font-semibold text-[var(--text-muted)]">Provincia</span>
-                  <select className="mt-1 w-full rounded-lg border border-[var(--border)] bg-white px-4 py-3 text-sm" value={form.provincia} onChange={(e) => update('provincia', e.target.value)}>
+                  <select
+                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-white px-4 py-3 text-sm"
+                    value={form.provincia}
+                    onChange={(e) => {
+                      // Cambiar de provincia invalida el municipio elegido antes.
+                      const provincia = e.target.value;
+                      const municipios = (window.CUBA_MUNICIPIOS && window.CUBA_MUNICIPIOS[provincia]) || [];
+                      update('provincia', provincia);
+                      if (!municipios.some((m) => m === form.municipio)) update('municipio', '');
+                    }}
+                  >
                     <option value="">Seleccionar provincia</option>
                     {provincias.map((province) => <option key={province} value={province}>{province}</option>)}
                   </select>
@@ -221,8 +214,18 @@ function RegisterBusinessPage() {
                 </label>
 
                 <label className="block" data-name="field-city" data-file="pages/register/RegisterBusinessPage.js">
-                  <span className="text-xs font-semibold text-[var(--text-muted)]">Municipio o zona</span>
-                  <input className="mt-1 w-full rounded-lg border border-[var(--border)] bg-white px-4 py-3 text-sm" value={form.municipio} onChange={(e) => update('municipio', e.target.value)} placeholder="Ej. Playa, Centro Habana, Cardenas" />
+                  <span className="text-xs font-semibold text-[var(--text-muted)]">Municipio</span>
+                  <select
+                    className="mt-1 w-full rounded-lg border border-[var(--border)] bg-white px-4 py-3 text-sm disabled:opacity-60"
+                    value={form.municipio}
+                    onChange={(e) => update('municipio', e.target.value)}
+                    disabled={!form.provincia}
+                  >
+                    <option value="">{form.provincia ? 'Seleccionar municipio' : 'Primero la provincia'}</option>
+                    {(window.getMunicipiosDeProvincia ? window.getMunicipiosDeProvincia(form.provincia, form.municipio) : []).map((m) => (
+                      <option key={m} value={m}>{m}</option>
+                    ))}
+                  </select>
                 </label>
 
                 <label className="block md:col-span-2" data-name="field-address" data-file="pages/register/RegisterBusinessPage.js">

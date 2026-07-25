@@ -1,11 +1,6 @@
 function CrearTiendaPage() {
   try {
-    const PROVINCIAS = [
-      'Pinar del Río', 'Artemisa', 'La Habana', 'Mayabeque', 'Matanzas',
-      'Cienfuegos', 'Villa Clara', 'Sancti Spíritus', 'Ciego de Ávila',
-      'Camagüey', 'Las Tunas', 'Holguín', 'Granma', 'Santiago de Cuba',
-      'Guantánamo', 'Isla de la Juventud'
-    ];
+    const PROVINCIAS = window.CUBA_PROVINCIAS || [];
 
     const [form, setForm] = React.useState({
       nombre: '', whatsapp: '', provincia: '', municipio: '', categoria: '', descripcion: '', logo_url: ''
@@ -168,14 +163,35 @@ function CrearTiendaPage() {
           <div className="grid grid-cols-2 gap-3">
             <label className="block">
               <span className="text-xs font-semibold text-[var(--text-muted)]">Provincia</span>
-              <select className="input-rr mt-1 bg-white" value={form.provincia} onChange={(e) => set('provincia', e.target.value)}>
+              <select
+                className="input-rr mt-1 bg-white"
+                value={form.provincia}
+                onChange={(e) => {
+                  // Cambiar de provincia invalida el municipio elegido antes.
+                  const provincia = e.target.value;
+                  const municipios = (window.CUBA_MUNICIPIOS && window.CUBA_MUNICIPIOS[provincia]) || [];
+                  const sigueValido = municipios.some((m) => m === form.municipio);
+                  setForm((f) => ({ ...f, provincia, municipio: sigueValido ? f.municipio : '' }));
+                  setError('');
+                }}
+              >
                 <option value="">Elige...</option>
                 {PROVINCIAS.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
             </label>
             <label className="block">
               <span className="text-xs font-semibold text-[var(--text-muted)]">Municipio</span>
-              <input className="input-rr mt-1" value={form.municipio} onChange={(e) => set('municipio', e.target.value)} placeholder="Ej: Playa" />
+              <select
+                className="input-rr mt-1 bg-white disabled:opacity-60"
+                value={form.municipio}
+                onChange={(e) => set('municipio', e.target.value)}
+                disabled={!form.provincia}
+              >
+                <option value="">{form.provincia ? 'Elige...' : 'Primero la provincia'}</option>
+                {(window.getMunicipiosDeProvincia ? window.getMunicipiosDeProvincia(form.provincia, form.municipio) : []).map((m) => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
+              </select>
             </label>
           </div>
 
