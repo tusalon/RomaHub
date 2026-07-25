@@ -3,16 +3,30 @@ function HomeHero({ initialParams }) {
     const businesses = MockData.listBusinesses();
     const totalBusinesses = businesses.length;
     const reservasHoy = MockData.getTodayReservations ? MockData.getTodayReservations() : 0;
-    // La cara de RomaHub debe mostrar RomaHub, no una captura prestada de
-    // Rservasroma (la app de reservas de otro producto). En vez de una
-    // imagen fija que hay que retocar a mano cada vez, se renderiza un
-    // negocio real y vivo de la propia base de datos: nunca queda
-    // desactualizada y siempre es 100% cierta.
-    const featured = MockData.listWeeklyFeatured()[0] || businesses[0] || null;
-    const featuredEsTendencia = Boolean(featured?.reservasSemana > 0);
+    // Mismas 5 fotos de categoria que utils/hero-backgrounds.js en
+    // rservasroma (las que la duena elige como fondo si no sube una foto
+    // propia), aqui en carrusel para mostrar de un vistazo todos los rubros
+    // que cubre el directorio, no solo el que mas negocios tiene hoy (unas).
+    const CATEGORIAS_HERO = [
+      { id: 'unas', label: 'Uñas y manicura', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=60&w=800&auto=format&fit=crop' },
+      { id: 'belleza', label: 'Salón de belleza', image: 'https://images.unsplash.com/photo-1560750588-73207b1ef5b8?q=60&w=800&auto=format&fit=crop' },
+      { id: 'barberia', label: 'Barbería', image: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?q=60&w=800&auto=format&fit=crop' },
+      { id: 'peluqueria', label: 'Peluquería', image: 'https://images.unsplash.com/photo-1701976333339-1d41dad8138b?ixlib=rb-4.1.0&q=60&fm=jpg&crop=entropy&cs=srgb&w=800&auto=format&fit=crop' },
+      { id: 'lashes', label: 'Lashes y pestañas', image: 'https://images.unsplash.com/photo-1589710751893-f9a6770ad71b?ixlib=rb-4.1.0&q=60&fm=jpg&crop=entropy&cs=srgb&w=800&auto=format&fit=crop' }
+    ];
+    const [slideActivo, setSlideActivo] = React.useState(0);
+
+    React.useEffect(() => {
+      const prefiereMenosMovimiento = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefiereMenosMovimiento) return; // se queda fija en unas, sin rotar
+      const id = setInterval(() => {
+        setSlideActivo((actual) => (actual + 1) % CATEGORIAS_HERO.length);
+      }, 3500);
+      return () => clearInterval(id);
+    }, []);
 
     return (
-      <section className="relative overflow-hidden pt-8 md:pt-14 pb-2" data-name="home-hero" data-file="pages/home/HomeHero.js">
+      <section className="relative overflow-hidden pt-4 md:pt-6 pb-2" data-name="home-hero" data-file="pages/home/HomeHero.js">
         <div className="hero-blob-rr top-[-160px] right-[-120px]" aria-hidden="true" data-name="hero-blob" data-file="pages/home/HomeHero.js"></div>
         <div className="container-rr relative grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10 lg:gap-6 items-center" data-name="home-hero-inner" data-file="pages/home/HomeHero.js">
           <div className="max-w-3xl hero-anim-rr" data-name="home-hero-copy" data-file="pages/home/HomeHero.js">
@@ -122,74 +136,56 @@ function HomeHero({ initialParams }) {
           </div>
 
           <div className="relative mx-auto w-full max-w-[300px] lg:max-w-full" data-name="hero-visual" data-file="pages/home/HomeHero.js">
-            {featured ? (
-              <a
-                className="group block relative rounded-[22px] lg:rounded-[28px] border border-[var(--border)] bg-white shadow-[0_16px_40px_rgba(17,24,39,0.12)] lg:shadow-[0_24px_60px_rgba(17,24,39,0.12)] overflow-hidden"
-                href={`business.html?id=${encodeURIComponent(featured.id)}`}
-                data-name="hero-visual-frame"
-                data-file="pages/home/HomeHero.js"
-              >
-                <div className="relative h-[220px] lg:h-[300px] bg-[#F3F4F6] overflow-hidden" data-name="hero-visual-cover" data-file="pages/home/HomeHero.js">
-                  {featured.portadaUrl ? (
-                    <img
-                      loading="eager"
-                      decoding="async"
-                      src={featured.portadaUrl}
-                      alt={`Imagen de ${featured.nombre}`}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      data-name="hero-visual-img"
-                      data-file="pages/home/HomeHero.js"
-                    />
-                  ) : null}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/0 to-transparent" data-name="hero-visual-gradient" data-file="pages/home/HomeHero.js"></div>
+            <a
+              className="group block relative rounded-[22px] lg:rounded-[28px] border border-[var(--border)] bg-white shadow-[0_16px_40px_rgba(17,24,39,0.12)] lg:shadow-[0_24px_60px_rgba(17,24,39,0.12)] overflow-hidden"
+              href="search.html"
+              data-name="hero-visual-frame"
+              data-file="pages/home/HomeHero.js"
+            >
+              <div className="relative h-[220px] lg:h-[300px] bg-[#F3F4F6] overflow-hidden" data-name="hero-visual-cover" data-file="pages/home/HomeHero.js">
+                {CATEGORIAS_HERO.map((cat, index) => (
+                  <img
+                    key={cat.id}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    src={cat.image}
+                    alt={cat.label}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ${index === slideActivo ? 'opacity-100' : 'opacity-0'}`}
+                    data-name="hero-visual-slide-img"
+                    data-file="pages/home/HomeHero.js"
+                  />
+                ))}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-transparent" data-name="hero-visual-gradient" data-file="pages/home/HomeHero.js"></div>
 
-                  {featured.esRservasroma ? (
-                    <span className="absolute top-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-[#111827] shadow-sm" data-name="hero-visual-diamond" data-file="pages/home/HomeHero.js">
-                      💎 Verificado
-                    </span>
-                  ) : null}
+                <span className="absolute top-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-[#e83387] shadow-sm" data-name="hero-visual-kicker" data-file="pages/home/HomeHero.js">
+                  ✨ Todos los rubros de belleza
+                </span>
 
-                  {/* Se etiqueta con la razon real de por que se muestra este
-                      negocio: si tuvo reservas esta semana, esa cifra en vivo;
-                      si no, un texto honesto sin inventar actividad. */}
-                  <span className="absolute top-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-[#e83387] shadow-sm" data-name="hero-visual-kicker" data-file="pages/home/HomeHero.js">
-                    {featuredEsTendencia ? `🔥 ${featured.reservasSemana} reservas esta semana` : '✨ Negocio del directorio'}
-                  </span>
-
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center gap-2.5" data-name="hero-visual-identity" data-file="pages/home/HomeHero.js">
-                    <div className="w-10 h-10 rounded-xl border-2 border-white bg-white overflow-hidden shadow-sm shrink-0 flex items-center justify-center" data-name="hero-visual-logo" data-file="pages/home/HomeHero.js">
-                      {featured.logoUrl ? (
-                        <img loading="lazy" decoding="async" src={featured.logoUrl} alt={`Logo de ${featured.nombre}`} className="w-full h-full object-contain" data-name="hero-visual-logo-img" data-file="pages/home/HomeHero.js" />
-                      ) : (
-                        <span className="text-sm font-bold text-[#e83387]" data-name="hero-visual-logo-initials" data-file="pages/home/HomeHero.js">
-                          {String(featured.nombre || 'N').trim().slice(0, 2).toUpperCase()}
-                        </span>
-                      )}
-                    </div>
-                    <div className="min-w-0" data-name="hero-visual-name-wrap" data-file="pages/home/HomeHero.js">
-                      <p className="text-white text-sm font-bold leading-tight truncate" data-name="hero-visual-name" data-file="pages/home/HomeHero.js">{featured.nombre}</p>
-                      <p className="text-white/80 text-[11px] leading-tight truncate" data-name="hero-visual-cat" data-file="pages/home/HomeHero.js">{[featured.categoria, featured.ubicacionCorta].filter(Boolean).join(' · ')}</p>
-                    </div>
+                <div className="absolute bottom-3 left-3 right-3" data-name="hero-visual-identity" data-file="pages/home/HomeHero.js">
+                  <p className="text-white text-lg lg:text-xl font-extrabold leading-tight drop-shadow-sm" data-name="hero-visual-category-label" data-file="pages/home/HomeHero.js">
+                    {CATEGORIAS_HERO[slideActivo].label}
+                  </p>
+                  <div className="mt-2 flex gap-1.5" aria-hidden="true" data-name="hero-visual-dots" data-file="pages/home/HomeHero.js">
+                    {CATEGORIAS_HERO.map((cat, index) => (
+                      <span
+                        key={cat.id}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${index === slideActivo ? 'w-6 bg-white' : 'w-1.5 bg-white/50'}`}
+                        data-name="hero-visual-dot"
+                        data-file="pages/home/HomeHero.js"
+                      ></span>
+                    ))}
                   </div>
                 </div>
+              </div>
 
-                <div className="p-4 flex items-center justify-between gap-3" data-name="hero-visual-footer" data-file="pages/home/HomeHero.js">
-                  {featured.estrellas > 0 ? (
-                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#111827]" data-name="hero-visual-rating" data-file="pages/home/HomeHero.js">
-                      <span className="icon-star text-base text-[#F59E0B]" aria-hidden="true"></span>
-                      {Number(featured.estrellas).toFixed(1)}
-                      <span className="text-xs font-normal text-[var(--text-muted)]">({featured.totalValoraciones})</span>
-                    </span>
-                  ) : (
-                    <span className="text-xs text-[var(--text-muted)]" data-name="hero-visual-rating" data-file="pages/home/HomeHero.js">Nuevo en el directorio</span>
-                  )}
-                  <span className="text-xs font-bold text-[#e83387] inline-flex items-center gap-1" data-name="hero-visual-cta" data-file="pages/home/HomeHero.js">
-                    Ver perfil
-                    <div className="icon-arrow-right text-sm" aria-hidden="true"></div>
-                  </span>
-                </div>
-              </a>
-            ) : null}
+              <div className="p-4 flex items-center justify-between gap-3" data-name="hero-visual-footer" data-file="pages/home/HomeHero.js">
+                <span className="text-xs text-[var(--text-muted)]" data-name="hero-visual-rating" data-file="pages/home/HomeHero.js">Uñas, belleza, barbería, peluquería y lashes</span>
+                <span className="text-xs font-bold text-[#e83387] inline-flex items-center gap-1 shrink-0" data-name="hero-visual-cta" data-file="pages/home/HomeHero.js">
+                  Ver directorio
+                  <div className="icon-arrow-right text-sm" aria-hidden="true"></div>
+                </span>
+              </div>
+            </a>
 
             {/* Ya no va superpuesta sobre la tarjeta (flujo normal, no
                 position:absolute): antes calculaba un offset fijo asumiendo
