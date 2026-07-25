@@ -1,4 +1,4 @@
-const CACHE_NAME = 'romahub-v10';
+const CACHE_NAME = 'romahub-v11';
 const APP_SHELL = [
   './index.html',
   './manifest.webmanifest',

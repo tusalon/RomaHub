@@ -18,7 +18,7 @@ function HomeHero({ initialParams }) {
               La belleza de Cuba en un solo lugar.
             </h1>
             <p className="mt-5 text-base md:text-lg text-[var(--text-muted)] leading-relaxed max-w-xl" data-name="hero-sub" data-file="pages/home/HomeHero.js">
-              Descubre salones, manicuristas, barberos y especialistas rankeados por valoraciones reales de clientas verificadas.
+              Salones, manicuristas, barberos y especialistas de toda la isla. Mira sus servicios y precios, y reserva tu turno online.
             </p>
 
             <div className="mt-8 max-w-[760px]" data-name="hero-search" data-file="pages/home/HomeHero.js">
@@ -76,10 +76,14 @@ function HomeHero({ initialParams }) {
               />
             </div>
             <div className="absolute -left-3 lg:-left-6 bottom-5 lg:bottom-8 surface-rr px-3 py-2 lg:px-4 lg:py-3 flex items-center gap-2 shadow-[0_12px_28px_rgba(17,24,39,0.14)]" data-name="hero-visual-badge" data-file="pages/home/HomeHero.js">
-              <span className="text-base lg:text-lg" aria-hidden="true">📈</span>
+              <span className="text-base lg:text-lg" aria-hidden="true">📅</span>
               <div data-name="hero-visual-badge-copy" data-file="pages/home/HomeHero.js">
-                <p className="text-xs lg:text-sm font-bold text-[#111827] leading-none" data-name="hero-visual-badge-title" data-file="pages/home/HomeHero.js">+300 negocios activos</p>
-                <p className="text-[10px] lg:text-[11px] text-[var(--text-muted)] mt-1" data-name="hero-visual-badge-sub" data-file="pages/home/HomeHero.js">reservando con Rservasroma</p>
+                {/* Cifra viva de la propia base de datos. Antes decia "+300
+                    negocios activos", pero el directorio de abajo lista los que
+                    tienen la suscripcion al dia: la clienta leia una promesa y
+                    justo debajo contaba otra cifra distinta. */}
+                <p className="text-xs lg:text-sm font-bold text-[#111827] leading-none" data-name="hero-visual-badge-title" data-file="pages/home/HomeHero.js">{totalBusinesses} negocios con reserva online</p>
+                <p className="text-[10px] lg:text-[11px] text-[var(--text-muted)] mt-1" data-name="hero-visual-badge-sub" data-file="pages/home/HomeHero.js">agenda real, disponibilidad al dia</p>
               </div>
             </div>
           </div>

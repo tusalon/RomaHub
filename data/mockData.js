@@ -379,6 +379,9 @@ const MockData = (() => {
       reservaUrl,
       fotos: fotos.length ? fotos : [logoUrl],
       whatsapp: telefono ? String(telefono).replace(/[^\d+]/g, '') : '',
+      // El horario ya venia en la consulta pero se perdia aqui: es justo el
+      // dato que la clienta busca antes de decidir si reserva.
+      horario: valueFrom(row, ['horario_atencion', 'horario'], ''),
       descripcion: valueFrom(row, ['descripcion', 'description', 'mensaje_bienvenida'], ''),
       categoriasCatalogo: buildCatalogSections({ servicios, productos, cursos }),
       resenas: resenas.map((item, index) => ({

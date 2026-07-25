@@ -45,6 +45,9 @@ function BusinessApp() {
     const [dataReady, setDataReady] = React.useState(false);
     const [dataError, setDataError] = React.useState('');
     const [business, setBusiness] = React.useState(null);
+    // Solo sirve para redibujar cuando termina de llegar el directorio y ya
+    // se pueden sugerir negocios cercanos.
+    const [directorioListo, setDirectorioListo] = React.useState(false);
     const businessId = (() => {
       try {
         const url = new URL(window.location.href);
@@ -74,6 +77,18 @@ function BusinessApp() {
       };
     }, [businessId]);
 
+    // El directorio completo se pide aparte y sin bloquear: la ficha se pinta
+    // con su propia consulta y, cuando llega el resto, aparecen las sugerencias
+    // de "otros negocios en la zona". Si se venia del listado, ya esta en cache
+    // y es instantaneo.
+    React.useEffect(() => {
+      let mounted = true;
+      MockData.loadBusinesses()
+        .then(() => { if (mounted) setDirectorioListo(true); })
+        .catch(() => {});
+      return () => { mounted = false; };
+    }, []);
+
     return (
       <div className="min-h-screen bg-[var(--bg)]" data-name="business-app" data-file="business-app.js">
         <ToastProvider data-name="toast-provider" data-file="business-app.js">
@@ -84,7 +99,7 @@ function BusinessApp() {
             ) : !dataReady ? (
               <div className="container-rr py-16 text-center text-sm text-[var(--text-muted)]" data-name="loading" data-file="business-app.js">Cargando negocio...</div>
             ) : business ? (
-              <BusinessPage business={business} data-name="business-page" data-file="business-app.js" />
+              <BusinessPage business={business} directorioListo={directorioListo} data-name="business-page" data-file="business-app.js" />
             ) : (
               <BusinessNotFound businessId={businessId} data-name="business-not-found" data-file="business-app.js" />
             )}

@@ -44,7 +44,18 @@
                 {[b.categoria, b.ubicacionCorta || b.ubicacion?.zona || b.ubicacion?.ciudad].filter(Boolean).join(' · ')}
               </p>
               {b.ubicacion?.direccion ? (
-                <p className="text-sm text-[var(--text-muted)] mt-1" data-name="address" data-file="pages/business/BusinessHeader.js">{b.ubicacion.direccion}</p>
+                <p className="text-sm text-[var(--text-muted)] mt-1 flex items-start gap-1.5" data-name="address" data-file="pages/business/BusinessHeader.js">
+                  <span className="icon-map-pin text-base text-[var(--primary-color)] shrink-0" aria-hidden="true" data-name="address-i" data-file="pages/business/BusinessHeader.js"></span>
+                  <span data-name="address-text" data-file="pages/business/BusinessHeader.js">{b.ubicacion.direccion}</span>
+                </p>
+              ) : null}
+              {/* El horario va aqui y no en la columna lateral: esa columna es
+                  hidden lg:block, y en el movil es justo donde mas falta hace. */}
+              {b.horario ? (
+                <p className="text-sm text-[var(--text-muted)] mt-1 flex items-start gap-1.5" data-name="horario" data-file="pages/business/BusinessHeader.js">
+                  <span className="icon-clock text-base text-[var(--primary-color)] shrink-0" aria-hidden="true" data-name="horario-i" data-file="pages/business/BusinessHeader.js"></span>
+                  <span data-name="horario-text" data-file="pages/business/BusinessHeader.js">{b.horario}</span>
+                </p>
               ) : null}
               <div className="mt-4 flex flex-wrap gap-2" data-name="quick-facts" data-file="pages/business/BusinessHeader.js">
                 <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="services-count" data-file="pages/business/BusinessHeader.js">{services.length} servicios</span>

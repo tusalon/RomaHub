@@ -81,6 +81,8 @@ function HomePage({ initialParams }) {
           data-file="pages/home/HomePage.js"
         />
 
+        <NegociosTestimonios data-name="negocios-testimonios" data-file="pages/home/HomePage.js" />
+
         <section className="mt-12" data-name="home-trust" data-file="pages/home/HomePage.js">
           <div className="container-rr" data-name="home-trust-inner" data-file="pages/home/HomePage.js">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4" data-name="trust-grid" data-file="pages/home/HomePage.js">

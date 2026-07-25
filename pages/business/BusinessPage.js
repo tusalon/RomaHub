@@ -1,4 +1,4 @@
-﻿function BusinessPage({ business }) {
+﻿function BusinessPage({ business, directorioListo }) {
   try {
     const b = business;
     const initials = String(b.nombre || 'N').trim().slice(0, 2).toUpperCase();
@@ -206,6 +206,7 @@
               <div className="mt-4 text-center lg:hidden" data-name="mobile-report" data-file="pages/business/BusinessPage.js">
                 <ReportarNegocio negocioId={b.id} negocioNombre={b.nombre} data-name="reportar-mobile" data-file="pages/business/BusinessPage.js" />
               </div>
+              <NegociosCerca negocioActual={b} listo={directorioListo} data-name="negocios-cerca" data-file="pages/business/BusinessPage.js" />
             </div>
 
             <aside className="hidden lg:block sticky top-[92px]" data-name="right" data-file="pages/business/BusinessPage.js">
