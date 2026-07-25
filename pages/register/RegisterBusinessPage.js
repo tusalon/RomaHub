@@ -1,6 +1,6 @@
 function RegisterBusinessPage() {
   try {
-    const ROMA_WHATSAPP = '5354066204';
+    const ROMA_WHATSAPP = '15154650340';
     const provincias = [
       'Pinar del Río',
       'Artemisa',
