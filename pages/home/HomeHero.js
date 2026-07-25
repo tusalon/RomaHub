@@ -3,6 +3,13 @@ function HomeHero({ initialParams }) {
     const businesses = MockData.listBusinesses();
     const totalBusinesses = businesses.length;
     const reservasHoy = MockData.getTodayReservations ? MockData.getTodayReservations() : 0;
+    // La cara de RomaHub debe mostrar RomaHub, no una captura prestada de
+    // Rservasroma (la app de reservas de otro producto). En vez de una
+    // imagen fija que hay que retocar a mano cada vez, se renderiza un
+    // negocio real y vivo de la propia base de datos: nunca queda
+    // desactualizada y siempre es 100% cierta.
+    const featured = MockData.listWeeklyFeatured()[0] || businesses[0] || null;
+    const featuredEsTendencia = Boolean(featured?.reservasSemana > 0);
 
     return (
       <section className="relative overflow-hidden pt-8 md:pt-14 pb-2" data-name="home-hero" data-file="pages/home/HomeHero.js">
@@ -114,20 +121,84 @@ function HomeHero({ initialParams }) {
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[280px] lg:max-w-full" data-name="hero-visual" data-file="pages/home/HomeHero.js">
-            <div className="relative rounded-[22px] lg:rounded-[28px] border border-[var(--border)] bg-white shadow-[0_16px_40px_rgba(17,24,39,0.12)] lg:shadow-[0_24px_60px_rgba(17,24,39,0.12)] overflow-hidden p-1.5 lg:p-2" data-name="hero-visual-frame" data-file="pages/home/HomeHero.js">
-              <img
-                loading="eager"
-                decoding="async"
-                src="https://tusalon.github.io/HouseofRservasRoma/assets/screenshots/cliente-calendario.jpg"
-                alt="Clienta reservando turno desde su celular con Rservasroma"
-                className="w-full rounded-[16px] lg:rounded-[20px] object-cover object-top"
-                style={{ height: 'clamp(240px, 42vh, 520px)' }}
-                data-name="hero-visual-img"
+          <div className="relative mx-auto w-full max-w-[300px] lg:max-w-full" data-name="hero-visual" data-file="pages/home/HomeHero.js">
+            {featured ? (
+              <a
+                className="group block relative rounded-[22px] lg:rounded-[28px] border border-[var(--border)] bg-white shadow-[0_16px_40px_rgba(17,24,39,0.12)] lg:shadow-[0_24px_60px_rgba(17,24,39,0.12)] overflow-hidden"
+                href={`business.html?id=${encodeURIComponent(featured.id)}`}
+                data-name="hero-visual-frame"
                 data-file="pages/home/HomeHero.js"
-              />
-            </div>
-            <div className="absolute -left-3 lg:-left-6 bottom-5 lg:bottom-8 surface-rr px-3 py-2 lg:px-4 lg:py-3 flex items-center gap-2 shadow-[0_12px_28px_rgba(17,24,39,0.14)]" data-name="hero-visual-badge" data-file="pages/home/HomeHero.js">
+              >
+                <div className="relative h-[220px] lg:h-[300px] bg-[#F3F4F6] overflow-hidden" data-name="hero-visual-cover" data-file="pages/home/HomeHero.js">
+                  {featured.portadaUrl ? (
+                    <img
+                      loading="eager"
+                      decoding="async"
+                      src={featured.portadaUrl}
+                      alt={`Imagen de ${featured.nombre}`}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      data-name="hero-visual-img"
+                      data-file="pages/home/HomeHero.js"
+                    />
+                  ) : null}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/0 to-transparent" data-name="hero-visual-gradient" data-file="pages/home/HomeHero.js"></div>
+
+                  {featured.esRservasroma ? (
+                    <span className="absolute top-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-[#111827] shadow-sm" data-name="hero-visual-diamond" data-file="pages/home/HomeHero.js">
+                      💎 Verificado
+                    </span>
+                  ) : null}
+
+                  {/* Se etiqueta con la razon real de por que se muestra este
+                      negocio: si tuvo reservas esta semana, esa cifra en vivo;
+                      si no, un texto honesto sin inventar actividad. */}
+                  <span className="absolute top-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-[#e83387] shadow-sm" data-name="hero-visual-kicker" data-file="pages/home/HomeHero.js">
+                    {featuredEsTendencia ? `🔥 ${featured.reservasSemana} reservas esta semana` : '✨ Negocio del directorio'}
+                  </span>
+
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center gap-2.5" data-name="hero-visual-identity" data-file="pages/home/HomeHero.js">
+                    <div className="w-10 h-10 rounded-xl border-2 border-white bg-white overflow-hidden shadow-sm shrink-0 flex items-center justify-center" data-name="hero-visual-logo" data-file="pages/home/HomeHero.js">
+                      {featured.logoUrl ? (
+                        <img loading="lazy" decoding="async" src={featured.logoUrl} alt={`Logo de ${featured.nombre}`} className="w-full h-full object-contain" data-name="hero-visual-logo-img" data-file="pages/home/HomeHero.js" />
+                      ) : (
+                        <span className="text-sm font-bold text-[#e83387]" data-name="hero-visual-logo-initials" data-file="pages/home/HomeHero.js">
+                          {String(featured.nombre || 'N').trim().slice(0, 2).toUpperCase()}
+                        </span>
+                      )}
+                    </div>
+                    <div className="min-w-0" data-name="hero-visual-name-wrap" data-file="pages/home/HomeHero.js">
+                      <p className="text-white text-sm font-bold leading-tight truncate" data-name="hero-visual-name" data-file="pages/home/HomeHero.js">{featured.nombre}</p>
+                      <p className="text-white/80 text-[11px] leading-tight truncate" data-name="hero-visual-cat" data-file="pages/home/HomeHero.js">{[featured.categoria, featured.ubicacionCorta].filter(Boolean).join(' · ')}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 flex items-center justify-between gap-3" data-name="hero-visual-footer" data-file="pages/home/HomeHero.js">
+                  {featured.estrellas > 0 ? (
+                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#111827]" data-name="hero-visual-rating" data-file="pages/home/HomeHero.js">
+                      <span className="icon-star text-base text-[#F59E0B]" aria-hidden="true"></span>
+                      {Number(featured.estrellas).toFixed(1)}
+                      <span className="text-xs font-normal text-[var(--text-muted)]">({featured.totalValoraciones})</span>
+                    </span>
+                  ) : (
+                    <span className="text-xs text-[var(--text-muted)]" data-name="hero-visual-rating" data-file="pages/home/HomeHero.js">Nuevo en el directorio</span>
+                  )}
+                  <span className="text-xs font-bold text-[#e83387] inline-flex items-center gap-1" data-name="hero-visual-cta" data-file="pages/home/HomeHero.js">
+                    Ver perfil
+                    <div className="icon-arrow-right text-sm" aria-hidden="true"></div>
+                  </span>
+                </div>
+              </a>
+            ) : null}
+
+            {/* Ya no va superpuesta sobre la tarjeta (flujo normal, no
+                position:absolute): antes calculaba un offset fijo asumiendo
+                una imagen de alto fijo, pero ahora la tarjeta tiene foto +
+                pie con rating/nombre de largo variable, y medido en el
+                navegador el offset fijo si se metia encima del texto del
+                pie. En flujo normal nunca puede solaparse, sin importar
+                cuanto mida el nombre del negocio destacado. */}
+            <div className="mt-3 mx-2 lg:mx-4 surface-rr px-3 py-2 lg:px-4 lg:py-3 flex items-center gap-2 shadow-[0_12px_28px_rgba(17,24,39,0.14)]" data-name="hero-visual-badge" data-file="pages/home/HomeHero.js">
               <span className="text-base lg:text-lg" aria-hidden="true">📅</span>
               <div data-name="hero-visual-badge-copy" data-file="pages/home/HomeHero.js">
                 {/* Cifra viva de la propia base de datos. Antes decia "+300
