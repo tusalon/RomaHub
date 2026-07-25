@@ -8,7 +8,7 @@ function HomeHero({ initialParams }) {
     return (
       <section className="relative overflow-hidden pt-8 md:pt-14 pb-2" data-name="home-hero" data-file="pages/home/HomeHero.js">
         <div className="hero-blob-rr top-[-160px] right-[-120px]" aria-hidden="true" data-name="hero-blob" data-file="pages/home/HomeHero.js"></div>
-        <div className="container-rr relative" data-name="home-hero-inner" data-file="pages/home/HomeHero.js">
+        <div className="container-rr relative grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10 lg:gap-6 items-center" data-name="home-hero-inner" data-file="pages/home/HomeHero.js">
           <div className="max-w-3xl hero-anim-rr" data-name="home-hero-copy" data-file="pages/home/HomeHero.js">
             <p className="kicker-rr mb-5" data-name="hero-kicker" data-file="pages/home/HomeHero.js">
               El directorio de la belleza en Cuba
@@ -58,6 +58,27 @@ function HomeHero({ initialParams }) {
               <div className="px-4 py-3 rounded-r-xl border border-[var(--border)] bg-white" data-name="stat-today" data-file="pages/home/HomeHero.js">
                 <p className="text-xl md:text-2xl font-bold text-[#111827]" data-name="stat-today-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={Number(reservasHoy || 0)}>{Number(reservasHoy || 0)}</span></p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-today-label" data-file="pages/home/HomeHero.js">reservas hoy</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="hidden lg:block relative" data-name="hero-visual" data-file="pages/home/HomeHero.js">
+            <div className="relative rounded-[28px] border border-[var(--border)] bg-white shadow-[0_24px_60px_rgba(17,24,39,0.12)] overflow-hidden p-2" data-name="hero-visual-frame" data-file="pages/home/HomeHero.js">
+              <img
+                loading="eager"
+                decoding="async"
+                src="https://tusalon.github.io/HouseofRservasRoma/assets/screenshots/cliente-calendario.jpg"
+                alt="Clienta reservando turno desde su celular con Rservasroma"
+                className="w-full h-auto rounded-[20px] object-cover"
+                data-name="hero-visual-img"
+                data-file="pages/home/HomeHero.js"
+              />
+            </div>
+            <div className="absolute -left-6 bottom-8 surface-rr px-4 py-3 flex items-center gap-2 shadow-[0_12px_28px_rgba(17,24,39,0.14)]" data-name="hero-visual-badge" data-file="pages/home/HomeHero.js">
+              <span className="text-lg" aria-hidden="true">📈</span>
+              <div data-name="hero-visual-badge-copy" data-file="pages/home/HomeHero.js">
+                <p className="text-sm font-bold text-[#111827] leading-none" data-name="hero-visual-badge-title" data-file="pages/home/HomeHero.js">+300 negocios activos</p>
+                <p className="text-[11px] text-[var(--text-muted)] mt-1" data-name="hero-visual-badge-sub" data-file="pages/home/HomeHero.js">reservando con Rservasroma</p>
               </div>
             </div>
           </div>

@@ -103,6 +103,22 @@ function CrearTiendaPage() {
             <a className="mt-3 inline-block text-xs text-[var(--text-muted)] hover:text-[var(--primary-color)]" href={`business.html?id=${encodeURIComponent(credenciales.negocioId || '')}`}>
               Ver mi tienda pública
             </a>
+
+            <div className="mt-6 pt-6 border-t border-[var(--border)] text-left" data-name="crear-tienda-upsell" data-file="pages/tienda/CrearTiendaPage.js">
+              <p className="text-xs font-bold text-[#111827]">💎 Un paso más: reservas online</p>
+              <p className="mt-1.5 text-xs text-[var(--text-muted)] leading-relaxed">
+                Tu tienda vende por WhatsApp. Con Rservasroma también puedes tener agenda propia para que tus clientas reserven turno solas, con recordatorios automáticos. 15 días de prueba gratis.
+              </p>
+              <a
+                className="mt-3 btn-rr btn-ghost-rr w-full flex items-center justify-center gap-2 text-xs"
+                href={`https://wa.me/15154650340?text=${encodeURIComponent(`Hola, acabo de crear mi tienda "${credenciales.nombre || ''}" en RomaHub y quiero saber cómo activar Rservasroma.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Preguntar por Rservasroma
+                <div className="icon-arrow-right text-base text-[var(--primary-color)]"></div>
+              </a>
+            </div>
           </div>
         </section>
       );

@@ -198,6 +198,11 @@
                 {renderCartCard()}
               </div> : null}
               <BusinessReviews business={b} data-name="reviews" data-file="pages/business/BusinessPage.js" />
+              {b.esTiendaExterna ? (
+                <div className="mt-4 lg:hidden" data-name="mobile-upgrade-promo" data-file="pages/business/BusinessPage.js">
+                  <RomaHubUpgradePromo nombreNegocio={b.nombre} data-name="upgrade-promo-mobile" data-file="pages/business/BusinessPage.js" />
+                </div>
+              ) : null}
               <div className="mt-4 text-center lg:hidden" data-name="mobile-report" data-file="pages/business/BusinessPage.js">
                 <ReportarNegocio negocioId={b.id} negocioNombre={b.nombre} data-name="reportar-mobile" data-file="pages/business/BusinessPage.js" />
               </div>
@@ -243,6 +248,11 @@
               {hasStore ? <div className="mt-4" data-name="desktop-cart" data-file="pages/business/BusinessPage.js">
                 {renderCartCard()}
               </div> : null}
+              {b.esTiendaExterna ? (
+                <div className="mt-4" data-name="desktop-upgrade-promo" data-file="pages/business/BusinessPage.js">
+                  <RomaHubUpgradePromo nombreNegocio={b.nombre} data-name="upgrade-promo-desktop" data-file="pages/business/BusinessPage.js" />
+                </div>
+              ) : null}
             </aside>
           </div>
         </div>
