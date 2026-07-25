@@ -38,7 +38,7 @@
             {list.map((b) => {
               const initials = String(b.nombre || 'N').trim().slice(0, 2).toUpperCase();
               return (
-              <div key={b.id} className="min-w-[260px] md:min-w-[320px]" data-name="top-rated-item" data-file="components/TopRatedCarousel.js">
+              <div key={b.id} className="reveal-card-rr min-w-[260px] md:min-w-[320px]" data-name="top-rated-item" data-file="components/TopRatedCarousel.js">
                 <button
                   className="card-rr w-full overflow-hidden text-left hover:shadow-[0_22px_70px_rgba(11,18,32,0.12)] transition-shadow"
                   onClick={() => Navigation.goToBusiness(b.id)}

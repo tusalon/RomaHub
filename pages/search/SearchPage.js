@@ -131,7 +131,7 @@
           ) : null}
         </div>
 
-        <div className="mt-5" data-name="horizontal-results" data-file="pages/search/SearchPage.js">
+        <section className="mt-5" data-name="horizontal-results" data-file="pages/search/SearchPage.js">
           <div className="flex items-center justify-between gap-3 mb-3" data-name="active-head" data-file="pages/search/SearchPage.js">
             <p className="text-sm font-semibold" data-name="active-title" data-file="pages/search/SearchPage.js">Negocios activos</p>
             <span className="md:hidden chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="count-mobile" data-file="pages/search/SearchPage.js">
@@ -146,7 +146,7 @@
                 </div>
               ) : null}
               {results.map((b) => (
-                <div key={b.id} className="min-w-[340px] max-w-[340px] snap-start" data-name="card-wrap" data-file="pages/search/SearchPage.js">
+                <div key={b.id} className="reveal-card-rr min-w-[340px] max-w-[340px] snap-start" data-name="card-wrap" data-file="pages/search/SearchPage.js">
                   <BusinessCard
                     business={b}
                     onHover={(x) => setActiveId(x?.id || null)}
@@ -157,6 +157,7 @@
                 </div>
               ))}
           </div>
+        </section>
 
           <div className="mt-4" data-name="map-area" data-file="pages/search/SearchPage.js">
             <div className="hidden lg:block surface-rr overflow-hidden h-[520px]" data-name="map-desktop" data-file="pages/search/SearchPage.js">
@@ -196,7 +197,6 @@
             </div>
 
         </div>
-      </div>
       </div>
     );
   } catch (error) {

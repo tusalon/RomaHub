@@ -17,7 +17,7 @@ function ProductCard({ item }) {
 
     return (
       <div
-        className="group surface-rr card-lift-rr overflow-hidden cursor-pointer flex flex-col"
+        className="reveal-card-rr group surface-rr card-lift-rr overflow-hidden cursor-pointer flex flex-col"
         onClick={abrirNegocio}
         onKeyDown={onKeyDown}
         role="button"

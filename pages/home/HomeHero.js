@@ -14,8 +14,25 @@ function HomeHero({ initialParams }) {
               El directorio de la belleza en Cuba
             </p>
 
+            {/* Mismo patron de dos colores que la marca en el header (Roma en
+                tinta oscura + Hub en rosa): aqui se reparte la frase, no las
+                letras, para no depender de que el texto contenga esas
+                palabras exactas. */}
             <h1 className="text-4xl md:text-6xl lg:text-[64px] font-black tracking-[-0.025em] leading-[1.02] text-[#111827]" data-name="hero-title" data-file="pages/home/HomeHero.js">
-              La belleza de Cuba en un solo lugar.
+              La belleza de Cuba en{' '}
+              <span className="relative inline-block text-[#e83387]" data-name="hero-title-accent" data-file="pages/home/HomeHero.js">
+                un solo lugar.
+                <svg
+                  className="absolute left-0 -bottom-1 md:-bottom-2 w-full h-2 md:h-3 pointer-events-none"
+                  viewBox="0 0 200 12"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                  data-name="hero-title-underline"
+                  data-file="pages/home/HomeHero.js"
+                >
+                  <path d="M2 9 C 50 2, 150 2, 198 9" stroke="#e83387" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.3" />
+                </svg>
+              </span>
             </h1>
             <p className="mt-5 text-base md:text-lg text-[var(--text-muted)] leading-relaxed max-w-xl" data-name="hero-sub" data-file="pages/home/HomeHero.js">
               Salones, manicuristas, barberos y especialistas de toda la isla. Mira sus servicios y precios, y reserva tu turno online.

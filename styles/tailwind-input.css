@@ -164,6 +164,33 @@
     transform: none;
   }
 
+  /* Cascada de tarjetas en movil: reveal-rr ya marca la seccion completa como
+     visible de golpe (title + grid + tarjetas a la vez), lo cual en pantallas
+     chicas se siente brusco. Aqui, dentro de una seccion ya visible, cada
+     tarjeta demora un poco mas que la anterior para entrar en fila, como en
+     los directorios cuidados. Solo en movil: en desktop se ven varias
+     tarjetas de golpe y la cascada se notaria como lentitud, no elegancia. */
+  @media (max-width: 767px) {
+    .reveal-card-rr {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-rr.is-visible .reveal-card-rr {
+      opacity: 1;
+      transform: none;
+    }
+
+    .reveal-card-rr:nth-child(1) { transition-delay: 0s; }
+    .reveal-card-rr:nth-child(2) { transition-delay: 0.1s; }
+    .reveal-card-rr:nth-child(3) { transition-delay: 0.2s; }
+    .reveal-card-rr:nth-child(4) { transition-delay: 0.3s; }
+    .reveal-card-rr:nth-child(5) { transition-delay: 0.4s; }
+    .reveal-card-rr:nth-child(6) { transition-delay: 0.5s; }
+    .reveal-card-rr:nth-child(n+7) { transition-delay: 0.6s; }
+  }
+
   .hero-anim-rr > * {
     animation: rise-rr 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
@@ -229,6 +256,12 @@
 
   @media (prefers-reduced-motion: reduce) {
     .reveal-rr {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .reveal-card-rr {
       opacity: 1;
       transform: none;
       transition: none;

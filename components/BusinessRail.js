@@ -34,7 +34,7 @@ function BusinessRail({ title, subtitle, items, badge, emptyText }) {
 
           <div ref={ref} className="flex gap-4 overflow-x-auto no-scrollbar pb-3 snap-x snap-mandatory" data-name="business-rail-track" data-file="components/BusinessRail.js">
             {list.length ? list.map((business, index) => (
-              <div key={business.id} className="min-w-[250px] md:min-w-[290px] max-w-[290px] snap-start" data-name="business-rail-item" data-file="components/BusinessRail.js">
+              <div key={business.id} className="reveal-card-rr min-w-[250px] md:min-w-[290px] max-w-[290px] snap-start" data-name="business-rail-item" data-file="components/BusinessRail.js">
                 <div className="relative" data-name="business-rail-card-wrap" data-file="components/BusinessRail.js">
                   {index < 3 ? (
                     <span className="absolute z-10 left-3 top-3 inline-flex w-8 h-8 items-center justify-center rounded-lg bg-black text-white text-xs font-semibold shadow-sm" data-name="business-rail-rank" data-file="components/BusinessRail.js">{index + 1}</span>

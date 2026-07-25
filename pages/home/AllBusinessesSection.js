@@ -154,7 +154,7 @@
 
           <div className="mt-6 flex gap-4 overflow-x-auto no-scrollbar pb-3 snap-x snap-mandatory" data-name="intrigue-grid" data-file="pages/home/AllBusinessesSection.js">
             {all.map((b) => (
-              <div key={b.id} className="min-w-[250px] md:min-w-[290px] max-w-[290px] snap-start" data-name="intrigue-item-wrap" data-file="pages/home/AllBusinessesSection.js">
+              <div key={b.id} className="reveal-card-rr min-w-[250px] md:min-w-[290px] max-w-[290px] snap-start" data-name="intrigue-item-wrap" data-file="pages/home/AllBusinessesSection.js">
                 <BusinessLogoCard business={b} onOpen={openCard} data-name="intrigue-item" data-file="pages/home/AllBusinessesSection.js" />
               </div>
             ))}
