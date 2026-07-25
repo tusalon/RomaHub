@@ -2,7 +2,6 @@ function HomeHero({ initialParams }) {
   try {
     const businesses = MockData.listBusinesses();
     const totalBusinesses = businesses.length;
-    const rankingCount = MockData.listTopRated().length;
     const reservasHoy = MockData.getTodayReservations ? MockData.getTodayReservations() : 0;
 
     return (
@@ -10,6 +9,15 @@ function HomeHero({ initialParams }) {
         <div className="hero-blob-rr top-[-160px] right-[-120px]" aria-hidden="true" data-name="hero-blob" data-file="pages/home/HomeHero.js"></div>
         <div className="container-rr relative grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10 lg:gap-6 items-center" data-name="home-hero-inner" data-file="pages/home/HomeHero.js">
           <div className="max-w-3xl hero-anim-rr" data-name="home-hero-copy" data-file="pages/home/HomeHero.js">
+            {/* Insignia honesta de apertura: RomaHub de verdad acaba de
+                lanzarse, asi que decirlo no es una afirmacion exagerada.
+                Nada de urgencia falsa ("solo por tiempo limitado") porque
+                el directorio gratis no tiene fecha de vencimiento. */}
+            <div className="inline-flex items-center gap-1.5 mb-3 px-3 py-1.5 rounded-full bg-[rgba(232,51,135,0.08)] border border-[rgba(232,51,135,0.18)]" data-name="hero-launch-badge" data-file="pages/home/HomeHero.js">
+              <span aria-hidden="true">🎉</span>
+              <span className="text-xs font-bold text-[#e83387]" data-name="hero-launch-badge-text" data-file="pages/home/HomeHero.js">Recién inaugurado</span>
+            </div>
+
             <p className="kicker-rr mb-5" data-name="hero-kicker" data-file="pages/home/HomeHero.js">
               El directorio de la belleza en Cuba
             </p>
@@ -46,21 +54,42 @@ function HomeHero({ initialParams }) {
                 data-name="hero-searchbar"
                 data-file="pages/home/HomeHero.js"
               />
+              {/* Antes esto era un segundo boton rosa del mismo tamano que
+                  "Ver negocios" de arriba, justo debajo — dos CTAs primarios
+                  pegados compiten entre si y parecen el mismo boton repetido.
+                  Como enlace de texto queda claro que es la ruta alterna
+                  (sin elegir provincia), no una accion igual de importante. */}
+              <button
+                className="mt-3 text-sm font-semibold text-[var(--text-muted)] hover:text-[#e83387] transition-colors inline-flex items-center gap-1.5"
+                onClick={() => Navigation.goToSearch('', '')}
+                data-name="hero-explore"
+                data-file="pages/home/HomeHero.js"
+              >
+                o mira el directorio completo sin filtrar
+                <div className="icon-arrow-right text-base" data-name="hero-explore-i" data-file="pages/home/HomeHero.js"></div>
+              </button>
             </div>
 
-            <div className="mt-6 flex flex-col sm:flex-row gap-3" data-name="hero-actions" data-file="pages/home/HomeHero.js">
-              <button className="btn-rr btn-primary-rr flex items-center justify-center gap-2" onClick={() => Navigation.goToSearch('', '')} data-name="hero-explore" data-file="pages/home/HomeHero.js">
-                Ver directorio completo
-                <div className="icon-arrow-right text-xl text-white" data-name="hero-explore-i" data-file="pages/home/HomeHero.js"></div>
-              </button>
-              <a className="btn-rr btn-ghost-rr flex items-center justify-center gap-2" href="register.html" data-name="hero-list" data-file="pages/home/HomeHero.js">
-                Registrar mi negocio
-                <div className="icon-sparkles text-xl text-[#e83387]" data-name="hero-list-i" data-file="pages/home/HomeHero.js"></div>
-              </a>
-              <a className="btn-rr btn-ghost-rr flex items-center justify-center gap-2" href="crear-tienda.html" data-name="hero-store" data-file="pages/home/HomeHero.js">
-                Abrir tienda gratis
-                <div className="icon-shopping-bag text-xl text-[#e83387]" data-name="hero-store-i" data-file="pages/home/HomeHero.js"></div>
-              </a>
+            {/* Las clientas y los negocios son dos publicos distintos: antes
+                "Registrar negocio" y "Abrir tienda" tenian el mismo peso
+                visual que la busqueda de arriba, como si fueran la misma
+                prioridad. Agrupados y etiquetados queda claro que es una
+                invitacion aparte, para quien tiene un salon. */}
+            <div className="mt-6 surface-rr p-4 flex flex-col sm:flex-row sm:items-center gap-3 justify-between" data-name="hero-business-cta" data-file="pages/home/HomeHero.js">
+              <div data-name="hero-business-copy" data-file="pages/home/HomeHero.js">
+                <p className="text-sm font-bold text-[#111827]" data-name="hero-business-title" data-file="pages/home/HomeHero.js">¿Tienes un salón o negocio de belleza?</p>
+                <p className="text-xs text-[var(--text-muted)] mt-0.5" data-name="hero-business-sub" data-file="pages/home/HomeHero.js">Aparece en RomaHub gratis, sin cuenta ni compromiso.</p>
+              </div>
+              <div className="flex gap-2 shrink-0" data-name="hero-business-actions" data-file="pages/home/HomeHero.js">
+                <a className="btn-rr btn-ghost-rr text-sm py-2 px-4 flex items-center gap-1.5" href="register.html" data-name="hero-list" data-file="pages/home/HomeHero.js">
+                  Registrar negocio
+                  <div className="icon-sparkles text-base text-[#e83387]" data-name="hero-list-i" data-file="pages/home/HomeHero.js"></div>
+                </a>
+                <a className="btn-rr btn-ghost-rr text-sm py-2 px-4 flex items-center gap-1.5" href="crear-tienda.html" data-name="hero-store" data-file="pages/home/HomeHero.js">
+                  Abrir tienda
+                  <div className="icon-shopping-bag text-base text-[#e83387]" data-name="hero-store-i" data-file="pages/home/HomeHero.js"></div>
+                </a>
+              </div>
             </div>
 
             <div className="mt-7 flex gap-1" data-name="hero-stats" data-file="pages/home/HomeHero.js">
@@ -68,9 +97,15 @@ function HomeHero({ initialParams }) {
                 <p className="text-xl md:text-2xl font-bold text-[#111827]" data-name="stat-businesses-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={totalBusinesses}>{totalBusinesses}</span></p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-businesses-label" data-file="pages/home/HomeHero.js">negocios</p>
               </div>
-              <div className="px-4 py-3 border border-[var(--border)] bg-white" data-name="stat-ranked" data-file="pages/home/HomeHero.js">
-                <p className="text-xl md:text-2xl font-bold text-[#e83387]" data-name="stat-ranked-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={rankingCount}>{rankingCount}</span></p>
-                <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-ranked-label" data-file="pages/home/HomeHero.js">en el ranking</p>
+              {/* "en el ranking" mostraba 0: todavia no hay valoraciones
+                  verificadas cargadas, y mas abajo en esta misma pagina la
+                  seccion de Ranking ya se oculta cuando no hay datos (ver
+                  HomePage.js). Poner un 0 grande en el hero de apertura
+                  contradice esa misma regla. Se cambia por un dato que si
+                  es verdad ahora: RomaHub no cobra por aparecer. */}
+              <div className="px-4 py-3 border border-[var(--border)] bg-white" data-name="stat-free" data-file="pages/home/HomeHero.js">
+                <p className="text-xl md:text-2xl font-bold text-[#e83387]" data-name="stat-free-value" data-file="pages/home/HomeHero.js">Gratis</p>
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-free-label" data-file="pages/home/HomeHero.js">para negocios</p>
               </div>
               <div className="px-4 py-3 rounded-r-xl border border-[var(--border)] bg-white" data-name="stat-today" data-file="pages/home/HomeHero.js">
                 <p className="text-xl md:text-2xl font-bold text-[#111827]" data-name="stat-today-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={Number(reservasHoy || 0)}>{Number(reservasHoy || 0)}</span></p>
