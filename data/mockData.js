@@ -452,9 +452,14 @@ const MockData = (() => {
       try {
         const CAMPOS_NEGOCIO = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,whatsapp_moneda';
         const [rowsRserva, rowsExternas, ratingData] = await Promise.all([
-          // Negocios rservasroma: exigen suscripción activa (llevan diamante).
-          supabaseFetch(`negocios?configurado=eq.true&suscripciones.estado=eq.activa&select=${CAMPOS_NEGOCIO},suscripciones!inner(estado)&order=nombre.asc`),
-          // Tiendas externas: sin suscripción, se identifican por el flag.
+          // Ya no exige suscripcion activa: el directorio muestra todo negocio
+          // configurado, tenga o no suscripcion al dia. El diamante 💎 nunca
+          // dependio de esto en el codigo (normalizeBusiness lo calcula solo
+          // por es_tienda_externa), asi que quitar el filtro no le quita
+          // significado. La curaduria de quien se ve ahora es manual, via el
+          // propio campo "configurado" de cada negocio.
+          supabaseFetch(`negocios?configurado=eq.true&select=${CAMPOS_NEGOCIO}&order=nombre.asc`),
+          // Tiendas externas: se identifican por el flag, no por suscripcion.
           optionalSupabaseFetch(`negocios?configurado=eq.true&es_tienda_externa=eq.true&select=${CAMPOS_NEGOCIO}&order=nombre.asc`),
           fetchVerifiedRatings()
         ]);
@@ -571,10 +576,10 @@ const MockData = (() => {
     const encodedId = encodeURIComponent(negocioId);
     const CAMPOS_DETALLE = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,whatsapp_moneda';
     const [rowsRserva, rowsExterna, ratingData] = await Promise.all([
-      // Negocio rservasroma: exige suscripción activa (inner join la excluye si no).
-      optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&suscripciones.estado=eq.activa&select=${CAMPOS_DETALLE},suscripciones!inner(estado)`),
-      // Tienda externa: sin suscripción, por flag. Sin esto su propio perfil
-      // nunca cargaba (el inner join de arriba la excluye siempre).
+      // Mismo criterio que loadBusinesses: ya no exige suscripcion activa
+      // para cargar el perfil, solo que este configurado.
+      optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&select=${CAMPOS_DETALLE}`),
+      // Tienda externa: sin suscripción, por flag.
       optionalSupabaseFetch(`negocios?id=eq.${encodedId}&configurado=eq.true&es_tienda_externa=eq.true&select=${CAMPOS_DETALLE}`),
       fetchVerifiedRatings()
     ]);
