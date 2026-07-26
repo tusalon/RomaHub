@@ -249,7 +249,10 @@ const MockData = (() => {
         tipo: 'servicios',
         titulo: 'Servicios',
         items: servicios.map((item) => ({
+          id: String(item.id || valueFrom(item, ['nombre', 'titulo', 'servicio'], 'Servicio')),
           nombre: valueFrom(item, ['nombre', 'titulo', 'servicio'], 'Servicio'),
+          categoria: valueFrom(item, ['categoria', 'subgrupo'], ''),
+          orden: numberFrom(item, ['orden'], 0),
           duracionMin: numberFrom(item, ['duracion_min', 'duracionMin', 'duracion', 'minutos'], 60),
           precio: numberFrom(item, ['precio', 'precio_cup', 'monto'], 0),
           moneda: String(valueFrom(item, ['precio_moneda', 'moneda'], 'CUP')).toUpperCase(),
@@ -375,6 +378,10 @@ const MockData = (() => {
       esRservasroma: !esTiendaExterna,
       portadaUrl: coverUrl,
       portadaEsPropia: Boolean(coverUrlPropia),
+      portadaPosicion: {
+        x: Math.max(0, Math.min(100, numberFrom(row, ['imagen_fondo_pos_x'], 50))),
+        y: Math.max(0, Math.min(100, numberFrom(row, ['imagen_fondo_pos_y'], 50)))
+      },
       logoUrl,
       reservaUrl,
       fotos: fotos.length ? fotos : [logoUrl],
@@ -450,7 +457,7 @@ const MockData = (() => {
       }
 
       try {
-        const CAMPOS_NEGOCIO = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,whatsapp_moneda';
+        const CAMPOS_NEGOCIO = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,imagen_fondo_pos_x,imagen_fondo_pos_y,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,whatsapp_moneda';
         const [rowsRserva, rowsExternas, ratingData] = await Promise.all([
           // Ya no exige suscripcion activa: el directorio muestra todo negocio
           // configurado, tenga o no suscripcion al dia. El diamante 💎 nunca
@@ -486,7 +493,7 @@ const MockData = (() => {
           cursosTiendaRows
         ] = await Promise.all([
           optionalSupabaseCount('reservas?created_at=gte.' + encodeURIComponent(getTodayStartIso()) + '&select=id'),
-          optionalSupabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,precio_moneda,descripcion,activo,imagen,categoria&order=nombre.asc&limit=5000'),
+          optionalSupabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,precio_moneda,descripcion,activo,imagen,categoria,orden&order=orden.asc,nombre.asc&limit=5000'),
           optionalSupabaseFetch('reservas?created_at=gte.' + encodeURIComponent(getWeekStartIso()) + '&select=negocio_id,created_at,estado&limit=5000'),
           tiendaTablesEnabled()
             ? optionalSupabaseFetch('productos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,stock,activo,destacado,orden&order=destacado.desc,orden.asc,nombre.asc&limit=5000')
@@ -574,7 +581,7 @@ const MockData = (() => {
     if (current?.detallesCargados && !forceRefresh) return current;
 
     const encodedId = encodeURIComponent(negocioId);
-    const CAMPOS_DETALLE = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,whatsapp_moneda';
+    const CAMPOS_DETALLE = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,imagen_fondo_pos_x,imagen_fondo_pos_y,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,whatsapp_moneda';
     const [rowsRserva, rowsExterna, ratingData] = await Promise.all([
       // Mismo criterio que loadBusinesses: ya no exige suscripcion activa
       // para cargar el perfil, solo que este configurado.
@@ -586,7 +593,7 @@ const MockData = (() => {
     const rows = [...(rowsRserva || []), ...(rowsExterna || [])];
     const row = rows[0] || current || { id: negocioId };
     if (!rows[0] && !current) return null;
-    const serviciosRows = await optionalSupabaseFetch(`servicios?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,duracion,precio,precio_moneda,descripcion,activo,imagen,categoria&order=nombre.asc`);
+    const serviciosRows = await optionalSupabaseFetch(`servicios?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,duracion,precio,precio_moneda,descripcion,activo,imagen,categoria,orden&order=orden.asc,nombre.asc`);
     const resenasRows = await optionalSupabaseFetch(`resenas?negocio_id=eq.${encodedId}&select=*&order=fecha.desc&limit=50`);
     const productosRows = tiendaTablesEnabled()
       ? await optionalSupabaseFetch(`productos?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,stock,activo,destacado,orden&order=destacado.desc,orden.asc,nombre.asc&limit=200`)

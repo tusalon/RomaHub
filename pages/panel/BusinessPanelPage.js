@@ -5,6 +5,7 @@
     const [esTiendaExterna, setEsTiendaExterna] = React.useState(false);
     const LIMITE_TIENDA_EXTERNA = 40;
     const [authLoading, setAuthLoading] = React.useState(true);
+    const [section, setSection] = React.useState('perfil');
     const [tab, setTab] = React.useState('productos');
     const [items, setItems] = React.useState({ productos: [], cursos: [] });
     const [loading, setLoading] = React.useState(true);
@@ -12,6 +13,19 @@
     const [message, setMessage] = React.useState('');
     const [uploadingImage, setUploadingImage] = React.useState(false);
     const fileInputRef = React.useRef(null);
+    const [presentation, setPresentation] = React.useState({
+      descripcion: '',
+      coverUrl: '',
+      logoUrl: '',
+      coverX: 50,
+      coverY: 50
+    });
+    const [presentationSaving, setPresentationSaving] = React.useState(false);
+    const [presentationMessage, setPresentationMessage] = React.useState('');
+    const [services, setServices] = React.useState([]);
+    const [servicesLoading, setServicesLoading] = React.useState(false);
+    const [servicesSaving, setServicesSaving] = React.useState(false);
+    const [servicesMessage, setServicesMessage] = React.useState('');
     const [form, setForm] = React.useState({
       id: '',
       nombre: '',
@@ -60,6 +74,13 @@
           setNegocioId(access.negocio_id);
           setBusinessName(access.negocios?.nombre || 'Tu negocio');
           setEsTiendaExterna(access.negocios?.es_tienda_externa === true);
+          setPresentation({
+            descripcion: access.negocios?.mensaje_bienvenida || '',
+            coverUrl: access.negocios?.imagen_fondo_url || '',
+            logoUrl: access.negocios?.logo_url || '',
+            coverX: Math.max(0, Math.min(100, Number(access.negocios?.imagen_fondo_pos_x ?? 50))),
+            coverY: Math.max(0, Math.min(100, Number(access.negocios?.imagen_fondo_pos_y ?? 50)))
+          });
         } catch (error) {
           console.error('BusinessPanelPage.initPanel error:', error);
           setMessage(error.message || 'No se pudo abrir el panel.');
@@ -91,8 +112,31 @@
       }
     };
 
+    const loadServices = async () => {
+      try {
+        setServicesLoading(true);
+        setServicesMessage('');
+        if (!negocioId) return;
+        const encoded = encodeURIComponent(negocioId);
+        const rows = await supabaseRequest(`servicios?negocio_id=eq.${encoded}&select=id,nombre,categoria,orden,activo&order=orden.asc,nombre.asc`);
+        setServices((rows || []).map((service, index) => ({
+          ...service,
+          categoria: service.categoria || '',
+          orden: Number.isFinite(Number(service.orden)) ? Number(service.orden) : index
+        })));
+      } catch (error) {
+        console.error('BusinessPanelPage.loadServices error:', error);
+        setServicesMessage(error.message || 'No se pudieron cargar los servicios.');
+      } finally {
+        setServicesLoading(false);
+      }
+    };
+
     React.useEffect(() => {
-      if (negocioId) loadStore();
+      if (negocioId) {
+        loadStore();
+        loadServices();
+      }
     }, [negocioId]);
 
     const resetForm = () => {
@@ -118,7 +162,97 @@
       setForm((current) => ({ ...current, [field]: value }));
     };
 
+    const positionCoverFromPointer = (event) => {
+      if (!presentation.coverUrl) return;
+      if (event.type === 'pointermove' && event.buttons !== 1) return;
+      const bounds = event.currentTarget.getBoundingClientRect();
+      if (!bounds.width || !bounds.height) return;
+      if (event.type === 'pointerdown') event.currentTarget.setPointerCapture?.(event.pointerId);
+      const x = Math.max(0, Math.min(100, ((event.clientX - bounds.left) / bounds.width) * 100));
+      const y = Math.max(0, Math.min(100, ((event.clientY - bounds.top) / bounds.height) * 100));
+      setPresentation((current) => ({ ...current, coverX: x, coverY: y }));
+    };
+
+    const savePresentation = async (event) => {
+      try {
+        event.preventDefault();
+        setPresentationMessage('');
+        if (!negocioId) throw new Error('No se encontró el negocio.');
+        setPresentationSaving(true);
+        const saved = await supabaseRequest('rpc/guardar_mi_presentacion_negocio', {
+          method: 'POST',
+          body: JSON.stringify({
+            p_negocio_id: negocioId,
+            p_mensaje_bienvenida: presentation.descripcion.trim(),
+            p_imagen_fondo_pos_x: Number(presentation.coverX),
+            p_imagen_fondo_pos_y: Number(presentation.coverY)
+          })
+        });
+        if (saved && typeof saved === 'object') {
+          setPresentation((current) => ({
+            ...current,
+            descripcion: saved.mensaje_bienvenida || '',
+            coverX: Number(saved.imagen_fondo_pos_x ?? current.coverX),
+            coverY: Number(saved.imagen_fondo_pos_y ?? current.coverY)
+          }));
+        }
+        sessionStorage.removeItem('romahub-negocios-v1');
+        setPresentationMessage('Perfil actualizado correctamente.');
+      } catch (error) {
+        console.error('BusinessPanelPage.savePresentation error:', error);
+        setPresentationMessage(error.message || 'No se pudo actualizar el perfil.');
+      } finally {
+        setPresentationSaving(false);
+      }
+    };
+
+    const updateServiceCategory = (serviceId, value) => {
+      setServices((current) => current.map((service) => (
+        service.id === serviceId ? { ...service, categoria: value } : service
+      )));
+    };
+
+    const moveService = (index, direction) => {
+      setServices((current) => {
+        const target = index + direction;
+        if (target < 0 || target >= current.length) return current;
+        const next = current.slice();
+        const selected = next[index];
+        next[index] = next[target];
+        next[target] = selected;
+        return next.map((service, order) => ({ ...service, orden: order }));
+      });
+    };
+
+    const saveServices = async () => {
+      try {
+        setServicesMessage('');
+        if (!negocioId) throw new Error('No se encontró el negocio.');
+        setServicesSaving(true);
+        await supabaseRequest('rpc/organizar_mis_servicios', {
+          method: 'POST',
+          body: JSON.stringify({
+            p_negocio_id: negocioId,
+            p_servicios: services.map((service, index) => ({
+              id: service.id,
+              categoria: String(service.categoria || '').trim(),
+              orden: index
+            }))
+          })
+        });
+        setServices((current) => current.map((service, index) => ({ ...service, orden: index })));
+        sessionStorage.removeItem('romahub-negocios-v1');
+        setServicesMessage('Orden y grupos guardados correctamente.');
+      } catch (error) {
+        console.error('BusinessPanelPage.saveServices error:', error);
+        setServicesMessage(error.message || 'No se pudo guardar la organización.');
+      } finally {
+        setServicesSaving(false);
+      }
+    };
+
     const editItem = (item, type) => {
+      setSection('tienda');
       setTab(type);
       setForm({
         id: item.id || '',
@@ -244,6 +378,9 @@
 
     const currentItems = items[tab] || [];
     const isProduct = tab === 'productos';
+    const serviceCategoryOptions = Array.from(new Set(
+      services.map((service) => String(service.categoria || '').trim()).filter(Boolean)
+    ));
     const totalActivosExterna = (items.productos || []).filter((p) => p.activo !== false).length
       + (items.cursos || []).filter((c) => c.activo !== false).length;
 
@@ -257,9 +394,9 @@
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5" data-name="panel-hero-row" data-file="pages/panel/BusinessPanelPage.js">
             <div data-name="panel-copy" data-file="pages/panel/BusinessPanelPage.js">
               <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-[var(--primary-color)]" data-name="panel-kicker" data-file="pages/panel/BusinessPanelPage.js">Panel de tienda</p>
-              <h1 className="mt-3 text-3xl md:text-5xl font-semibold tracking-tight" data-name="panel-title" data-file="pages/panel/BusinessPanelPage.js">Productos y cursos</h1>
+              <h1 className="mt-3 text-3xl md:text-5xl font-semibold tracking-tight" data-name="panel-title" data-file="pages/panel/BusinessPanelPage.js">Gestiona tu presencia en RomaHub</h1>
               <p className="mt-3 text-sm md:text-base text-[var(--text-muted)] max-w-[720px] leading-relaxed" data-name="panel-subtitle" data-file="pages/panel/BusinessPanelPage.js">
-                {businessName}. Gestiona tu mini tienda. Sube fotos desde tu teléfono o computadora.
+                {businessName}. Ajusta cómo se ve tu perfil y organiza tu catálogo desde un solo lugar.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2" data-name="panel-actions" data-file="pages/panel/BusinessPanelPage.js">
@@ -275,6 +412,212 @@
           </div>
         </section>
 
+        <nav className="mt-5 surface-rr p-2 grid grid-cols-2 gap-2" aria-label="Secciones del panel" data-name="panel-sections" data-file="pages/panel/BusinessPanelPage.js">
+          <button
+            type="button"
+            className={`btn-rr ${section === 'perfil' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+            onClick={() => setSection('perfil')}
+            data-name="section-profile"
+            data-file="pages/panel/BusinessPanelPage.js"
+          >
+            Perfil y servicios
+          </button>
+          <button
+            type="button"
+            className={`btn-rr ${section === 'tienda' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+            onClick={() => setSection('tienda')}
+            data-name="section-store"
+            data-file="pages/panel/BusinessPanelPage.js"
+          >
+            Productos y cursos
+          </button>
+        </nav>
+
+        {section === 'perfil' ? (
+          <section className="mt-5 grid grid-cols-1 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-4 items-start" data-name="profile-services-grid" data-file="pages/panel/BusinessPanelPage.js">
+            <form className="surface-rr p-5 md:p-6 space-y-5" onSubmit={savePresentation} data-name="presentation-form" data-file="pages/panel/BusinessPanelPage.js">
+              <div data-name="presentation-head" data-file="pages/panel/BusinessPanelPage.js">
+                <p className="kicker-rr">Perfil público</p>
+                <h2 className="mt-2 text-xl font-semibold">Portada y descripción</h2>
+                <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed">
+                  Toca o arrastra sobre la foto, o usa los controles, para elegir qué parte debe quedar al centro.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-3" data-name="business-identity" data-file="pages/panel/BusinessPanelPage.js">
+                <div className="w-12 h-12 rounded-xl border border-[var(--border)] bg-white overflow-hidden flex items-center justify-center shrink-0" data-name="identity-logo" data-file="pages/panel/BusinessPanelPage.js">
+                  {presentation.logoUrl ? (
+                    <img src={presentation.logoUrl} alt={`Logo de ${businessName}`} className="w-full h-full object-contain" />
+                  ) : (
+                    <div className="icon-store text-xl text-[var(--primary-color)]"></div>
+                  )}
+                </div>
+                <div className="min-w-0" data-name="identity-copy" data-file="pages/panel/BusinessPanelPage.js">
+                  <p className="text-sm font-semibold truncate">{businessName}</p>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5">Nombre, WhatsApp y logo se mantienen desde la base de datos.</p>
+                </div>
+              </div>
+
+              <div data-name="cover-position-editor" data-file="pages/panel/BusinessPanelPage.js">
+                <div
+                  className={`relative aspect-video rounded-xl overflow-hidden border border-[var(--border)] bg-[#F3F4F6] ${presentation.coverUrl ? 'cursor-crosshair touch-none' : ''}`}
+                  onPointerDown={positionCoverFromPointer}
+                  onPointerMove={positionCoverFromPointer}
+                  data-name="cover-preview"
+                  data-file="pages/panel/BusinessPanelPage.js"
+                >
+                  {presentation.coverUrl ? (
+                    <img
+                      src={presentation.coverUrl}
+                      alt={`Vista previa de la portada de ${businessName}`}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      style={{ objectPosition: `${presentation.coverX}% ${presentation.coverY}%` }}
+                      onDragStart={(e) => e.preventDefault()}
+                      data-name="cover-preview-image"
+                      data-file="pages/panel/BusinessPanelPage.js"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 text-[var(--text-muted)]" data-name="cover-empty" data-file="pages/panel/BusinessPanelPage.js">
+                      <div className="icon-image text-3xl opacity-50"></div>
+                      <p className="mt-2 text-sm">Este negocio todavía no tiene foto de portada.</p>
+                    </div>
+                  )}
+                  {presentation.coverUrl ? <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-black/5"></div> : null}
+                </div>
+
+                <div className="mt-4 space-y-4" data-name="cover-controls" data-file="pages/panel/BusinessPanelPage.js">
+                  <label className="block" data-name="cover-x-label" data-file="pages/panel/BusinessPanelPage.js">
+                    <span className="flex items-center justify-between text-xs font-semibold text-[var(--text-muted)]">
+                      Posición horizontal <output>{Math.round(presentation.coverX)}%</output>
+                    </span>
+                    <input
+                      className="mt-2 w-full accent-[var(--primary-color)]"
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={presentation.coverX}
+                      onChange={(e) => setPresentation((current) => ({ ...current, coverX: Number(e.target.value) }))}
+                      disabled={!presentation.coverUrl}
+                      aria-label="Posición horizontal de la portada"
+                      data-name="cover-x"
+                      data-file="pages/panel/BusinessPanelPage.js"
+                    />
+                  </label>
+                  <label className="block" data-name="cover-y-label" data-file="pages/panel/BusinessPanelPage.js">
+                    <span className="flex items-center justify-between text-xs font-semibold text-[var(--text-muted)]">
+                      Posición vertical <output>{Math.round(presentation.coverY)}%</output>
+                    </span>
+                    <input
+                      className="mt-2 w-full accent-[var(--primary-color)]"
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={presentation.coverY}
+                      onChange={(e) => setPresentation((current) => ({ ...current, coverY: Number(e.target.value) }))}
+                      disabled={!presentation.coverUrl}
+                      aria-label="Posición vertical de la portada"
+                      data-name="cover-y"
+                      data-file="pages/panel/BusinessPanelPage.js"
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className="text-xs font-semibold text-[var(--primary-color)] hover:underline"
+                    onClick={() => setPresentation((current) => ({ ...current, coverX: 50, coverY: 50 }))}
+                    disabled={!presentation.coverUrl}
+                    data-name="cover-center"
+                    data-file="pages/panel/BusinessPanelPage.js"
+                  >
+                    Volver a centrar
+                  </button>
+                </div>
+              </div>
+
+              <label className="block" data-name="business-description-label" data-file="pages/panel/BusinessPanelPage.js">
+                <span className="flex items-center justify-between text-xs font-semibold text-[var(--text-muted)]">
+                  Descripción del negocio <span>{presentation.descripcion.length}/600</span>
+                </span>
+                <textarea
+                  className="input-rr mt-2 min-h-[132px] resize-y"
+                  value={presentation.descripcion}
+                  onChange={(e) => setPresentation((current) => ({ ...current, descripcion: e.target.value.slice(0, 600) }))}
+                  placeholder="Cuenta qué hace especial a tu negocio, qué servicios ofrece y qué pueden esperar tus clientas."
+                  maxLength={600}
+                  data-name="business-description"
+                  data-file="pages/panel/BusinessPanelPage.js"
+                />
+              </label>
+
+              {presentationMessage ? <p className="text-sm text-[var(--text-muted)] leading-relaxed" data-name="presentation-message" data-file="pages/panel/BusinessPanelPage.js">{presentationMessage}</p> : null}
+
+              <button type="submit" className="btn-rr btn-primary-rr w-full" disabled={presentationSaving} data-name="save-presentation" data-file="pages/panel/BusinessPanelPage.js">
+                {presentationSaving ? 'Guardando...' : 'Guardar perfil'}
+              </button>
+            </form>
+
+            <div className="surface-rr overflow-hidden" data-name="services-organizer" data-file="pages/panel/BusinessPanelPage.js">
+              <div className="p-5 md:p-6 border-b border-[var(--border)] flex flex-col sm:flex-row sm:items-start justify-between gap-3" data-name="services-organizer-head" data-file="pages/panel/BusinessPanelPage.js">
+                <div data-name="services-organizer-copy" data-file="pages/panel/BusinessPanelPage.js">
+                  <p className="kicker-rr">Catálogo</p>
+                  <h2 className="mt-2 text-xl font-semibold">Orden y subgrupos</h2>
+                  <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed">
+                    Usa las flechas para ordenar. Escribe el mismo subgrupo en varios servicios para mostrarlos juntos; el primero de cada grupo define el orden de los grupos.
+                  </p>
+                </div>
+                <button type="button" className="btn-rr btn-ghost-rr shrink-0" onClick={loadServices} disabled={servicesLoading} data-name="reload-services" data-file="pages/panel/BusinessPanelPage.js">
+                  Actualizar
+                </button>
+              </div>
+
+              <datalist id="service-category-options">
+                {serviceCategoryOptions.map((category) => <option key={category} value={category} />)}
+              </datalist>
+
+              {servicesLoading ? (
+                <p className="p-5 text-sm text-[var(--text-muted)]">Cargando servicios...</p>
+              ) : services.length ? (
+                <div className="divide-y divide-[var(--border)]" data-name="services-sort-list" data-file="pages/panel/BusinessPanelPage.js">
+                  {services.map((service, index) => (
+                    <div key={service.id} className="p-4 md:p-5 grid grid-cols-[36px_1fr_auto] gap-3 items-center" data-name="service-sort-row" data-file="pages/panel/BusinessPanelPage.js">
+                      <div className="w-9 h-9 rounded-lg bg-[var(--bg-muted)] flex items-center justify-center text-xs font-bold text-[var(--text-muted)]" data-name="service-position" data-file="pages/panel/BusinessPanelPage.js">{index + 1}</div>
+                      <div className="min-w-0" data-name="service-sort-copy" data-file="pages/panel/BusinessPanelPage.js">
+                        <p className="text-sm font-semibold truncate" data-name="service-sort-name" data-file="pages/panel/BusinessPanelPage.js">{service.nombre}</p>
+                        <input
+                          className="input-rr mt-2 py-2 text-xs"
+                          value={service.categoria || ''}
+                          onChange={(e) => updateServiceCategory(service.id, e.target.value.slice(0, 80))}
+                          placeholder="Subgrupo (ej. Manicura)"
+                          list="service-category-options"
+                          maxLength={80}
+                          aria-label={`Subgrupo de ${service.nombre}`}
+                          data-name="service-category"
+                          data-file="pages/panel/BusinessPanelPage.js"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1" data-name="service-sort-actions" data-file="pages/panel/BusinessPanelPage.js">
+                        <button type="button" className="w-9 h-9 rounded-lg border border-[var(--border)] hover:border-[var(--primary-color)] disabled:opacity-30" onClick={() => moveService(index, -1)} disabled={index === 0} aria-label={`Subir ${service.nombre}`} title="Subir" data-name="service-up" data-file="pages/panel/BusinessPanelPage.js">
+                          <span className="icon-chevron-up text-base"></span>
+                        </button>
+                        <button type="button" className="w-9 h-9 rounded-lg border border-[var(--border)] hover:border-[var(--primary-color)] disabled:opacity-30" onClick={() => moveService(index, 1)} disabled={index === services.length - 1} aria-label={`Bajar ${service.nombre}`} title="Bajar" data-name="service-down" data-file="pages/panel/BusinessPanelPage.js">
+                          <span className="icon-chevron-down text-base"></span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="p-5 text-sm text-[var(--text-muted)]">Este negocio todavía no tiene servicios para organizar.</p>
+              )}
+
+              <div className="p-5 md:p-6 border-t border-[var(--border)]" data-name="services-organizer-footer" data-file="pages/panel/BusinessPanelPage.js">
+                {servicesMessage ? <p className="mb-3 text-sm text-[var(--text-muted)] leading-relaxed" data-name="services-message" data-file="pages/panel/BusinessPanelPage.js">{servicesMessage}</p> : null}
+                <button type="button" className="btn-rr btn-primary-rr w-full" onClick={saveServices} disabled={servicesSaving || servicesLoading || !services.length} data-name="save-services-order" data-file="pages/panel/BusinessPanelPage.js">
+                  {servicesSaving ? 'Guardando...' : 'Guardar orden y subgrupos'}
+                </button>
+              </div>
+            </div>
+          </section>
+        ) : (
         <section className="mt-5 grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-4 items-start" data-name="store-grid" data-file="pages/panel/BusinessPanelPage.js">
           <form className="surface-rr p-5 md:p-6 space-y-3" onSubmit={saveItem} data-name="store-form" data-file="pages/panel/BusinessPanelPage.js">
             <div className="grid grid-cols-2 gap-2" data-name="store-tabs" data-file="pages/panel/BusinessPanelPage.js">
@@ -384,6 +727,7 @@
             )}
           </div>
         </section>
+        )}
       </div>
     );
   } catch (error) {

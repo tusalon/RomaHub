@@ -72,7 +72,7 @@ function NegociosCerca({ negocioActual, listo }) {
             >
               <div className="relative h-24 bg-[#F3F4F6] overflow-hidden" data-name="cerca-media" data-file="components/NegociosCerca.js">
                 {otro.portadaUrl ? (
-                  <img loading="lazy" decoding="async" src={otro.portadaUrl} alt={`Imagen de ${otro.nombre}`} className="w-full h-full object-cover" data-name="cerca-img" data-file="components/NegociosCerca.js" />
+                  <img loading="lazy" decoding="async" src={otro.portadaUrl} alt={`Imagen de ${otro.nombre}`} className="w-full h-full object-cover" style={{ objectPosition: `${otro.portadaPosicion?.x ?? 50}% ${otro.portadaPosicion?.y ?? 50}%` }} data-name="cerca-img" data-file="components/NegociosCerca.js" />
                 ) : null}
               </div>
               <div className="p-3" data-name="cerca-body" data-file="components/NegociosCerca.js">

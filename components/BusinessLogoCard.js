@@ -14,7 +14,7 @@ function BusinessLogoCard({ business, onOpen }) {
       >
         <div className="relative h-36 overflow-hidden bg-[#F3F4F6]" data-name="logo-card-media" data-file="components/BusinessLogoCard.js">
           {b.portadaUrl ? (
-            <img loading="lazy" decoding="async" src={b.portadaUrl} alt={`Imagen de ${b.nombre}`} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-name="logo-card-cover" data-file="components/BusinessLogoCard.js" />
+            <img loading="lazy" decoding="async" src={b.portadaUrl} alt={`Imagen de ${b.nombre}`} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" style={{ objectPosition: `${b.portadaPosicion?.x ?? 50}% ${b.portadaPosicion?.y ?? 50}%` }} data-name="logo-card-cover" data-file="components/BusinessLogoCard.js" />
           ) : null}
           <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" data-name="logo-card-gradient" data-file="components/BusinessLogoCard.js"></div>
 

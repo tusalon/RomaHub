@@ -15,7 +15,16 @@
           <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr_auto] gap-5 items-center" data-name="header-grid" data-file="pages/business/BusinessHeader.js">
             <div className="relative h-[180px] lg:h-[160px] rounded-lg overflow-hidden border border-[var(--border)] bg-[#F9FAFB]" data-name="brand-media" data-file="pages/business/BusinessHeader.js">
               {hasCover ? (
-                <img loading="lazy" decoding="async" src={b.portadaUrl} alt={`Imagen de ${b.nombre}`} className="w-full h-full object-cover" data-name="cover-img" data-file="pages/business/BusinessHeader.js" />
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  src={b.portadaUrl}
+                  alt={`Imagen de ${b.nombre}`}
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: `${b.portadaPosicion?.x ?? 50}% ${b.portadaPosicion?.y ?? 50}%` }}
+                  data-name="cover-img"
+                  data-file="pages/business/BusinessHeader.js"
+                />
               ) : (
                 <div className="w-full h-full flex items-center justify-center p-8" data-name="logo-only" data-file="pages/business/BusinessHeader.js">
                   {b.logoUrl ? (
@@ -43,6 +52,9 @@
               <p className="text-sm text-[var(--text-muted)] mt-2" data-name="meta" data-file="pages/business/BusinessHeader.js">
                 {[b.categoria, b.ubicacionCorta || b.ubicacion?.zona || b.ubicacion?.ciudad].filter(Boolean).join(' · ')}
               </p>
+              {b.descripcion ? (
+                <p className="text-sm text-[var(--text-muted)] mt-3 leading-relaxed max-w-[720px]" data-name="business-description" data-file="pages/business/BusinessHeader.js">{b.descripcion}</p>
+              ) : null}
               {b.ubicacion?.direccion ? (
                 <p className="text-sm text-[var(--text-muted)] mt-1 flex items-start gap-1.5" data-name="address" data-file="pages/business/BusinessHeader.js">
                   <span className="icon-map-pin text-base text-[var(--primary-color)] shrink-0" aria-hidden="true" data-name="address-i" data-file="pages/business/BusinessHeader.js"></span>
@@ -82,4 +94,3 @@
     return null;
   }
 }
-

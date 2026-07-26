@@ -59,7 +59,7 @@
         <div className="grid grid-cols-[96px_1fr] gap-4 p-3" data-name="business-card-inner" data-file="components/BusinessCard.js">
           <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-[#F3F4F6]" data-name="photo" data-file="components/BusinessCard.js">
             {b.portadaUrl ? (
-              <img loading="lazy" decoding="async" src={b.portadaUrl} alt={`Imagen de ${b.nombre}`} className="absolute inset-0 w-full h-full object-cover" data-name="photo-cover" data-file="components/BusinessCard.js" />
+              <img loading="lazy" decoding="async" src={b.portadaUrl} alt={`Imagen de ${b.nombre}`} className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: `${b.portadaPosicion?.x ?? 50}% ${b.portadaPosicion?.y ?? 50}%` }} data-name="photo-cover" data-file="components/BusinessCard.js" />
             ) : null}
             <div className="absolute bottom-1 right-1 w-8 h-8 rounded-lg border-2 border-white bg-white overflow-hidden shadow-sm" data-name="photo-logo-badge" data-file="components/BusinessCard.js">
               {b.logoUrl ? (
@@ -136,5 +136,4 @@
     return null;
   }
 }
-
 
