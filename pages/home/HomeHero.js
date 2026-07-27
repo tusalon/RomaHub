@@ -69,6 +69,7 @@ function HomeHero({ initialParams }) {
 
             <div className="mt-8 max-w-[760px]" data-name="hero-search" data-file="pages/home/HomeHero.js">
               <SearchBar
+                initialNombre={initialParams?.nombre || ''}
                 initialServicio={initialParams?.servicio || ''}
                 initialUbicacion={initialParams?.ubicacion || ''}
                 compact={false}

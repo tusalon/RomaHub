@@ -15,7 +15,7 @@ function Header({ currentParams }) {
     const onGoSearch = () => {
       try {
         const q = currentParams || Navigation.getSearchParams();
-        Navigation.goToSearch(q?.servicio || '', q?.ubicacion || '');
+        Navigation.goToSearch(q?.servicio || '', q?.ubicacion || '', q?.nombre || '');
       } catch (error) {
         console.error('Header.onGoSearch error:', error);
       }

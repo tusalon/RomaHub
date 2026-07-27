@@ -14,11 +14,11 @@
 
     const provinceMapBusinesses = React.useMemo(() => {
       try {
-        return MockData.searchBusinesses({ servicio: query?.servicio || '', ubicacion: '' });
+        return MockData.searchBusinesses({ nombre: query?.nombre || '', servicio: query?.servicio || '', ubicacion: '' });
       } catch (e) {
         return [];
       }
-    }, [query?.servicio]);
+    }, [query?.nombre, query?.servicio]);
 
     const normalize = (value) => String(value || '')
       .toLowerCase()
@@ -45,7 +45,7 @@
     React.useEffect(() => {
       try {
         if (!results.length) {
-          toast?.push({ title: 'Sín resultados', message: 'Prueba con otra palabra o una ubicacion más general, por ejemplo La Habana.' });
+          toast?.push({ title: 'Sin resultados', message: 'Prueba con otro nombre, servicio o una ubicación más general.' });
         }
       } catch (error) {
         console.error('SearchPage useEffect error:', error);
@@ -57,6 +57,7 @@
         const next = { ...(query || {}), [key]: value };
         onQueryChange?.(next);
         const params = new URLSearchParams();
+        if (next.nombre) params.set('nombre', next.nombre);
         if (next.servicio) params.set('servicio', next.servicio);
         if (next.ubicacion) params.set('ubicacion', next.ubicacion);
         window.history.replaceState({}, '', `search.html?${params.toString()}`);
@@ -82,14 +83,24 @@
         </div>
 
         <div className="mt-5 surface-rr p-3 md:p-4" data-name="search-bar" data-file="pages/search/SearchPage.js">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3" data-name="search-fields" data-file="pages/search/SearchPage.js">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3" data-name="search-fields" data-file="pages/search/SearchPage.js">
+            <div className="flex items-center gap-3" data-name="field-name" data-file="pages/search/SearchPage.js">
+              <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-[var(--secondary-color)]" data-name="field-name-iw" data-file="pages/search/SearchPage.js">
+                <div className="icon-store text-xl text-[var(--primary-color)]" data-name="field-name-i" data-file="pages/search/SearchPage.js"></div>
+              </div>
+              <div className="flex-1" data-name="field-name-in" data-file="pages/search/SearchPage.js">
+                <label className="block text-[11px] text-[var(--text-muted)] mb-1" htmlFor="filtro-nombre-negocio" data-name="lbl-name" data-file="pages/search/SearchPage.js">Nombre del negocio</label>
+                <input id="filtro-nombre-negocio" className="input-rr" value={query?.nombre || ''} onChange={(e) => setQueryParam('nombre', e.target.value)} placeholder="Ej: Salón Divina" autoComplete="off" data-name="inp-name" data-file="pages/search/SearchPage.js" />
+              </div>
+            </div>
+
             <div className="flex items-center gap-3" data-name="field-serv" data-file="pages/search/SearchPage.js">
               <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-[var(--secondary-color)]" data-name="field-serv-iw" data-file="pages/search/SearchPage.js">
                 <div className="icon-search text-xl text-[var(--primary-color)]" data-name="field-serv-i" data-file="pages/search/SearchPage.js"></div>
               </div>
               <div className="flex-1" data-name="field-serv-in" data-file="pages/search/SearchPage.js">
-                <label className="block text-[11px] text-[var(--text-muted)] mb-1" data-name="lbl-serv" data-file="pages/search/SearchPage.js">Servicio o curso</label>
-                <input className="input-rr" value={query?.servicio || ''} onChange={(e) => setQueryParam('servicio', e.target.value)} placeholder="Ej: Barbería, uñas acrílicas" data-name="inp-serv" data-file="pages/search/SearchPage.js" />
+                <label className="block text-[11px] text-[var(--text-muted)] mb-1" data-name="lbl-serv" data-file="pages/search/SearchPage.js">Servicio, producto o curso</label>
+                <input className="input-rr" value={query?.servicio || ''} onChange={(e) => setQueryParam('servicio', e.target.value)} placeholder="Ej: Uñas acrílicas" data-name="inp-serv" data-file="pages/search/SearchPage.js" />
               </div>
             </div>
 
@@ -204,6 +215,4 @@
     return null;
   }
 }
-
-
 

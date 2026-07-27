@@ -748,7 +748,8 @@ const MockData = (() => {
   }
 
   function searchBusinesses(query) {
-    const q = query || { servicio: '', ubicacion: '' };
+    const q = query || { nombre: '', servicio: '', ubicacion: '' };
+    const nombre = normalizeText(q.nombre);
     const servicio = normalizeText(q.servicio);
     const ubicacion = normalizeText(q.ubicacion);
 
@@ -760,6 +761,8 @@ const MockData = (() => {
           ...(section.items || []).flatMap((item) => [item.nombre, item.descripcion, item.categoria])
         ])
         .filter(Boolean);
+
+      const hayNombre = !nombre || normalizeText(b.nombre).includes(nombre);
 
       const hayServicio = !servicio
         ? true
@@ -773,7 +776,7 @@ const MockData = (() => {
           .filter(Boolean)
           .some((t) => normalizeText(t).includes(ubicacion));
 
-      return hayServicio && hayUbicacion;
+      return hayNombre && hayServicio && hayUbicacion;
     });
   }
 

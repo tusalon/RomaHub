@@ -1,6 +1,7 @@
-﻿function SearchBar({ initialServicio, initialUbicacion, compact }) {
+function SearchBar({ initialNombre, initialServicio, initialUbicacion, compact }) {
   try {
     const toast = useToast();
+    const [nombre, setNombre] = React.useState(initialNombre || '');
     const [provincia, setProvincia] = React.useState(initialUbicacion || '');
     const [focus, setFocus] = React.useState(false);
     const provincias = [
@@ -24,28 +25,51 @@
 
     React.useEffect(() => {
       try {
+        setNombre(initialNombre || '');
         setProvincia(initialUbicacion || '');
       } catch (error) {
         console.error('SearchBar sync error:', error);
       }
-    }, [initialUbicacion]);
+    }, [initialNombre, initialUbicacion]);
 
     const ejecutarBusqueda = () => {
       try {
-        if (!provincia) {
-          toast?.push({ title: 'Selecciona una provincia', message: 'Elige dónde quieres ver negocios activos.' });
+        if (!nombre.trim() && !provincia) {
+          toast?.push({ title: 'Busca un negocio', message: 'Escribe su nombre o selecciona una provincia.' });
           return;
         }
-        Navigation.goToSearch('', provincia);
+        Navigation.goToSearch(initialServicio || '', provincia, nombre);
       } catch (error) {
         console.error('SearchBar.ejecutarBusqueda error:', error);
       }
     };
 
     return (
-      <div className={`${compact ? 'w-full' : 'w-full max-w-[760px] mx-auto'}`} data-name="searchbar" data-file="components/SearchBar.js">
+      <div className={`${compact ? 'w-full' : 'w-full max-w-[900px] mx-auto'}`} data-name="searchbar" data-file="components/SearchBar.js">
         <div className={`surface-rr bg-white p-2 md:p-2 ${focus ? 'subtle-glow-rr' : ''} transition-shadow`} data-name="searchbar-surface" data-file="components/SearchBar.js">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-2 items-stretch" data-name="searchbar-grid" data-file="components/SearchBar.js">
+          <div className="grid grid-cols-1 md:grid-cols-[1.15fr_0.85fr_auto] gap-2 items-stretch" data-name="searchbar-grid" data-file="components/SearchBar.js">
+            <div className="flex items-center gap-3 px-3 py-3" data-name="field-nombre" data-file="components/SearchBar.js">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[rgba(11,18,32,0.04)]" data-name="field-nombre-icon" data-file="components/SearchBar.js">
+                <div className="icon-search text-xl text-[var(--primary-color)]" data-name="field-nombre-icon-i" data-file="components/SearchBar.js"></div>
+              </div>
+              <div className="min-w-0 flex-1" data-name="field-nombre-input" data-file="components/SearchBar.js">
+                <label className="block text-[11px] text-[var(--text-muted)] mb-1" htmlFor="buscar-negocio-nombre" data-name="label-nombre" data-file="components/SearchBar.js">Nombre del negocio</label>
+                <input
+                  id="buscar-negocio-nombre"
+                  className="w-full text-sm bg-transparent outline-none"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') ejecutarBusqueda(); }}
+                  onFocus={() => setFocus(true)}
+                  onBlur={() => setFocus(false)}
+                  placeholder="Ej: Salón Divina"
+                  autoComplete="off"
+                  data-name="input-nombre"
+                  data-file="components/SearchBar.js"
+                />
+              </div>
+            </div>
+
             <div className="flex items-center gap-3 px-3 py-3" data-name="field-provincia" data-file="components/SearchBar.js">
               <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[rgba(11,18,32,0.04)]" data-name="field-provincia-icon" data-file="components/SearchBar.js">
                 <div className="icon-map-pin text-xl text-[var(--primary-color)]" data-name="field-provincia-icon-i" data-file="components/SearchBar.js"></div>
@@ -61,7 +85,7 @@
                   data-name="select-provincia"
                   data-file="components/SearchBar.js"
                 >
-                  <option value="">Selecciona provincia</option>
+                  <option value="">Todas las provincias</option>
                   {provincias.map((item) => <option key={item} value={item}>{item}</option>)}
                 </select>
               </div>
@@ -73,7 +97,7 @@
               data-name="btn-buscar"
               data-file="components/SearchBar.js"
             >
-              <span data-name="btn-buscar-text" data-file="components/SearchBar.js">Ver negocios</span>
+              <span data-name="btn-buscar-text" data-file="components/SearchBar.js">Buscar</span>
               <div className="icon-arrow-right text-xl text-white" data-name="btn-buscar-icon" data-file="components/SearchBar.js"></div>
             </button>
           </div>

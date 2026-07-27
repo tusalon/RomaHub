@@ -13,20 +13,23 @@ const Navigation = (() => {
   function getSearchParams() {
     try {
       const url = new URL(window.location.href);
+      const nombre = (url.searchParams.get('nombre') || '').trim();
       const servicio = (url.searchParams.get('servicio') || '').trim();
       const ubicacion = (url.searchParams.get('ubicacion') || '').trim();
-      return { servicio, ubicacion };
+      return { nombre, servicio, ubicacion };
     } catch (error) {
       console.error('Navigation.getSearchParams error:', error);
-      return { servicio: '', ubicacion: '' };
+      return { nombre: '', servicio: '', ubicacion: '' };
     }
   }
 
-  function goToSearch(servicio, ubicacion) {
+  function goToSearch(servicio, ubicacion, nombre) {
     try {
       const s = (servicio || '').trim();
       const u = (ubicacion || '').trim();
+      const n = (nombre || '').trim();
       const params = new URLSearchParams();
+      if (n) params.set('nombre', n);
       if (s) params.set('servicio', s);
       if (u) params.set('ubicacion', u);
       window.location.href = `search.html?${params.toString()}`;

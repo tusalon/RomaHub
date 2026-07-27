@@ -48,7 +48,7 @@ function SearchApp() {
       try {
         return Navigation.getSearchParams();
       } catch (e) {
-        return { servicio: '', ubicacion: '' };
+        return { nombre: '', servicio: '', ubicacion: '' };
       }
     });
 
