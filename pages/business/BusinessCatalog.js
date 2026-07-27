@@ -1,4 +1,4 @@
-function BusinessCatalog({ business, onAddToCart }) {
+function BusinessCatalog({ business, onAddToCart, selectedItemId = '' }) {
   try {
     const b = business;
     const sections = b.categoriasCatalogo || [];
@@ -33,8 +33,9 @@ function BusinessCatalog({ business, onAddToCart }) {
     const StoreCard = ({ item, type }) => {
       try {
         const esCurso = type === 'curso';
+        const selected = String(item.id || '') === String(selectedItemId || '');
         return (
-          <div className="surface-rr overflow-hidden flex flex-col" data-name="store-card" data-file="pages/business/BusinessCatalog.js">
+          <div id={`catalog-item-${item.id}`} className={`surface-rr overflow-hidden flex flex-col scroll-mt-28 transition-shadow ${selected ? 'ring-2 ring-[var(--primary-color)] shadow-lg' : ''}`} data-name="store-card" data-file="pages/business/BusinessCatalog.js">
             <div className="relative aspect-square bg-[#F3F4F6]" data-name="store-image" data-file="pages/business/BusinessCatalog.js">
               {item.imagen ? (
                 <img loading="lazy" decoding="async" src={item.imagen} alt={item.nombre} className="absolute inset-0 w-full h-full object-cover" data-name="store-img" data-file="pages/business/BusinessCatalog.js" />
@@ -44,6 +45,7 @@ function BusinessCatalog({ business, onAddToCart }) {
                 </div>
               )}
               {esCurso ? <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#111827] text-white text-[10px] font-bold" data-name="store-type" data-file="pages/business/BusinessCatalog.js">Curso</span> : null}
+              {selected ? <span className="absolute bottom-2 left-2 px-2 py-1 rounded-full bg-white text-[10px] font-bold text-[var(--primary-color)] shadow-sm">Tu selección</span> : null}
             </div>
             <div className="p-3 flex flex-col flex-1" data-name="store-copy" data-file="pages/business/BusinessCatalog.js">
               <p className="text-sm font-bold text-[#111827] leading-snug line-clamp-2" data-name="store-name" data-file="pages/business/BusinessCatalog.js">{item.nombre}</p>

@@ -572,6 +572,7 @@ const MockData = (() => {
           if (!negocio) return null;
           return {
             id: `${tipo}-${item.id}`,
+            itemId: String(item.id),
             tipo,
             nombre: item.nombre || '',
             descripcion: item.descripcion || '',

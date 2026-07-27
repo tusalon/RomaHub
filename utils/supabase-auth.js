@@ -1,6 +1,7 @@
 ﻿const RomaAuth = (() => {
   const STORAGE_KEY = 'rservasroma_business_session';
   const AUTH_PHONE_DOMAIN = 'whatsapp.rservasroma.local';
+  let refreshPromise = null;
 
   const getConfig = () => {
     const url = String(window.SUPABASE_URL || '').replace(/\/$/, '');
@@ -35,21 +36,55 @@
     return normalized;
   };
 
-  const getSession = () => {
+  const readStoredSession = () => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return null;
-      const session = JSON.parse(raw);
-      if (!session?.access_token || Number(session.expires_at || 0) < Date.now() + 30000) {
-        localStorage.removeItem(STORAGE_KEY);
-        return null;
-      }
-      return session;
+      return JSON.parse(raw);
     } catch (error) {
       localStorage.removeItem(STORAGE_KEY);
       return null;
     }
   };
+
+  const getSession = () => {
+    const session = readStoredSession();
+    if (!session?.access_token || Number(session.expires_at || 0) < Date.now() + 30000) return null;
+    return session;
+  };
+
+  const refreshSession = async () => {
+    if (refreshPromise) return refreshPromise;
+    refreshPromise = (async () => {
+      const stored = readStoredSession();
+      if (!stored?.refresh_token) {
+        localStorage.removeItem(STORAGE_KEY);
+        return null;
+      }
+      const config = getConfig();
+      const response = await fetch(`${config.url}/auth/v1/token?grant_type=refresh_token`, {
+        method: 'POST',
+        headers: {
+          apikey: config.key,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ refresh_token: stored.refresh_token })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.access_token) {
+        localStorage.removeItem(STORAGE_KEY);
+        return null;
+      }
+      return saveSession(data);
+    })();
+    try {
+      return await refreshPromise;
+    } finally {
+      refreshPromise = null;
+    }
+  };
+
+  const ensureSession = async () => getSession() || refreshSession();
 
   const signOut = () => {
     localStorage.removeItem(STORAGE_KEY);
@@ -78,9 +113,30 @@
     return signIn(phoneToAuthEmail(whatsapp), password);
   };
 
+  const recoverAccess = async ({ whatsapp, recoveryCode, newPassword, website = '' }) => {
+    const config = getConfig();
+    const response = await fetch(`${config.url}/functions/v1/recuperar-acceso`, {
+      method: 'POST',
+      headers: {
+        apikey: config.key,
+        Authorization: `Bearer ${config.key}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        whatsapp: normalizeWhatsApp(whatsapp),
+        codigo_recuperacion: recoveryCode,
+        nueva_password: newPassword,
+        website
+      })
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || 'No se pudo recuperar el acceso.');
+    return data;
+  };
+
   const request = async (path, options = {}, settings = {}) => {
     const config = getConfig();
-    const session = getSession();
+    const session = await ensureSession();
     if (settings.requireAuth && !session) throw new Error('Inicia sesión para continuar.');
 
     const response = await fetch(`${config.url}/rest/v1/${path}`, {
@@ -104,7 +160,7 @@
 
   const getBusinessAccess = async () => {
     const rows = await request(
-      'usuarios_negocio?activo=eq.true&select=negocio_id,rol,negocios(id,nombre,slug,logo_url,imagen_fondo_url,imagen_fondo_pos_x,imagen_fondo_pos_y,mensaje_bienvenida,sitio_web,es_tienda_externa)&limit=1',
+      'usuarios_negocio?activo=eq.true&select=negocio_id,rol,negocios(id,nombre,slug,telefono,especialidad,provincia,municipio,logo_url,imagen_fondo_url,imagen_fondo_pos_x,imagen_fondo_pos_y,mensaje_bienvenida,sitio_web,es_tienda_externa)&limit=1',
       {},
       { requireAuth: true }
     );
@@ -114,8 +170,10 @@
   return {
     signIn,
     signInWithWhatsApp,
+    recoverAccess,
     signOut,
     getSession,
+    ensureSession,
     request,
     getBusinessAccess,
     normalizeWhatsApp,

@@ -49,9 +49,10 @@ window.RomaUpload = (function () {
     });
   }
 
-  async function comprimir(file) {
+  async function comprimir(file, maxDimension) {
     var image = await cargarImagenEnCanvas(file);
-    var scale = Math.min(1, MAX_DIMENSION / Math.max(image.width, image.height));
+    var limite = Number(maxDimension || MAX_DIMENSION);
+    var scale = Math.min(1, limite / Math.max(image.width, image.height));
     var width = Math.max(1, Math.round(image.width * scale));
     var height = Math.max(1, Math.round(image.height * scale));
     var canvas = document.createElement('canvas');
@@ -66,9 +67,8 @@ window.RomaUpload = (function () {
     });
   }
 
-  // Sube una imagen de producto/curso. Devuelve la URL segura de Cloudinary
-  // (lo unico que se guarda en negocios.imagen_url) o null si falla.
-  async function subirImagenProducto(file, etiqueta) {
+  async function subirImagen(file, etiqueta, opciones) {
+    opciones = opciones || {};
     if (!file) return null;
     if (!file.type || !file.type.startsWith('image/')) {
       throw new Error('Solo se permiten archivos de imagen.');
@@ -80,12 +80,12 @@ window.RomaUpload = (function () {
       throw new Error('Falta configurar CLOUDINARY_CLOUD_NAME en utils/supabase-config.js.');
     }
 
-    var imagenComprimida = await comprimir(file);
+    var imagenComprimida = await comprimir(file, opciones.maxDimension || MAX_DIMENSION);
     var formData = new FormData();
     formData.append('file', imagenComprimida, slugArchivo(etiqueta) + '-' + Date.now() + '.jpg');
     formData.append('upload_preset', UPLOAD_PRESET);
-    formData.append('folder', FOLDER);
-    formData.append('tags', 'romahub,producto');
+    formData.append('folder', opciones.folder || FOLDER);
+    formData.append('tags', 'romahub,' + (opciones.tag || 'producto'));
 
     var response = await fetch('https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload', {
       method: 'POST',
@@ -102,5 +102,29 @@ window.RomaUpload = (function () {
     return data.secure_url;
   }
 
-  return { subirImagenProducto: subirImagenProducto };
+  // Sube una imagen de producto/curso. Devuelve la URL segura de Cloudinary
+  // (lo unico que se guarda en productos/cursos.imagen_url) o null si falla.
+  async function subirImagenProducto(file, etiqueta) {
+    return subirImagen(file, etiqueta, {
+      folder: 'romahub/productos',
+      tag: 'producto',
+      maxDimension: 1000
+    });
+  }
+
+  // Las tiendas externas pueden administrar su logo y portada. Reutilizamos el
+  // mismo preset sin firma, pero separamos los recursos por carpeta y etiqueta.
+  async function subirImagenPerfil(file, etiqueta, tipo) {
+    var esPortada = tipo === 'portada';
+    return subirImagen(file, etiqueta, {
+      folder: esPortada ? 'romahub/portadas' : 'romahub/logos',
+      tag: esPortada ? 'portada' : 'logo',
+      maxDimension: esPortada ? 1600 : 1000
+    });
+  }
+
+  return {
+    subirImagenProducto: subirImagenProducto,
+    subirImagenPerfil: subirImagenPerfil
+  };
 })();

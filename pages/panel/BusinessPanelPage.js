@@ -12,8 +12,16 @@
     const [saving, setSaving] = React.useState(false);
     const [message, setMessage] = React.useState('');
     const [uploadingImage, setUploadingImage] = React.useState(false);
+    const [profileUpload, setProfileUpload] = React.useState('');
     const fileInputRef = React.useRef(null);
+    const logoInputRef = React.useRef(null);
+    const coverInputRef = React.useRef(null);
     const [presentation, setPresentation] = React.useState({
+      nombre: '',
+      whatsapp: '',
+      categoria: '',
+      provincia: '',
+      municipio: '',
       descripcion: '',
       coverUrl: '',
       logoUrl: '',
@@ -57,7 +65,7 @@
         try {
           setAuthLoading(true);
           setMessage('');
-          const session = window.RomaAuth?.getSession?.();
+          const session = await window.RomaAuth?.ensureSession?.();
           if (!session) {
             goToLogin();
             return;
@@ -75,6 +83,11 @@
           setBusinessName(access.negocios?.nombre || 'Tu negocio');
           setEsTiendaExterna(access.negocios?.es_tienda_externa === true);
           setPresentation({
+            nombre: access.negocios?.nombre || '',
+            whatsapp: String(access.negocios?.telefono || '').replace(/\D/g, '').replace(/^53/, '').slice(-8),
+            categoria: access.negocios?.especialidad || '',
+            provincia: access.negocios?.provincia || '',
+            municipio: access.negocios?.municipio || '',
             descripcion: access.negocios?.mensaje_bienvenida || '',
             coverUrl: access.negocios?.imagen_fondo_url || '',
             logoUrl: access.negocios?.logo_url || '',
@@ -179,11 +192,18 @@
         setPresentationMessage('');
         if (!negocioId) throw new Error('No se encontró el negocio.');
         setPresentationSaving(true);
-        const saved = await supabaseRequest('rpc/guardar_mi_presentacion_negocio', {
+        const saved = await supabaseRequest('rpc/guardar_mi_perfil_romahub', {
           method: 'POST',
           body: JSON.stringify({
             p_negocio_id: negocioId,
+            p_nombre: presentation.nombre.trim(),
+            p_whatsapp: presentation.whatsapp.replace(/\D/g, ''),
+            p_especialidad: presentation.categoria.trim(),
+            p_provincia: presentation.provincia,
+            p_municipio: presentation.municipio,
             p_mensaje_bienvenida: presentation.descripcion.trim(),
+            p_logo_url: presentation.logoUrl,
+            p_imagen_fondo_url: presentation.coverUrl,
             p_imagen_fondo_pos_x: Number(presentation.coverX),
             p_imagen_fondo_pos_y: Number(presentation.coverY)
           })
@@ -191,12 +211,20 @@
         if (saved && typeof saved === 'object') {
           setPresentation((current) => ({
             ...current,
+            nombre: saved.nombre || current.nombre,
+            whatsapp: String(saved.telefono || current.whatsapp).replace(/\D/g, '').replace(/^53/, '').slice(-8),
+            categoria: saved.especialidad || '',
+            provincia: saved.provincia || '',
+            municipio: saved.municipio || '',
             descripcion: saved.mensaje_bienvenida || '',
+            logoUrl: saved.logo_url || '',
+            coverUrl: saved.imagen_fondo_url || '',
             coverX: Number(saved.imagen_fondo_pos_x ?? current.coverX),
             coverY: Number(saved.imagen_fondo_pos_y ?? current.coverY)
           }));
+          setBusinessName(saved.nombre || businessName);
         }
-        sessionStorage.removeItem('romahub-negocios-v1');
+        sessionStorage.removeItem('romahub-negocios-v2');
         setPresentationMessage('Perfil actualizado correctamente.');
       } catch (error) {
         console.error('BusinessPanelPage.savePresentation error:', error);
@@ -241,7 +269,7 @@
           })
         });
         setServices((current) => current.map((service, index) => ({ ...service, orden: index })));
-        sessionStorage.removeItem('romahub-negocios-v1');
+        sessionStorage.removeItem('romahub-negocios-v2');
         setServicesMessage('Orden y grupos guardados correctamente.');
       } catch (error) {
         console.error('BusinessPanelPage.saveServices error:', error);
@@ -357,6 +385,29 @@
       }
     };
 
+    const onPickProfileImage = async (event, type) => {
+      const file = event.target.files?.[0];
+      event.target.value = '';
+      if (!file || !esTiendaExterna) return;
+      try {
+        setPresentationMessage('');
+        setProfileUpload(type);
+        if (!window.RomaUpload?.subirImagenPerfil) throw new Error('No se cargó el subidor de imágenes.');
+        const url = await window.RomaUpload.subirImagenPerfil(file, presentation.nombre || businessName, type);
+        setPresentation((current) => ({
+          ...current,
+          [type === 'portada' ? 'coverUrl' : 'logoUrl']: url,
+          ...(type === 'portada' ? { coverX: 50, coverY: 50 } : {})
+        }));
+        setPresentationMessage('Imagen lista. Pulsa “Guardar perfil” para publicarla.');
+      } catch (error) {
+        console.error('BusinessPanelPage.onPickProfileImage error:', error);
+        setPresentationMessage(error.message || 'No se pudo subir la imagen.');
+      } finally {
+        setProfileUpload('');
+      }
+    };
+
     const toggleActive = async (item, type) => {
       try {
         const table = type === 'productos' ? 'productos' : 'cursos';
@@ -383,6 +434,19 @@
     ));
     const totalActivosExterna = (items.productos || []).filter((p) => p.activo !== false).length
       + (items.cursos || []).filter((c) => c.activo !== false).length;
+    const municipios = window.getMunicipiosDeProvincia?.(presentation.provincia, presentation.municipio) || [];
+    const hasCatalog = services.some((service) => service.activo !== false) || totalActivosExterna > 0;
+    const profileTasks = [
+      { id: 'descripcion', label: 'Descripción clara', done: presentation.descripcion.trim().length >= 40, section: 'perfil' },
+      { id: 'logo', label: 'Logo o foto del negocio', done: Boolean(presentation.logoUrl), section: 'perfil' },
+      { id: 'portada', label: 'Foto de portada', done: Boolean(presentation.coverUrl), section: 'perfil' },
+      { id: 'ubicacion', label: 'Provincia y municipio', done: Boolean(presentation.provincia && presentation.municipio), section: 'perfil' },
+      { id: 'whatsapp', label: 'WhatsApp de contacto', done: /^\d{8}$/.test(presentation.whatsapp), section: 'perfil' },
+      { id: 'catalogo', label: 'Algo para ofrecer', done: hasCatalog, section: esTiendaExterna ? 'tienda' : 'perfil' }
+    ];
+    const completedTasks = profileTasks.filter((task) => task.done).length;
+    const profileProgress = Math.round((completedTasks / profileTasks.length) * 100);
+    const nextTask = profileTasks.find((task) => !task.done);
 
     if (authLoading) {
       return <div className="container-rr py-16 text-sm text-[var(--text-muted)]">Abriendo panel...</div>;
@@ -407,7 +471,49 @@
                 </span>
               ) : null}
               <a className="btn-rr btn-ghost-rr flex items-center justify-center gap-2" href={`business.html?id=${encodeURIComponent(negocioId)}`} data-name="view-business" data-file="pages/panel/BusinessPanelPage.js">Ver ficha</a>
+              <ShareBusiness businessId={negocioId} businessName={businessName} compact={true} />
               <button className="btn-rr btn-ghost-rr" type="button" onClick={signOut} data-name="logout" data-file="pages/panel/BusinessPanelPage.js">Salir</button>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-5 surface-rr p-5 md:p-6" aria-label="Progreso del perfil" data-name="profile-progress" data-file="pages/panel/BusinessPanelPage.js">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="kicker-rr">Tu escaparate</p>
+                  <h2 className="mt-1 text-xl font-semibold">Perfil {profileProgress}% listo</h2>
+                </div>
+                <span className="text-sm font-bold text-[var(--primary-color)]">{completedTasks}/{profileTasks.length}</span>
+              </div>
+              <div className="mt-3 h-2.5 rounded-full bg-[var(--bg-muted)] overflow-hidden" role="progressbar" aria-valuenow={profileProgress} aria-valuemin="0" aria-valuemax="100">
+                <div className="h-full rounded-full bg-[var(--primary-color)] transition-all" style={{ width: `${profileProgress}%` }}></div>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {profileTasks.map((task) => (
+                  <span key={task.id} className={`chip-rr px-3 py-2 text-xs flex items-center gap-1.5 ${task.done ? 'text-green-700 bg-green-50' : 'text-[var(--text-muted)]'}`}>
+                    <span className={task.done ? 'icon-circle-check' : 'icon-circle'}></span>
+                    {task.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="lg:w-[260px] shrink-0 rounded-xl bg-[var(--bg-muted)] p-4">
+              {nextTask ? (
+                <>
+                  <p className="text-xs font-bold uppercase tracking-wide text-[var(--text-muted)]">Siguiente paso</p>
+                  <p className="mt-1 text-sm font-semibold">Completa: {nextTask.label}</p>
+                  <button type="button" className="mt-3 btn-rr btn-primary-rr w-full py-2.5 text-sm" onClick={() => setSection(nextTask.section)}>
+                    Completar ahora
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm font-semibold text-green-700">Tu perfil está listo para recibir clientas.</p>
+                  <a className="mt-3 btn-rr btn-primary-rr w-full py-2.5 text-sm flex items-center justify-center" href={`business.html?id=${encodeURIComponent(negocioId)}`}>Ver y compartir</a>
+                </>
+              )}
             </div>
           </div>
         </section>
@@ -438,27 +544,86 @@
             <form className="surface-rr p-5 md:p-6 space-y-5" onSubmit={savePresentation} data-name="presentation-form" data-file="pages/panel/BusinessPanelPage.js">
               <div data-name="presentation-head" data-file="pages/panel/BusinessPanelPage.js">
                 <p className="kicker-rr">Perfil público</p>
-                <h2 className="mt-2 text-xl font-semibold">Portada y descripción</h2>
+                <h2 className="mt-2 text-xl font-semibold">La cara de tu negocio</h2>
                 <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed">
-                  Toca o arrastra sobre la foto, o usa los controles, para elegir qué parte debe quedar al centro.
+                  Completa tus datos y acomoda la portada. Así te encontrarán y contactarán desde toda Cuba.
                 </p>
               </div>
 
-              <div className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-3" data-name="business-identity" data-file="pages/panel/BusinessPanelPage.js">
-                <div className="w-12 h-12 rounded-xl border border-[var(--border)] bg-white overflow-hidden flex items-center justify-center shrink-0" data-name="identity-logo" data-file="pages/panel/BusinessPanelPage.js">
-                  {presentation.logoUrl ? (
-                    <img src={presentation.logoUrl} alt={`Logo de ${businessName}`} className="w-full h-full object-contain" />
-                  ) : (
-                    <div className="icon-store text-xl text-[var(--primary-color)]"></div>
-                  )}
+              {esTiendaExterna ? (
+                <div className="space-y-4" data-name="external-business-fields" data-file="pages/panel/BusinessPanelPage.js">
+                  <div className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-3" data-name="logo-uploader">
+                    <div className="w-16 h-16 rounded-xl border border-[var(--border)] bg-white overflow-hidden flex items-center justify-center shrink-0">
+                      {profileUpload === 'logo' ? <div className="w-5 h-5 rounded-full border-2 border-[var(--border)] border-t-[var(--primary-color)] animate-spin"></div> : presentation.logoUrl ? (
+                        <img src={presentation.logoUrl} alt={`Logo de ${businessName}`} className="w-full h-full object-cover" />
+                      ) : <div className="icon-store text-xl text-[var(--primary-color)]"></div>}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold">Logo o foto del negocio</p>
+                      <p className="mt-0.5 text-xs text-[var(--text-muted)]">Usa una imagen cuadrada y fácil de reconocer.</p>
+                      <input ref={logoInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => onPickProfileImage(e, 'logo')} />
+                      <button type="button" className="mt-2 btn-rr btn-ghost-rr py-2 px-3 text-xs" onClick={() => logoInputRef.current?.click()} disabled={Boolean(profileUpload)}>
+                        {profileUpload === 'logo' ? 'Subiendo...' : presentation.logoUrl ? 'Cambiar logo' : 'Subir logo'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <label className="block">
+                    <span className="text-xs font-semibold text-[var(--text-muted)]">Nombre del negocio</span>
+                    <input className="input-rr mt-1" value={presentation.nombre} onChange={(e) => setPresentation((current) => ({ ...current, nombre: e.target.value.slice(0, 100) }))} maxLength={100} required />
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label className="block">
+                      <span className="text-xs font-semibold text-[var(--text-muted)]">WhatsApp</span>
+                      <div className="mt-1 flex rounded-[var(--radius-md)] border border-[var(--border)] bg-white overflow-hidden">
+                        <span className="px-3 py-3 text-sm font-semibold text-[var(--primary-color)] border-r border-[var(--border)] bg-[var(--bg-muted)]">+53</span>
+                        <input className="min-w-0 flex-1 px-3 py-3 text-sm outline-none" value={presentation.whatsapp} onChange={(e) => setPresentation((current) => ({ ...current, whatsapp: e.target.value.replace(/\D/g, '').slice(0, 8) }))} inputMode="numeric" pattern="[0-9]{8}" required />
+                      </div>
+                    </label>
+                    <label className="block">
+                      <span className="text-xs font-semibold text-[var(--text-muted)]">Especialidad</span>
+                      <input className="input-rr mt-1" value={presentation.categoria} onChange={(e) => setPresentation((current) => ({ ...current, categoria: e.target.value.slice(0, 80) }))} placeholder="Ej. Uñas, peluquería, cosmética" maxLength={80} />
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label className="block">
+                      <span className="text-xs font-semibold text-[var(--text-muted)]">Provincia</span>
+                      <select className="input-rr mt-1 bg-white" value={presentation.provincia} onChange={(e) => setPresentation((current) => ({ ...current, provincia: e.target.value, municipio: '' }))} required>
+                        <option value="">Selecciona</option>
+                        {(window.CUBA_PROVINCIAS || []).map((provincia) => <option key={provincia} value={provincia}>{provincia}</option>)}
+                      </select>
+                    </label>
+                    <label className="block">
+                      <span className="text-xs font-semibold text-[var(--text-muted)]">Municipio</span>
+                      <select className="input-rr mt-1 bg-white" value={presentation.municipio} onChange={(e) => setPresentation((current) => ({ ...current, municipio: e.target.value }))} disabled={!presentation.provincia} required>
+                        <option value="">Selecciona</option>
+                        {municipios.map((municipio) => <option key={municipio} value={municipio}>{municipio}</option>)}
+                      </select>
+                    </label>
+                  </div>
                 </div>
-                <div className="min-w-0" data-name="identity-copy" data-file="pages/panel/BusinessPanelPage.js">
-                  <p className="text-sm font-semibold truncate">{businessName}</p>
-                  <p className="text-xs text-[var(--text-muted)] mt-0.5">Nombre, WhatsApp y logo se mantienen desde la base de datos.</p>
+              ) : (
+                <div className="flex items-start gap-3 rounded-xl border border-blue-100 bg-blue-50 p-4" data-name="rservas-profile-note" data-file="pages/panel/BusinessPanelPage.js">
+                  <div className="icon-info text-xl text-blue-700 mt-0.5"></div>
+                  <div>
+                    <p className="text-sm font-semibold text-blue-900">Tus datos principales vienen de Rservasroma</p>
+                    <p className="mt-1 text-xs text-blue-800 leading-relaxed">Para cambiar nombre, WhatsApp, logo, provincia o municipio ve a Rservasroma → Editar negocio. Aquí puedes escribir la descripción, centrar la portada y organizar tus servicios.</p>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div data-name="cover-position-editor" data-file="pages/panel/BusinessPanelPage.js">
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <span className="text-xs font-semibold text-[var(--text-muted)]">Foto de portada</span>
+                  {esTiendaExterna ? (
+                    <>
+                      <input ref={coverInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => onPickProfileImage(e, 'portada')} />
+                      <button type="button" className="btn-rr btn-ghost-rr py-2 px-3 text-xs" onClick={() => coverInputRef.current?.click()} disabled={Boolean(profileUpload)}>
+                        {profileUpload === 'portada' ? 'Subiendo...' : presentation.coverUrl ? 'Cambiar portada' : 'Subir portada'}
+                      </button>
+                    </>
+                  ) : null}
+                </div>
                 <div
                   className={`relative aspect-video rounded-xl overflow-hidden border border-[var(--border)] bg-[#F3F4F6] ${presentation.coverUrl ? 'cursor-crosshair touch-none' : ''}`}
                   onPointerDown={positionCoverFromPointer}
@@ -466,7 +631,12 @@
                   data-name="cover-preview"
                   data-file="pages/panel/BusinessPanelPage.js"
                 >
-                  {presentation.coverUrl ? (
+                  {profileUpload === 'portada' ? (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-[var(--bg-muted)] text-[var(--text-muted)]">
+                      <div className="w-6 h-6 rounded-full border-2 border-[var(--border)] border-t-[var(--primary-color)] animate-spin"></div>
+                      <p className="mt-2 text-sm">Subiendo portada...</p>
+                    </div>
+                  ) : presentation.coverUrl ? (
                     <img
                       src={presentation.coverUrl}
                       alt={`Vista previa de la portada de ${businessName}`}

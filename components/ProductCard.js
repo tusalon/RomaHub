@@ -2,31 +2,21 @@ function ProductCard({ item }) {
   try {
     const it = item;
     const esCurso = it.tipo === 'curso';
-
-    const abrirNegocio = () => {
-      try {
-        Navigation.goToBusiness(it.negocioId);
-      } catch (error) {
-        console.error('ProductCard.abrirNegocio error:', error);
-      }
-    };
-
-    const onKeyDown = (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirNegocio(); }
-    };
+    const itemId = String(it.itemId || it.id || '').replace(/^(producto|curso)-/, '');
+    const detailUrl = `business.html?id=${encodeURIComponent(it.negocioId)}&item=${encodeURIComponent(itemId)}&tipo=${encodeURIComponent(it.tipo)}`;
+    const whatsapp = String(it.negocioWhatsapp || '').replace(/\D/g, '');
+    const whatsappCompleto = whatsapp.length === 8 ? `53${whatsapp}` : whatsapp;
+    const contactUrl = whatsappCompleto
+      ? `https://wa.me/${whatsappCompleto}?text=${encodeURIComponent(`Hola, vi ${it.nombre} en RomaHub y quiero ${esCurso ? 'más información' : 'comprarlo'}.`)}`
+      : detailUrl;
 
     return (
-      <div
-        className="reveal-card-rr group surface-rr card-lift-rr overflow-hidden cursor-pointer flex flex-col"
-        onClick={abrirNegocio}
-        onKeyDown={onKeyDown}
-        role="button"
-        tabIndex={0}
+      <article
+        className="reveal-card-rr group surface-rr card-lift-rr overflow-hidden flex flex-col"
         data-name="product-card"
         data-file="components/ProductCard.js"
-        aria-label={`${it.nombre} — ${it.negocioNombre}`}
       >
-        <div className="relative aspect-square overflow-hidden bg-[#F3F4F6]" data-name="product-media" data-file="components/ProductCard.js">
+        <a href={detailUrl} className="relative aspect-square overflow-hidden bg-[#F3F4F6] block" data-name="product-media" data-file="components/ProductCard.js" aria-label={`Ver ${it.nombre} en ${it.negocioNombre}`}>
           {it.imagen ? (
             <img loading="lazy" decoding="async" src={it.imagen} alt={it.nombre} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-name="product-img" data-file="components/ProductCard.js" />
           ) : (
@@ -42,7 +32,7 @@ function ProductCard({ item }) {
               <div className="icon-star text-xs text-[#F59E0B]"></div> Destacado
             </span>
           ) : null}
-        </div>
+        </a>
 
         <div className="p-3 flex flex-col flex-1" data-name="product-body" data-file="components/ProductCard.js">
           <p className="text-sm font-bold text-[#111827] leading-snug line-clamp-2" data-name="product-name" data-file="components/ProductCard.js">{it.nombre}</p>
@@ -59,8 +49,15 @@ function ProductCard({ item }) {
             <span className="text-xs text-[var(--text-muted)] truncate" data-name="product-biz-name" data-file="components/ProductCard.js">{it.negocioNombre}</span>
             {it.negocioEsRservasroma ? <span className="text-xs shrink-0" title="Negocio verificado Rservasroma" data-name="diamond-badge" data-file="components/ProductCard.js">💎</span> : null}
           </div>
+          <div className="mt-3 grid grid-cols-2 gap-2" data-name="product-actions" data-file="components/ProductCard.js">
+            <a className="btn-rr btn-primary-rr py-2 px-2 text-xs flex items-center justify-center gap-1" href={contactUrl} target={whatsappCompleto ? '_blank' : undefined} rel={whatsappCompleto ? 'noopener noreferrer' : undefined} data-name="product-contact">
+              <span className="icon-message-circle text-sm text-white"></span>
+              {esCurso ? 'Me interesa' : 'Comprar'}
+            </a>
+            <a className="btn-rr btn-ghost-rr py-2 px-2 text-xs flex items-center justify-center" href={detailUrl} data-name="product-detail">Ver detalle</a>
+          </div>
         </div>
-      </div>
+      </article>
     );
   } catch (error) {
     console.error('ProductCard component error:', error);

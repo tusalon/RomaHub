@@ -77,14 +77,15 @@
               </div>
             </div>
 
-            {!b.esTiendaExterna && services.length ? (
-              <div className="w-full lg:w-[230px]" data-name="header-action" data-file="pages/business/BusinessHeader.js">
+            <div className="w-full lg:w-[230px] space-y-2" data-name="header-action" data-file="pages/business/BusinessHeader.js">
+              {!b.esTiendaExterna && services.length ? (
                 <a className="btn-rr btn-primary-rr w-full flex items-center justify-center gap-2" href={b.reservaUrl || `https://wa.me/${String(b.whatsapp||'').replace('+','')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}. Tienen disponibilidad?`)}`} target="_blank" rel="noopener noreferrer" data-name="cta-wa" data-file="pages/business/BusinessHeader.js">
                   <div className="icon-message-circle text-xl text-white" data-name="cta-wa-i" data-file="pages/business/BusinessHeader.js"></div>
                   Reservar
                 </a>
-              </div>
-            ) : null}
+              ) : null}
+              <ShareBusiness businessId={b.id} businessName={b.nombre} compact={true} />
+            </div>
           </div>
         </div>
       </section>

@@ -1,6 +1,7 @@
 ﻿function BusinessPage({ business, directorioListo }) {
   try {
     const b = business;
+    const selectedItemId = new URLSearchParams(window.location.search).get('item') || '';
     const initials = String(b.nombre || 'N').trim().slice(0, 2).toUpperCase();
     const catalog = b.categoriasCatalogo || [];
     const hasStore = Boolean((catalog.find((section) => section.tipo === 'productos')?.items || []).length || (catalog.find((section) => section.tipo === 'cursos')?.items || []).length);
@@ -20,6 +21,14 @@
     const totalFormateado = Object.entries(totalesPorMoneda)
       .map(([moneda, valor]) => Format.formatPrecio(valor, moneda))
       .join(' + ') || Format.formatPrecio(0);
+
+    React.useEffect(() => {
+      if (!selectedItemId) return;
+      const timer = window.setTimeout(() => {
+        document.getElementById(`catalog-item-${selectedItemId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 250);
+      return () => window.clearTimeout(timer);
+    }, [b.id, selectedItemId]);
 
     const addToCart = (item, type) => {
       try {
@@ -193,7 +202,7 @@
         <div className="container-rr mt-5 md:mt-7" data-name="business-content" data-file="pages/business/BusinessPage.js">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 items-start" data-name="business-grid" data-file="pages/business/BusinessPage.js">
             <div data-name="left" data-file="pages/business/BusinessPage.js">
-              <BusinessCatalog business={b} onAddToCart={addToCart} data-name="catalog" data-file="pages/business/BusinessPage.js" />
+              <BusinessCatalog business={b} onAddToCart={addToCart} selectedItemId={selectedItemId} data-name="catalog" data-file="pages/business/BusinessPage.js" />
               {hasStore ? <div className="lg:hidden mt-4" data-name="mobile-cart" data-file="pages/business/BusinessPage.js">
                 {renderCartCard()}
               </div> : null}

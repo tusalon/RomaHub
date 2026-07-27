@@ -59,6 +59,7 @@ const bundles = {
     'components/ReportarNegocio.js',
     'components/RomaHubUpgradePromo.js',
     'components/NegociosCerca.js',
+    'components/ShareBusiness.js',
     'pages/business/BusinessHeader.js',
     'pages/business/BusinessTabs.js',
     'pages/business/BusinessCatalog.js',
@@ -109,6 +110,7 @@ const bundles = {
     'components/ToastProvider.js',
     'components/Header.js',
     'components/Footer.js',
+    'components/ShareBusiness.js',
     'pages/panel/BusinessPanelPage.js',
     'panel-app.js'
   ]

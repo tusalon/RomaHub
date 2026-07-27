@@ -6,7 +6,8 @@ function RegisterBusinessPage() {
     const [form, setForm] = React.useState({
       nombre: '',
       whatsapp: '',
-      provincia: ''
+      provincia: '',
+      website: ''
     });
     const [enviando, setEnviando] = React.useState(false);
     const [error, setError] = React.useState('');
@@ -78,7 +79,8 @@ function RegisterBusinessPage() {
             municipio: '',
             categoria: '',
             descripcion: '',
-            logo_url: ''
+            logo_url: '',
+            website: form.website
           })
         });
         const data = await response.json().catch(() => ({}));
@@ -91,6 +93,7 @@ function RegisterBusinessPage() {
         setCredenciales({
           usuario: data.acceso?.usuario || whatsapp,
           password: data.acceso?.password || '',
+          recoveryCode: data.acceso?.codigo_recuperacion || '',
           negocioId: data.tienda?.negocio_id || '',
           nombre: data.tienda?.nombre || nombre
         });
@@ -115,10 +118,10 @@ function RegisterBusinessPage() {
               ¡{credenciales.nombre} ya está en RomaHub!
             </h1>
             <p className="mt-3 text-sm text-[var(--text-muted)] leading-relaxed max-w-lg mx-auto" data-name="success-sub" data-file="pages/register/RegisterBusinessPage.js">
-              Guarda estos datos o haz una captura de pantalla. Los necesitarás para entrar, completar tu perfil y publicar productos o cursos.
+              Guarda estos datos o haz una captura ahora. La contraseña y el código de recuperación se muestran una sola vez y RomaHub no guarda una copia legible.
             </p>
 
-            <div className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-3 text-left" data-name="success-credentials" data-file="pages/register/RegisterBusinessPage.js">
+            <div className="mt-7 grid grid-cols-1 md:grid-cols-3 gap-3 text-left" data-name="success-credentials" data-file="pages/register/RegisterBusinessPage.js">
               <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-4" data-name="credential-user" data-file="pages/register/RegisterBusinessPage.js">
                 <p className="text-[11px] uppercase tracking-wide text-[var(--text-muted)] font-bold">Usuario (tu WhatsApp)</p>
                 <div className="mt-2 flex items-center justify-between gap-3">
@@ -134,6 +137,15 @@ function RegisterBusinessPage() {
                   <p className="text-lg font-extrabold font-mono tracking-wider text-[#111827]">{credenciales.password}</p>
                   <button type="button" className="btn-rr btn-ghost-rr py-2 px-3 text-xs" onClick={() => copiar('password', credenciales.password)}>
                     {copiado === 'password' ? 'Copiada' : 'Copiar'}
+                  </button>
+                </div>
+              </div>
+              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4" data-name="credential-recovery" data-file="pages/register/RegisterBusinessPage.js">
+                <p className="text-[11px] uppercase tracking-wide text-amber-800 font-bold">Código de recuperación</p>
+                <div className="mt-2 flex items-center justify-between gap-3">
+                  <p className="text-base font-extrabold font-mono tracking-wide text-[#111827] break-all">{credenciales.recoveryCode}</p>
+                  <button type="button" className="btn-rr btn-ghost-rr py-2 px-3 text-xs" onClick={() => copiar('recovery', credenciales.recoveryCode)}>
+                    {copiado === 'recovery' ? 'Copiado' : 'Copiar'}
                   </button>
                 </div>
               </div>
@@ -177,7 +189,7 @@ function RegisterBusinessPage() {
               <div className="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-3" data-name="register-benefits" data-file="pages/register/RegisterBusinessPage.js">
                 {[
                   ['1', 'Escribe lo básico', 'Nombre, WhatsApp y provincia.'],
-                  ['2', 'Recibe tu acceso', 'Usuario y contraseña al instante.'],
+                  ['2', 'Recibe tu acceso', 'Usuario, contraseña y código privado.'],
                   ['3', 'Completa tu perfil', 'Sube fotos, productos y cursos.']
                 ].map((item) => (
                   <div key={item[0]} className="surface-rr p-4" data-name="register-benefit" data-file="pages/register/RegisterBusinessPage.js">
@@ -231,6 +243,11 @@ function RegisterBusinessPage() {
                 </select>
               </label>
 
+              <label className="hidden" aria-hidden="true" htmlFor="registro-website">
+                Sitio web
+                <input id="registro-website" tabIndex="-1" autoComplete="off" value={form.website} onChange={(e) => actualizar('website', e.target.value)} />
+              </label>
+
               {error ? (
                 <div className="mt-4 rounded-xl border border-red-100 bg-red-50 p-3" role="alert" data-name="register-error" data-file="pages/register/RegisterBusinessPage.js">
                   <p className="text-sm text-red-700 leading-relaxed">{error}</p>
@@ -249,7 +266,7 @@ function RegisterBusinessPage() {
               </button>
 
               <p className="mt-3 text-[11px] text-[var(--text-muted)] text-center leading-relaxed">
-                Recibirás un usuario y una contraseña para administrar tu espacio. No necesitas tener Rservasroma.
+                Recibirás un usuario, una contraseña y un código privado de recuperación. No necesitas tener Rservasroma.
               </p>
               <p className="mt-4 pt-4 border-t border-[var(--border)] text-xs text-[var(--text-muted)] text-center">
                 ¿Ya creaste tu negocio? <a className="font-bold text-[var(--primary-color)]" href="login.html">Entrar</a>
