@@ -1,6 +1,7 @@
 const MockData = (() => {
   let businesses = [];
   let showcaseItems = [];
+  let promotions = [];
   let loadPromise = null;
   let loadedFromSupabase = false;
   let loadError = null;
@@ -15,7 +16,7 @@ const MockData = (() => {
   // normalizado en sessionStorage para pintar al instante y refrescar detras.
   // Cambiar la version invalida caches que pudieron guardar solo los primeros
   // 1,000 servicios por el limite de filas de Supabase.
-  const CACHE_KEY = 'romahub-negocios-v2';
+  const CACHE_KEY = 'romahub-negocios-v3';
   const CACHE_TTL_MS = 5 * 60 * 1000;
 
   function leerCache() {
@@ -37,6 +38,7 @@ const MockData = (() => {
         guardadoEn: Date.now(),
         businesses,
         showcaseItems,
+        promotions,
         totalReservasHoy
       }));
     } catch (error) {
@@ -349,6 +351,7 @@ const MockData = (() => {
     const servicios = relations.servicios[id] || [];
     const productos = relations.productos[id] || [];
     const cursos = relations.cursos[id] || [];
+    const promociones = relations.promociones?.[id] || [];
     const resenas = relations.resenas[id] || [];
     const descripcionNegocio = valueFrom(row, ['descripcion', 'description', 'mensaje_bienvenida'], '');
     const tieneServicios = servicios.length > 0;
@@ -430,6 +433,24 @@ const MockData = (() => {
       // dato que la clienta busca antes de decidir si reserva.
       horario: valueFrom(row, ['horario_atencion', 'horario'], ''),
       descripcion: descripcionNegocio,
+      promociones: promociones.map((item) => ({
+        id: String(item.id || ''),
+        negocioId: id,
+        negocioNombre: valueFrom(row, ['nombre', 'name', 'titulo'], 'Negocio'),
+        negocioWhatsapp: telefono ? String(telefono).replace(/[^\d+]/g, '') : '',
+        negocioLogo: logoUrl,
+        titulo: valueFrom(item, ['titulo'], 'Oferta especial'),
+        descripcion: valueFrom(item, ['descripcion'], ''),
+        tipo: valueFrom(item, ['tipo'], 'general'),
+        itemId: valueFrom(item, ['item_id'], ''),
+        precioAnterior: numberFrom(item, ['precio_anterior'], 0),
+        precioPromocional: numberFrom(item, ['precio_promocional'], 0),
+        moneda: String(valueFrom(item, ['moneda'], 'CUP')).toUpperCase(),
+        imagen: valueFrom(item, ['imagen_url'], ''),
+        fechaInicio: valueFrom(item, ['fecha_inicio'], ''),
+        fechaFin: valueFrom(item, ['fecha_fin'], ''),
+        activo: boolFrom(item, ['activo'], true)
+      })),
       categoriasCatalogo: buildCatalogSections({ servicios, productos, cursos }),
       resenas: resenas.map((item, index) => ({
         id: String(item.id || `${id}-resena-${index}`),
@@ -478,8 +499,12 @@ const MockData = (() => {
     if (!forceRefresh) {
       const guardado = leerCache();
       if (guardado) {
-        businesses = guardado.businesses || [];
+        businesses = (guardado.businesses || []).map((business) => ({
+          ...business,
+          promociones: (business.promociones || []).filter(isPromotionCurrent)
+        }));
         showcaseItems = guardado.showcaseItems || [];
+        promotions = guardado.promotions || businesses.flatMap((business) => business.promociones || []);
         totalReservasHoy = guardado.totalReservasHoy || 0;
         loadedFromSupabase = true;
         loadError = null;
@@ -530,7 +555,8 @@ const MockData = (() => {
           serviciosRows,
           reservasSemanaRows,
           productosTiendaRows,
-          cursosTiendaRows
+          cursosTiendaRows,
+          promocionesRows
         ] = await Promise.all([
           optionalSupabaseCount('reservas?created_at=gte.' + encodeURIComponent(getTodayStartIso()) + '&select=id'),
           optionalSupabaseFetchAll('servicios?activo=eq.true&select=id,negocio_id,nombre,precio,precio_moneda,categoria,orden&order=negocio_id.asc,orden.asc,nombre.asc,id.asc'),
@@ -540,7 +566,8 @@ const MockData = (() => {
             : Promise.resolve([]),
           tiendaTablesEnabled()
             ? optionalSupabaseFetchAll('cursos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=negocio_id.asc,destacado.desc,orden.asc,fecha.asc,nombre.asc,id.asc')
-            : Promise.resolve([])
+            : Promise.resolve([]),
+          optionalSupabaseFetchAll('promociones_romahub?activo=eq.true&select=id,negocio_id,titulo,descripcion,tipo,item_id,precio_anterior,precio_promocional,moneda,imagen_url,fecha_inicio,fecha_fin,activo,created_at&order=created_at.desc,id.asc')
         ]);
         totalReservasHoy = reservasHoyCount;
         const tiendasIds = new Set([...businessIdSet(productosTiendaRows), ...businessIdSet(cursosTiendaRows)]);
@@ -550,6 +577,7 @@ const MockData = (() => {
           servicios: groupByBusiness(serviciosRows),
           productos: groupByBusiness(productosTiendaRows),
           cursos: groupByBusiness(cursosTiendaRows),
+          promociones: groupByBusiness(promocionesRows),
           resenas: {}
         };
 
@@ -597,6 +625,7 @@ const MockData = (() => {
           ...(productosTiendaRows || []).map((item) => enrichStoreItem(item, 'producto')),
           ...(cursosTiendaRows || []).map((item) => enrichStoreItem(item, 'curso'))
         ].filter(Boolean);
+        promotions = businesses.flatMap((business) => business.promociones || []);
 
         loadedFromSupabase = true;
         loadError = null;
@@ -642,11 +671,13 @@ const MockData = (() => {
     const cursosRows = tiendaTablesEnabled()
       ? await optionalSupabaseFetch(`cursos?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=destacado.desc,orden.asc,fecha.asc,nombre.asc&limit=200`)
       : [];
+    const promocionesRows = await optionalSupabaseFetch(`promociones_romahub?activo=eq.true&negocio_id=eq.${encodedId}&select=id,negocio_id,titulo,descripcion,tipo,item_id,precio_anterior,precio_promocional,moneda,imagen_url,fecha_inicio,fecha_fin,activo,created_at&order=created_at.desc,id.asc`);
 
     const detailed = normalizeBusiness(row, {
       servicios: groupByBusiness(serviciosRows),
       productos: groupByBusiness(productosRows),
       cursos: groupByBusiness(cursosRows),
+      promociones: groupByBusiness(promocionesRows),
       resenas: groupByBusiness(resenasRows)
     }, ratingData);
     detailed.reservasSemana = current?.reservasSemana || 0;
@@ -733,6 +764,20 @@ const MockData = (() => {
     return showcaseItems.length;
   }
 
+  function listPromotions(limit) {
+    const list = promotions
+      .filter(isPromotionCurrent)
+      .sort((a, b) => new Date(a.fechaFin).getTime() - new Date(b.fechaFin).getTime() || String(a.titulo).localeCompare(String(b.titulo)));
+    return limit ? list.slice(0, limit) : list;
+  }
+
+  function isPromotionCurrent(item) {
+    const now = Date.now();
+    return item.activo !== false
+      && (!item.fechaInicio || new Date(item.fechaInicio).getTime() <= now)
+      && (!item.fechaFin || new Date(item.fechaFin).getTime() > now);
+  }
+
   function listRomaReviews() {
     return businesses
       .flatMap((business) => (business.resenas || []).map((review) => ({ ...review, negocioNombre: business.nombre })))
@@ -810,6 +855,7 @@ const MockData = (() => {
           ...(section.items || []).flatMap((item) => [item.nombre, item.descripcion, item.categoria])
         ])
         .filter(Boolean)
+        .concat((b.promociones || []).flatMap((item) => [item.titulo, item.descripcion, item.tipo]).filter(Boolean))
       : [];
 
     const hayNombre = !nombre || normalizeText(b.nombre).includes(nombre);
@@ -826,12 +872,15 @@ const MockData = (() => {
         .filter(Boolean)
         .some((t) => normalizeText(t).includes(ubicacion));
 
-    return hayNombre && hayServicio && hayUbicacion;
+    const hayOferta = !q.ofertas || Boolean((b.promociones || []).length);
+
+    return hayNombre && hayServicio && hayUbicacion && hayOferta;
   }
 
   function searchBusinesses(query) {
+    const q = query || {};
     return businesses
-      .filter((business) => business.tieneServicios && matchesBusiness(business, query))
+      .filter((business) => (business.tieneServicios || (q.ofertas && (business.promociones || []).length)) && matchesBusiness(business, q))
       .sort(ordenNegocio);
   }
 
@@ -843,5 +892,5 @@ const MockData = (() => {
       .sort(ordenNegocio);
   }
 
-  return { listBusinesses, listUpcomingBusinesses, listTopRated, listWeeklyFeatured, listRomaStores, listShowcaseProducts, getShowcaseCount, listRomaReviews, searchBusinesses, searchUpcomingBusinesses, getBusinessById, loadBusinesses, loadBusinessDetails, getLoadError, getTodayReservations, addReview, addOrder };
+  return { listBusinesses, listUpcomingBusinesses, listTopRated, listWeeklyFeatured, listRomaStores, listShowcaseProducts, getShowcaseCount, listPromotions, listRomaReviews, searchBusinesses, searchUpcomingBusinesses, getBusinessById, loadBusinesses, loadBusinessDetails, getLoadError, getTodayReservations, addReview, addOrder };
 })();

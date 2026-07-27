@@ -19,11 +19,21 @@ class FavoritesErrorBoundary extends React.Component {
 }
 
 function FavoritesApp() {
+  const [dataReady, setDataReady] = React.useState(false);
+
+  React.useEffect(() => {
+    let mounted = true;
+    MockData.loadBusinesses().catch((error) => console.error('FavoritesApp.loadBusinesses error:', error)).finally(() => {
+      if (mounted) setDataReady(true);
+    });
+    return () => { mounted = false; };
+  }, []);
+
   return (
     <div className="min-h-screen bg-[var(--bg)]">
       <ToastProvider>
         <Header />
-        <main className="flex-1"><FavoritesPage /></main>
+        <main className="flex-1">{dataReady ? <FavoritesPage /> : <div className="container-rr py-16 text-center text-sm text-[var(--text-muted)]">Cargando tus guardados...</div>}</main>
         <Footer />
       </ToastProvider>
     </div>

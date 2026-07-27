@@ -24,6 +24,7 @@ const bundles = {
     'components/BusinessRail.js',
     'components/ProductCard.js',
     'components/ProductShowcase.js',
+    'components/PromotionCard.js',
     'components/RomaReviewsRail.js',
     'components/NegociosTestimonios.js',
     'components/TopRatedCarousel.js',
@@ -69,10 +70,12 @@ const bundles = {
     'components/NegociosCerca.js',
     'components/ShareBusiness.js',
     'components/FavoriteButton.js',
+    'components/PromotionCard.js',
     'pages/business/BusinessHeader.js',
     'pages/business/BusinessTabs.js',
     'pages/business/BusinessCatalog.js',
     'pages/business/BusinessReviews.js',
+    'pages/business/BusinessPromotions.js',
     'pages/business/BusinessPage.js',
     'business-app.js'
   ],
@@ -134,11 +137,14 @@ const bundles = {
   'favorites.bundle.js': [
     'utils/navigation.js',
     'utils/format.js',
+    'utils/romahub-analytics.js',
     'utils/romahub-saved.js',
+    'data/mockData.js',
     'components/ToastProvider.js',
     'components/Header.js',
     'components/Footer.js',
     'components/FavoriteButton.js',
+    'components/PromotionCard.js',
     'pages/favorites/FavoritesPage.js',
     'favorites-app.js'
   ]

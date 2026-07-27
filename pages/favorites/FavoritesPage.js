@@ -3,7 +3,7 @@ function FavoritesPage() {
     const readState = () => ({
       favorites: window.RomaSaved?.listFavorites?.() || [],
       recent: window.RomaSaved?.listRecent?.() || [],
-      search: window.RomaSaved?.getSearch?.() || { nombre: '', servicio: '', ubicacion: '' }
+      search: window.RomaSaved?.getSearch?.() || { nombre: '', servicio: '', ubicacion: '', ofertas: false }
     });
     const [state, setState] = React.useState(readState);
 
@@ -11,8 +11,10 @@ function FavoritesPage() {
 
     const businesses = state.favorites.filter((entry) => entry.type === 'negocio');
     const storeItems = state.favorites.filter((entry) => entry.type !== 'negocio');
-    const hasSearch = Boolean(state.search.nombre || state.search.servicio || state.search.ubicacion);
-    const searchLabel = [state.search.servicio, state.search.ubicacion, state.search.nombre].filter(Boolean).join(' · ');
+    const hasSearch = Boolean(state.search.nombre || state.search.servicio || state.search.ubicacion || state.search.ofertas);
+    const searchLabel = [state.search.servicio, state.search.ubicacion, state.search.nombre, state.search.ofertas ? 'Con ofertas' : ''].filter(Boolean).join(' · ');
+    const favoriteBusinessIds = new Set(businesses.map((entry) => String(entry.id || entry.key.replace(/^negocio:/, ''))));
+    const favoritePromotions = MockData.listPromotions().filter((promotion) => favoriteBusinessIds.has(String(promotion.negocioId)));
 
     const SavedBusiness = ({ entry, recent = false }) => (
       <article className="surface-rr overflow-hidden flex flex-col" data-name={recent ? 'recent-business-card' : 'favorite-business-card'}>
@@ -74,7 +76,20 @@ function FavoritesPage() {
                 <h2 className="mt-1 text-lg font-semibold">Tu última búsqueda</h2>
                 <p className="mt-1 text-sm text-[var(--text-muted)]">{searchLabel}</p>
               </div>
-              <button type="button" className="btn-rr btn-primary-rr shrink-0" onClick={() => Navigation.goToSearch(state.search.servicio, state.search.ubicacion, state.search.nombre)}>Continuar búsqueda</button>
+              <button type="button" className="btn-rr btn-primary-rr shrink-0" onClick={() => Navigation.goToSearch(state.search.servicio, state.search.ubicacion, state.search.nombre, state.search.ofertas)}>Continuar búsqueda</button>
+            </section>
+          ) : null}
+
+          {favoritePromotions.length ? (
+            <section aria-labelledby="favorite-promotions-title" data-name="favorite-promotions">
+              <div className="surface-rr p-5 md:p-6 mb-4 border-l-4 border-l-[var(--primary-color)]">
+                <p className="kicker-rr">No te la pierdas</p>
+                <h2 id="favorite-promotions-title" className="mt-1 text-xl md:text-2xl font-semibold">Tus favoritos tienen ofertas</h2>
+                <p className="mt-1 text-sm text-[var(--text-muted)]">Estas promociones están activas ahora y desaparecerán al vencer.</p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {favoritePromotions.map((promotion) => <PromotionCard key={promotion.id} promotion={promotion} compact={true} />)}
+              </div>
             </section>
           ) : null}
 

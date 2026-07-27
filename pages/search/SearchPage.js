@@ -27,12 +27,12 @@ function SearchPage({ query, onQueryChange }) {
 
     const provinceMapBusinesses = React.useMemo(() => {
       try {
-        return MockData.searchBusinesses({ nombre: query?.nombre || '', servicio: query?.servicio || '', ubicacion: '' });
+        return MockData.searchBusinesses({ nombre: query?.nombre || '', servicio: query?.servicio || '', ubicacion: '', ofertas: query?.ofertas === true });
       } catch (error) {
         console.error('SearchPage.provinceBusinesses error:', error);
         return [];
       }
-    }, [query?.nombre, query?.servicio]);
+    }, [query?.nombre, query?.servicio, query?.ofertas]);
 
     const visibleResults = results.slice(0, visibleCount);
     const visibleUpcoming = upcomingResults.slice(0, UPCOMING_PREVIEW_SIZE);
@@ -62,7 +62,7 @@ function SearchPage({ query, onQueryChange }) {
 
     React.useEffect(() => {
       setVisibleCount(SEARCH_PAGE_SIZE);
-    }, [query?.nombre, query?.servicio, query?.ubicacion]);
+    }, [query?.nombre, query?.servicio, query?.ubicacion, query?.ofertas]);
 
     React.useEffect(() => {
       try {
@@ -83,6 +83,7 @@ function SearchPage({ query, onQueryChange }) {
         if (next.nombre) params.set('nombre', next.nombre);
         if (next.servicio) params.set('servicio', next.servicio);
         if (next.ubicacion) params.set('ubicacion', next.ubicacion);
+        if (next.ofertas) params.set('ofertas', '1');
         const suffix = params.toString();
         window.history.replaceState({}, '', suffix ? `search.html?${suffix}` : 'search.html');
       } catch (error) {
@@ -96,7 +97,7 @@ function SearchPage({ query, onQueryChange }) {
           <div data-name="search-titlewrap" data-file="pages/search/SearchPage.js">
             <h1 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]" data-name="search-title" data-file="pages/search/SearchPage.js">Explorar negocios</h1>
             <p className="text-sm text-[var(--text-muted)] mt-1" data-name="search-sub" data-file="pages/search/SearchPage.js">
-              Encuentra negocios que ya publicaron sus servicios y están listos para atenderte.
+              {query?.ofertas ? 'Encuentra promociones vigentes de servicios, productos y cursos.' : 'Encuentra negocios que ya publicaron sus servicios y están listos para atenderte.'}
             </p>
           </div>
           <span className="hidden md:inline-flex chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="count" data-file="pages/search/SearchPage.js">
@@ -152,6 +153,18 @@ function SearchPage({ query, onQueryChange }) {
               })}
             </div>
           ) : null}
+          <div className="mt-4 flex flex-wrap items-center gap-2" data-name="offer-filter">
+            <button
+              type="button"
+              className={`chip-rr px-4 py-2 text-xs font-bold flex items-center gap-2 ${query?.ofertas ? 'bg-[var(--primary-color)] text-white border-[var(--primary-color)]' : 'text-[var(--text-muted)]'}`}
+              onClick={() => setQueryParam('ofertas', !query?.ofertas)}
+              aria-pressed={query?.ofertas === true}
+            >
+              <span className="icon-tag"></span>
+              Solo negocios con ofertas
+            </button>
+            {query?.ofertas ? <span className="text-xs text-[var(--text-muted)]">Mostrando promociones vigentes</span> : null}
+          </div>
         </div>
 
         <section className="mt-6" aria-labelledby="negocios-disponibles" data-name="active-results" data-file="pages/search/SearchPage.js">
@@ -162,7 +175,7 @@ function SearchPage({ query, onQueryChange }) {
 
           {!results.length ? (
             <div className="surface-rr w-full p-6 text-center text-sm text-[var(--text-muted)]" data-name="empty-active-businesses" data-file="pages/search/SearchPage.js">
-              No encontramos negocios con servicios publicados para esta búsqueda.
+              {query?.ofertas ? 'No hay promociones vigentes para esta búsqueda.' : 'No encontramos negocios con servicios publicados para esta búsqueda.'}
             </div>
           ) : (
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-4" data-name="cards" data-file="pages/search/SearchPage.js">

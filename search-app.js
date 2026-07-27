@@ -47,11 +47,11 @@ function SearchApp() {
     const [query, setQuery] = React.useState(() => {
       try {
         const current = Navigation.getSearchParams();
-        return current.nombre || current.servicio || current.ubicacion
+        return current.nombre || current.servicio || current.ubicacion || current.ofertas
           ? current
           : (window.RomaSaved?.getSearch?.() || current);
       } catch (e) {
-        return { nombre: '', servicio: '', ubicacion: '' };
+        return { nombre: '', servicio: '', ubicacion: '', ofertas: false };
       }
     });
 

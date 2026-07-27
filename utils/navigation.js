@@ -16,14 +16,15 @@ const Navigation = (() => {
       const nombre = (url.searchParams.get('nombre') || '').trim();
       const servicio = (url.searchParams.get('servicio') || '').trim();
       const ubicacion = (url.searchParams.get('ubicacion') || '').trim();
-      return { nombre, servicio, ubicacion };
+      const ofertas = url.searchParams.get('ofertas') === '1';
+      return { nombre, servicio, ubicacion, ofertas };
     } catch (error) {
       console.error('Navigation.getSearchParams error:', error);
-      return { nombre: '', servicio: '', ubicacion: '' };
+      return { nombre: '', servicio: '', ubicacion: '', ofertas: false };
     }
   }
 
-  function goToSearch(servicio, ubicacion, nombre) {
+  function goToSearch(servicio, ubicacion, nombre, ofertas = false) {
     try {
       const s = (servicio || '').trim();
       const u = (ubicacion || '').trim();
@@ -32,7 +33,8 @@ const Navigation = (() => {
       if (n) params.set('nombre', n);
       if (s) params.set('servicio', s);
       if (u) params.set('ubicacion', u);
-      window.RomaSaved?.saveSearch?.({ nombre: n, servicio: s, ubicacion: u });
+      if (ofertas) params.set('ofertas', '1');
+      window.RomaSaved?.saveSearch?.({ nombre: n, servicio: s, ubicacion: u, ofertas: Boolean(ofertas) });
       window.location.href = `search.html?${params.toString()}`;
     } catch (error) {
       console.error('Navigation.goToSearch error:', error);

@@ -12,6 +12,16 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
     const initials = String(b.nombre || 'N').trim().slice(0, 2).toUpperCase();
     const profileHref = `business.html?id=${encodeURIComponent(b.id)}`;
     const favoriteEntry = window.RomaSaved?.businessEntry?.(b);
+    const activePromotion = (b.promociones || [])[0] || null;
+    const offerOnly = !b.tieneServicios && Boolean(activePromotion);
+    const offerHref = activePromotion ? `business.html?id=${encodeURIComponent(b.id)}&promo=${encodeURIComponent(activePromotion.id)}` : profileHref;
+    const onOfferClick = () => activePromotion && window.RomaAnalytics?.track?.({
+      negocioId: b.id,
+      evento: 'promocion_click',
+      itemTipo: 'promocion',
+      itemId: activePromotion.id,
+      itemNombre: activePromotion.titulo
+    });
 
     const onContact = (e) => {
       try {
@@ -94,16 +104,21 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
               {serviceCount ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--text-muted)]" data-name="services-count" data-file="components/BusinessCard.js">{serviceCount} servicios</span> : null}
               {productCount ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--text-muted)]" data-name="products-count" data-file="components/BusinessCard.js">Tienda</span> : null}
               {courseCount ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--text-muted)]" data-name="courses-count" data-file="components/BusinessCard.js">Cursos</span> : null}
+              {(b.promociones || []).length ? <span className="chip-rr px-2.5 py-1 text-[11px] font-bold text-[var(--primary-color)] bg-[var(--secondary-color)]" data-name="promotions-count">Oferta activa</span> : null}
             </div>
 
             <div className="mt-4 flex items-center justify-between gap-3" data-name="bottom" data-file="components/BusinessCard.js">
               <span className="text-xs text-[var(--text-muted)] truncate" data-name="price" data-file="components/BusinessCard.js">
-                {upcoming ? 'Aún no acepta reservas desde RomaHub' : (firstService ? `${firstService.nombre} - ${Format.formatPrecioCUP(firstService.precio, firstService.moneda)}` : Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max, b.rangoPrecio?.moneda))}
+                {upcoming ? 'Aún no acepta reservas desde RomaHub' : offerOnly ? activePromotion.titulo : (firstService ? `${firstService.nombre} - ${Format.formatPrecioCUP(firstService.precio, firstService.moneda)}` : Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max, b.rangoPrecio?.moneda))}
               </span>
 
               {upcoming ? (
                 <a href={profileHref} className="btn-rr btn-ghost-rr py-2 px-4 text-xs whitespace-nowrap" data-name="profile" data-file="components/BusinessCard.js">
                   Ver perfil
+                </a>
+              ) : offerOnly ? (
+                <a href={offerHref} onClick={onOfferClick} className="btn-rr btn-primary-rr py-2 px-4 text-xs whitespace-nowrap" data-name="view-offer" data-file="components/BusinessCard.js">
+                  Ver oferta
                 </a>
               ) : (
                 <button

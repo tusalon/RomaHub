@@ -148,7 +148,8 @@ window.RomaSaved = (function () {
     write(SEARCH_KEY, {
       nombre: clean(q.nombre, 100),
       servicio: clean(q.servicio, 100),
-      ubicacion: clean(q.ubicacion, 100)
+      ubicacion: clean(q.ubicacion, 100),
+      ofertas: q.ofertas === true
     });
   }
 
@@ -157,7 +158,8 @@ window.RomaSaved = (function () {
     return {
       nombre: clean(q.nombre, 100),
       servicio: clean(q.servicio, 100),
-      ubicacion: clean(q.ubicacion, 100)
+      ubicacion: clean(q.ubicacion, 100),
+      ofertas: q.ofertas === true
     };
   }
 

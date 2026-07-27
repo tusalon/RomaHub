@@ -20,7 +20,7 @@ function Header({ currentParams }) {
         const current = currentParams || Navigation.getSearchParams();
         const remembered = window.RomaSaved?.getSearch?.() || {};
         const q = current?.nombre || current?.servicio || current?.ubicacion ? current : remembered;
-        Navigation.goToSearch(q?.servicio || '', q?.ubicacion || '', q?.nombre || '');
+        Navigation.goToSearch(q?.servicio || '', q?.ubicacion || '', q?.nombre || '', q?.ofertas === true);
       } catch (error) {
         console.error('Header.onGoSearch error:', error);
       }

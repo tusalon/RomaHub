@@ -1,5 +1,16 @@
 ﻿function BusinessPanelPage() {
   try {
+    const dateTimeLocal = (value) => {
+      const date = value ? new Date(value) : new Date();
+      if (Number.isNaN(date.getTime())) return '';
+      const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+      return local.toISOString().slice(0, 16);
+    };
+    const emptyPromotion = () => ({
+      id: '', titulo: '', descripcion: '', tipo: 'general', precio_anterior: '',
+      precio_promocional: '', moneda: 'CUP', imagen_url: '',
+      fecha_inicio: dateTimeLocal(), fecha_fin: dateTimeLocal(Date.now() + 7 * 24 * 60 * 60 * 1000), activo: true
+    });
     const [negocioId, setNegocioId] = React.useState('');
     const [businessName, setBusinessName] = React.useState('');
     const [esTiendaExterna, setEsTiendaExterna] = React.useState(false);
@@ -49,6 +60,13 @@
     });
     const [statsLoading, setStatsLoading] = React.useState(false);
     const [statsMessage, setStatsMessage] = React.useState('');
+    const [promotions, setPromotions] = React.useState([]);
+    const [promotionsLoading, setPromotionsLoading] = React.useState(false);
+    const [promotionSaving, setPromotionSaving] = React.useState(false);
+    const [promotionUploading, setPromotionUploading] = React.useState(false);
+    const [promotionMessage, setPromotionMessage] = React.useState('');
+    const [promotionForm, setPromotionForm] = React.useState(emptyPromotion);
+    const promotionInputRef = React.useRef(null);
     const [form, setForm] = React.useState({
       id: '',
       nombre: '',
@@ -178,11 +196,38 @@
       }
     };
 
+    const loadPromotions = async () => {
+      try {
+        if (!negocioId) return;
+        setPromotionsLoading(true);
+        const encoded = encodeURIComponent(negocioId);
+        const [rows, metrics] = await Promise.all([
+          supabaseRequest(`promociones_romahub?negocio_id=eq.${encoded}&select=*&order=created_at.desc`),
+          supabaseRequest('rpc/mis_metricas_promociones_romahub', {
+            method: 'POST',
+            body: JSON.stringify({ p_negocio_id: negocioId, p_dias: 30 })
+          })
+        ]);
+        const metricById = Object.fromEntries((Array.isArray(metrics) ? metrics : []).map((metric) => [String(metric.id), metric]));
+        setPromotions((rows || []).map((promotion) => ({
+          ...promotion,
+          vistas: Number(metricById[String(promotion.id)]?.vistas || 0),
+          contactos: Number(metricById[String(promotion.id)]?.contactos || 0)
+        })));
+      } catch (error) {
+        console.error('BusinessPanelPage.loadPromotions error:', error);
+        setPromotionMessage(error.message || 'No se pudieron cargar las promociones.');
+      } finally {
+        setPromotionsLoading(false);
+      }
+    };
+
     React.useEffect(() => {
       if (negocioId) {
         loadStore();
         loadServices();
         loadStats();
+        loadPromotions();
       }
     }, [negocioId]);
 
@@ -207,6 +252,106 @@
 
     const updateForm = (field, value) => {
       setForm((current) => ({ ...current, [field]: value }));
+    };
+
+    const resetPromotionForm = () => setPromotionForm(emptyPromotion());
+
+    const updatePromotionForm = (field, value) => {
+      setPromotionForm((current) => ({ ...current, [field]: value }));
+    };
+
+    const editPromotion = (promotion) => {
+      setSection('promociones');
+      setPromotionForm({
+        id: promotion.id || '',
+        titulo: promotion.titulo || '',
+        descripcion: promotion.descripcion || '',
+        tipo: promotion.tipo || 'general',
+        precio_anterior: promotion.precio_anterior == null ? '' : String(promotion.precio_anterior),
+        precio_promocional: promotion.precio_promocional == null ? '' : String(promotion.precio_promocional),
+        moneda: promotion.moneda || 'CUP',
+        imagen_url: promotion.imagen_url || '',
+        fecha_inicio: dateTimeLocal(promotion.fecha_inicio),
+        fecha_fin: dateTimeLocal(promotion.fecha_fin),
+        activo: promotion.activo !== false
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const savePromotion = async (event) => {
+      try {
+        event.preventDefault();
+        setPromotionMessage('');
+        if (!negocioId) throw new Error('No se encontró el negocio.');
+        if (promotionForm.titulo.trim().length < 3) throw new Error('Escribe un título de al menos 3 caracteres.');
+        const start = new Date(promotionForm.fecha_inicio);
+        const end = new Date(promotionForm.fecha_fin);
+        if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) throw new Error('La fecha final debe ser posterior al inicio.');
+        const previousPrice = promotionForm.precio_anterior === '' ? null : Number(promotionForm.precio_anterior);
+        const promoPrice = promotionForm.precio_promocional === '' ? null : Number(promotionForm.precio_promocional);
+        if ((previousPrice != null && previousPrice < 0) || (promoPrice != null && promoPrice < 0)) throw new Error('Los precios no pueden ser negativos.');
+        if (previousPrice != null && promoPrice != null && promoPrice >= previousPrice) throw new Error('El precio de oferta debe ser menor que el precio anterior.');
+        setPromotionSaving(true);
+        const payload = {
+          negocio_id: negocioId,
+          titulo: promotionForm.titulo.trim(),
+          descripcion: promotionForm.descripcion.trim() || null,
+          tipo: promotionForm.tipo,
+          precio_anterior: previousPrice,
+          precio_promocional: promoPrice,
+          moneda: promotionForm.moneda,
+          imagen_url: promotionForm.imagen_url.trim() || null,
+          fecha_inicio: start.toISOString(),
+          fecha_fin: end.toISOString(),
+          activo: promotionForm.activo
+        };
+        if (promotionForm.id) {
+          await supabaseRequest(`promociones_romahub?id=eq.${encodeURIComponent(promotionForm.id)}`, { method: 'PATCH', body: JSON.stringify(payload) });
+        } else {
+          await supabaseRequest('promociones_romahub', { method: 'POST', body: JSON.stringify(payload) });
+        }
+        sessionStorage.removeItem('romahub-negocios-v3');
+        setPromotionMessage(promotionForm.id ? 'Promoción actualizada.' : 'Promoción publicada.');
+        resetPromotionForm();
+        await loadPromotions();
+      } catch (error) {
+        console.error('BusinessPanelPage.savePromotion error:', error);
+        setPromotionMessage(error.message || 'No se pudo guardar la promoción.');
+      } finally {
+        setPromotionSaving(false);
+      }
+    };
+
+    const togglePromotion = async (promotion) => {
+      try {
+        setPromotionMessage('');
+        await supabaseRequest(`promociones_romahub?id=eq.${encodeURIComponent(promotion.id)}`, {
+          method: 'PATCH', body: JSON.stringify({ activo: promotion.activo === false })
+        });
+        sessionStorage.removeItem('romahub-negocios-v3');
+        await loadPromotions();
+      } catch (error) {
+        console.error('BusinessPanelPage.togglePromotion error:', error);
+        setPromotionMessage(error.message || 'No se pudo cambiar el estado.');
+      }
+    };
+
+    const onPickPromotionImage = async (event) => {
+      const file = event.target.files?.[0];
+      event.target.value = '';
+      if (!file) return;
+      try {
+        setPromotionUploading(true);
+        setPromotionMessage('');
+        if (!window.RomaUpload) throw new Error('No se cargó el subidor de imágenes.');
+        const url = await window.RomaUpload.subirImagenProducto(file, promotionForm.titulo || 'promocion');
+        updatePromotionForm('imagen_url', url);
+      } catch (error) {
+        console.error('BusinessPanelPage.onPickPromotionImage error:', error);
+        setPromotionMessage(error.message || 'No se pudo subir la imagen.');
+      } finally {
+        setPromotionUploading(false);
+      }
     };
 
     const positionCoverFromPointer = (event) => {
@@ -258,7 +403,7 @@
           }));
           setBusinessName(saved.nombre || businessName);
         }
-        sessionStorage.removeItem('romahub-negocios-v2');
+        sessionStorage.removeItem('romahub-negocios-v3');
         setPresentationMessage('Perfil actualizado correctamente.');
       } catch (error) {
         console.error('BusinessPanelPage.savePresentation error:', error);
@@ -303,7 +448,7 @@
           })
         });
         setServices((current) => current.map((service, index) => ({ ...service, orden: index })));
-        sessionStorage.removeItem('romahub-negocios-v2');
+        sessionStorage.removeItem('romahub-negocios-v3');
         setServicesMessage('Orden y grupos guardados correctamente.');
       } catch (error) {
         console.error('BusinessPanelPage.saveServices error:', error);
@@ -635,7 +780,7 @@
           </article>
         </section>
 
-        <nav className="mt-5 surface-rr p-2 grid grid-cols-1 sm:grid-cols-3 gap-2" aria-label="Secciones del panel" data-name="panel-sections" data-file="pages/panel/BusinessPanelPage.js">
+        <nav className="mt-5 surface-rr p-2 grid grid-cols-2 lg:grid-cols-4 gap-2" aria-label="Secciones del panel" data-name="panel-sections" data-file="pages/panel/BusinessPanelPage.js">
           <button
             type="button"
             className={`btn-rr ${section === 'perfil' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
@@ -653,6 +798,15 @@
             data-file="pages/panel/BusinessPanelPage.js"
           >
             Productos y cursos
+          </button>
+          <button
+            type="button"
+            className={`btn-rr ${section === 'promociones' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+            onClick={() => { setSection('promociones'); loadPromotions(); }}
+            data-name="section-promotions"
+            data-file="pages/panel/BusinessPanelPage.js"
+          >
+            Promociones
           </button>
           <button
             type="button"
@@ -1001,6 +1155,134 @@
               <p className="mt-2 text-sm md:text-base font-semibold leading-relaxed">{statsInsight}</p>
               <p className="mt-2 text-xs text-[var(--text-muted)]">Las estadísticas comienzan a registrarse desde esta actualización; no incluyen visitas anteriores.</p>
             </article>
+          </section>
+        ) : section === 'promociones' ? (
+          <section className="mt-5 grid grid-cols-1 lg:grid-cols-[390px_1fr] gap-4 items-start" data-name="promotions-section">
+            <form className="surface-rr p-5 md:p-6 space-y-4" onSubmit={savePromotion} data-name="promotion-form">
+              <div>
+                <p className="kicker-rr">Oferta temporal</p>
+                <h2 className="mt-1 text-xl font-semibold">{promotionForm.id ? 'Editar promoción' : 'Crear promoción'}</h2>
+                <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed">Define cuándo se muestra. Al vencer, desaparecerá automáticamente de RomaHub.</p>
+              </div>
+
+              <label className="block">
+                <span className="text-xs font-semibold text-[var(--text-muted)]">Título de la oferta</span>
+                <input className="input-rr mt-1" value={promotionForm.titulo} onChange={(e) => updatePromotionForm('titulo', e.target.value.slice(0, 120))} maxLength={120} placeholder="Ej: 20% en uñas acrílicas" required />
+              </label>
+              <label className="block">
+                <span className="text-xs font-semibold text-[var(--text-muted)]">Descripción</span>
+                <textarea className="input-rr mt-1 min-h-[88px] resize-y" value={promotionForm.descripcion} onChange={(e) => updatePromotionForm('descripcion', e.target.value.slice(0, 600))} maxLength={600} placeholder="Explica qué incluye y cualquier condición." />
+              </label>
+              <label className="block">
+                <span className="text-xs font-semibold text-[var(--text-muted)]">Tipo</span>
+                <select className="input-rr mt-1 bg-white" value={promotionForm.tipo} onChange={(e) => updatePromotionForm('tipo', e.target.value)}>
+                  <option value="general">Oferta general</option>
+                  <option value="servicio">Servicio</option>
+                  <option value="producto">Producto</option>
+                  <option value="curso">Curso</option>
+                </select>
+              </label>
+
+              <div className="grid grid-cols-2 gap-2">
+                <label className="block">
+                  <span className="text-xs font-semibold text-[var(--text-muted)]">Precio anterior</span>
+                  <input className="input-rr mt-1" type="number" min="0" step="0.01" value={promotionForm.precio_anterior} onChange={(e) => updatePromotionForm('precio_anterior', e.target.value)} placeholder="Opcional" />
+                </label>
+                <label className="block">
+                  <span className="text-xs font-semibold text-[var(--text-muted)]">Precio de oferta</span>
+                  <input className="input-rr mt-1" type="number" min="0" step="0.01" value={promotionForm.precio_promocional} onChange={(e) => updatePromotionForm('precio_promocional', e.target.value)} placeholder="Opcional" />
+                </label>
+              </div>
+              <select className="input-rr bg-white" value={promotionForm.moneda} onChange={(e) => updatePromotionForm('moneda', e.target.value)} aria-label="Moneda de la promoción">
+                <option value="CUP">CUP</option><option value="USD">USD</option><option value="EUR">EUR</option><option value="MXN">MXN</option>
+              </select>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
+                <label className="block">
+                  <span className="text-xs font-semibold text-[var(--text-muted)]">Comienza</span>
+                  <input className="input-rr mt-1" type="datetime-local" value={promotionForm.fecha_inicio} onChange={(e) => updatePromotionForm('fecha_inicio', e.target.value)} required />
+                </label>
+                <label className="block">
+                  <span className="text-xs font-semibold text-[var(--text-muted)]">Termina</span>
+                  <input className="input-rr mt-1" type="datetime-local" value={promotionForm.fecha_fin} onChange={(e) => updatePromotionForm('fecha_fin', e.target.value)} required />
+                </label>
+              </div>
+
+              <div className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-3">
+                <div className="w-16 h-16 rounded-xl bg-white border border-[var(--border)] overflow-hidden flex items-center justify-center shrink-0">
+                  {promotionUploading ? <span className="w-5 h-5 rounded-full border-2 border-[var(--border)] border-t-[var(--primary-color)] animate-spin"></span> : promotionForm.imagen_url ? <img src={promotionForm.imagen_url} alt="Vista previa" className="w-full h-full object-cover" /> : <span className="icon-image text-xl text-[var(--primary-color)]"></span>}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold">Imagen de la oferta</p>
+                  <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">Opcional. Si no subes una, usaremos tu logo.</p>
+                  <input ref={promotionInputRef} type="file" accept="image/*" className="hidden" onChange={onPickPromotionImage} />
+                  <button type="button" className="mt-2 btn-rr btn-ghost-rr py-2 px-3 text-xs" onClick={() => promotionInputRef.current?.click()} disabled={promotionUploading}>{promotionUploading ? 'Subiendo...' : 'Subir imagen'}</button>
+                </div>
+              </div>
+
+              <label className="rounded-xl border border-[var(--border)] p-3 flex items-center gap-2 text-sm font-medium">
+                <input type="checkbox" checked={promotionForm.activo} onChange={(e) => updatePromotionForm('activo', e.target.checked)} />
+                Publicar según estas fechas
+              </label>
+              {promotionMessage ? <p className="text-sm text-[var(--text-muted)] leading-relaxed">{promotionMessage}</p> : null}
+              <div className="grid grid-cols-2 gap-2">
+                <button type="button" className="btn-rr btn-ghost-rr" onClick={resetPromotionForm}>Limpiar</button>
+                <button type="submit" className="btn-rr btn-primary-rr" disabled={promotionSaving || promotionUploading}>{promotionSaving ? 'Guardando...' : promotionForm.id ? 'Actualizar' : 'Publicar oferta'}</button>
+              </div>
+            </form>
+
+            <div className="surface-rr overflow-hidden" data-name="promotions-list">
+              <div className="p-5 md:p-6 border-b border-[var(--border)] flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                <div>
+                  <p className="kicker-rr">Tus campañas</p>
+                  <h2 className="mt-1 text-xl font-semibold">Promociones publicadas</h2>
+                  <p className="mt-1 text-sm text-[var(--text-muted)]">Vistas y contactos de los últimos 30 días.</p>
+                </div>
+                <button type="button" className="btn-rr btn-ghost-rr shrink-0" onClick={loadPromotions} disabled={promotionsLoading}>{promotionsLoading ? 'Actualizando...' : 'Actualizar'}</button>
+              </div>
+              {promotionsLoading && !promotions.length ? (
+                <p className="p-6 text-sm text-[var(--text-muted)]">Cargando promociones...</p>
+              ) : promotions.length ? (
+                <div className="divide-y divide-[var(--border)]">
+                  {promotions.map((promotion) => {
+                    const now = Date.now();
+                    const startsAt = new Date(promotion.fecha_inicio).getTime();
+                    const endsAt = new Date(promotion.fecha_fin).getTime();
+                    const status = promotion.activo === false ? 'Pausada' : startsAt > now ? 'Programada' : endsAt <= now ? 'Vencida' : 'Activa';
+                    const statusClass = status === 'Activa' ? 'bg-green-50 text-green-700' : status === 'Programada' ? 'bg-blue-50 text-blue-700' : status === 'Vencida' ? 'bg-gray-100 text-gray-600' : 'bg-amber-50 text-amber-700';
+                    return (
+                      <article key={promotion.id} className="p-4 md:p-5 grid grid-cols-[72px_1fr] sm:grid-cols-[72px_1fr_auto] gap-3 items-start">
+                        <div className="w-[72px] h-[72px] rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] overflow-hidden flex items-center justify-center">
+                          {promotion.imagen_url ? <img src={promotion.imagen_url} alt={promotion.titulo} className="w-full h-full object-cover" loading="lazy" /> : <span className="icon-tag text-xl text-[var(--primary-color)]"></span>}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="text-sm font-semibold leading-snug">{promotion.titulo}</h3>
+                            <span className={`px-2 py-1 rounded-full text-[10px] font-bold ${statusClass}`}>{status}</span>
+                          </div>
+                          <p className="mt-1 text-xs text-[var(--text-muted)]">Termina {new Date(promotion.fecha_fin).toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' })}</p>
+                          {(promotion.precio_promocional != null || promotion.precio_anterior != null) ? <p className="mt-2 text-sm font-bold text-[var(--primary-color)]">{promotion.precio_promocional != null ? Format.formatPrecioCUP(promotion.precio_promocional, promotion.moneda) : 'Sin precio'} {promotion.precio_anterior != null ? <span className="ml-1 text-xs font-normal text-[var(--text-muted)] line-through">{Format.formatPrecioCUP(promotion.precio_anterior, promotion.moneda)}</span> : null}</p> : null}
+                          <div className="mt-3 flex gap-2 text-[11px] text-[var(--text-muted)]">
+                            <span className="chip-rr px-2.5 py-1">{promotion.vistas || 0} vistas</span>
+                            <span className="chip-rr px-2.5 py-1">{promotion.contactos || 0} contactos</span>
+                          </div>
+                        </div>
+                        <div className="col-span-2 sm:col-span-1 flex sm:flex-col gap-2">
+                          <button type="button" className="btn-rr btn-ghost-rr py-2 px-3 text-xs flex-1" onClick={() => editPromotion(promotion)}>Editar</button>
+                          <button type="button" className="btn-rr btn-ghost-rr py-2 px-3 text-xs flex-1" onClick={() => togglePromotion(promotion)}>{promotion.activo === false ? 'Activar' : 'Pausar'}</button>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="p-7 text-center">
+                  <span className="icon-tag text-4xl text-[var(--primary-color)] opacity-50"></span>
+                  <p className="mt-3 text-sm font-semibold">Aún no has publicado promociones</p>
+                  <p className="mt-1 text-sm text-[var(--text-muted)]">Crea una oferta corta, clara y con fecha límite para atraer más clientas.</p>
+                </div>
+              )}
+            </div>
           </section>
         ) : (
         <section className="mt-5 grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-4 items-start" data-name="store-grid" data-file="pages/panel/BusinessPanelPage.js">

@@ -2,6 +2,7 @@
   try {
     const b = business;
     const selectedItemId = new URLSearchParams(window.location.search).get('item') || '';
+    const selectedPromotionId = new URLSearchParams(window.location.search).get('promo') || '';
     const initials = String(b.nombre || 'N').trim().slice(0, 2).toUpperCase();
     const catalog = b.categoriasCatalogo || [];
     const hasStore = Boolean((catalog.find((section) => section.tipo === 'productos')?.items || []).length || (catalog.find((section) => section.tipo === 'cursos')?.items || []).length);
@@ -222,6 +223,7 @@
         <div className="container-rr mt-5 md:mt-7" data-name="business-content" data-file="pages/business/BusinessPage.js">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 items-start" data-name="business-grid" data-file="pages/business/BusinessPage.js">
             <div data-name="left" data-file="pages/business/BusinessPage.js">
+              <BusinessPromotions business={b} selectedPromotionId={selectedPromotionId} />
               <BusinessCatalog business={b} onAddToCart={addToCart} selectedItemId={selectedItemId} data-name="catalog" data-file="pages/business/BusinessPage.js" />
               {hasStore ? <div className="lg:hidden mt-4" data-name="mobile-cart" data-file="pages/business/BusinessPage.js">
                 {renderCartCard()}

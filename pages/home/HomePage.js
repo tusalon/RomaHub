@@ -3,6 +3,7 @@ function HomePage({ initialParams }) {
     const top = MockData.listTopRated();
     const featured = MockData.listWeeklyFeatured();
     const showcase = MockData.listShowcaseProducts(8);
+    const promotions = MockData.listPromotions(8);
     const allBusinesses = MockData.listBusinesses();
 
     const provinceCounts = React.useMemo(() => {
@@ -21,6 +22,24 @@ function HomePage({ initialParams }) {
     return (
       <div data-name="home-page" data-file="pages/home/HomePage.js">
         <HomeHero initialParams={initialParams} data-name="home-hero" data-file="pages/home/HomePage.js" />
+
+        {promotions.length ? (
+          <section className="mt-10" aria-labelledby="home-promotions-title" data-name="home-promotions">
+            <div className="container-rr">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5">
+                <div>
+                  <p className="kicker-rr">Aprovecha ahora</p>
+                  <h2 id="home-promotions-title" className="mt-1 text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]">Ofertas por tiempo limitado</h2>
+                  <p className="mt-1 text-sm text-[var(--text-muted)]">Promociones activas de negocios de belleza en RomaHub.</p>
+                </div>
+                <button type="button" className="btn-rr btn-ghost-rr shrink-0" onClick={() => Navigation.goToSearch('', '', '', true)}>Ver negocios con ofertas</button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {promotions.map((promotion) => <PromotionCard key={promotion.id} promotion={promotion} />)}
+              </div>
+            </div>
+          </section>
+        ) : null}
 
         {top.length > 0 ? (
           <BusinessRail
