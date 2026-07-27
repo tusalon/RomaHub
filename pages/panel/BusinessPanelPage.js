@@ -460,6 +460,21 @@
       goToLogin();
     };
 
+    const openTask = (task) => {
+      if (!task) return;
+      setSection(task.section || 'perfil');
+      if (task.tab) setTab(task.tab);
+      window.setTimeout(() => {
+        const target = document.querySelector(`[data-task-target="${task.target || task.id}"]`);
+        if (!target) return;
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const control = target.matches('input, textarea, select, button')
+          ? target
+          : target.querySelector('input, textarea, select, button');
+        control?.focus?.({ preventScroll: true });
+      }, 120);
+    };
+
     const currentItems = items[tab] || [];
     const isProduct = tab === 'productos';
     const serviceCategoryOptions = Array.from(new Set(
@@ -468,14 +483,16 @@
     const totalActivosExterna = (items.productos || []).filter((p) => p.activo !== false).length
       + (items.cursos || []).filter((c) => c.activo !== false).length;
     const municipios = window.getMunicipiosDeProvincia?.(presentation.provincia, presentation.municipio) || [];
-    const hasCatalog = services.some((service) => service.activo !== false) || totalActivosExterna > 0;
+    const activeServices = services.filter((service) => service.activo !== false);
+    const isDirectoryReady = activeServices.length > 0;
+    const hasStoreOffer = esTiendaExterna ? totalActivosExterna > 0 : isDirectoryReady;
     const profileTasks = [
       { id: 'descripcion', label: 'Descripción clara', done: presentation.descripcion.trim().length >= 40, section: 'perfil' },
-      { id: 'logo', label: 'Logo o foto del negocio', done: Boolean(presentation.logoUrl), section: 'perfil' },
+      { id: 'logo', label: 'Logo o foto del negocio', done: Boolean(presentation.logoUrl), section: 'perfil', target: esTiendaExterna ? 'logo' : 'rservas-data' },
       { id: 'portada', label: 'Foto de portada', done: Boolean(presentation.coverUrl), section: 'perfil' },
-      { id: 'ubicacion', label: 'Provincia y municipio', done: Boolean(presentation.provincia && presentation.municipio), section: 'perfil' },
-      { id: 'whatsapp', label: 'WhatsApp de contacto', done: /^\d{8}$/.test(presentation.whatsapp), section: 'perfil' },
-      { id: 'catalogo', label: 'Algo para ofrecer', done: hasCatalog, section: esTiendaExterna ? 'tienda' : 'perfil' }
+      { id: 'ubicacion', label: 'Provincia y municipio', done: Boolean(presentation.provincia && presentation.municipio), section: 'perfil', target: esTiendaExterna ? 'ubicacion' : 'rservas-data' },
+      { id: 'whatsapp', label: 'WhatsApp de contacto', done: /^\d{8}$/.test(presentation.whatsapp), section: 'perfil', target: esTiendaExterna ? 'whatsapp' : 'rservas-data' },
+      { id: 'catalogo', label: esTiendaExterna ? 'Producto o curso activo' : 'Servicio activo', done: hasStoreOffer, section: esTiendaExterna ? 'tienda' : 'perfil', tab: esTiendaExterna ? 'productos' : null }
     ];
     const completedTasks = profileTasks.filter((task) => task.done).length;
     const profileProgress = Math.round((completedTasks / profileTasks.length) * 100);
@@ -513,7 +530,6 @@
                 </span>
               ) : null}
               <a className="btn-rr btn-ghost-rr flex items-center justify-center gap-2" href={`business.html?id=${encodeURIComponent(negocioId)}`} data-name="view-business" data-file="pages/panel/BusinessPanelPage.js">Ver ficha</a>
-              <ShareBusiness businessId={negocioId} businessName={businessName} compact={true} />
               <button className="btn-rr btn-ghost-rr" type="button" onClick={signOut} data-name="logout" data-file="pages/panel/BusinessPanelPage.js">Salir</button>
             </div>
           </div>
@@ -525,7 +541,7 @@
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="kicker-rr">Tu escaparate</p>
-                  <h2 className="mt-1 text-xl font-semibold">Perfil {profileProgress}% listo</h2>
+                  <h2 className="mt-1 text-xl font-semibold">{esTiendaExterna ? 'Tienda' : 'Perfil'} {profileProgress}% {esTiendaExterna ? 'lista' : 'listo'}</h2>
                 </div>
                 <span className="text-sm font-bold text-[var(--primary-color)]">{completedTasks}/{profileTasks.length}</span>
               </div>
@@ -534,10 +550,10 @@
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 {profileTasks.map((task) => (
-                  <span key={task.id} className={`chip-rr px-3 py-2 text-xs flex items-center gap-1.5 ${task.done ? 'text-green-700 bg-green-50' : 'text-[var(--text-muted)]'}`}>
+                  <button key={task.id} type="button" disabled={task.done} onClick={() => openTask(task)} className={`chip-rr px-3 py-2 text-xs flex items-center gap-1.5 ${task.done ? 'text-green-700 bg-green-50 cursor-default' : 'text-[var(--text-muted)] hover:border-[var(--primary-color)] hover:text-[var(--primary-color)]'}`}>
                     <span className={task.done ? 'icon-circle-check' : 'icon-circle'}></span>
                     {task.label}
-                  </span>
+                  </button>
                 ))}
               </div>
             </div>
@@ -546,7 +562,7 @@
                 <>
                   <p className="text-xs font-bold uppercase tracking-wide text-[var(--text-muted)]">Siguiente paso</p>
                   <p className="mt-1 text-sm font-semibold">Completa: {nextTask.label}</p>
-                  <button type="button" className="mt-3 btn-rr btn-primary-rr w-full py-2.5 text-sm" onClick={() => setSection(nextTask.section)}>
+                  <button type="button" className="mt-3 btn-rr btn-primary-rr w-full py-2.5 text-sm" onClick={() => openTask(nextTask)}>
                     Completar ahora
                   </button>
                 </>
@@ -558,6 +574,64 @@
               )}
             </div>
           </div>
+        </section>
+
+        <section className="mt-5 grid grid-cols-1 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] gap-4 items-stretch" data-name="activation-tools" data-file="pages/panel/BusinessPanelPage.js">
+          <article className="surface-rr overflow-hidden" data-name="storefront-preview">
+            <div className="px-5 pt-5 md:px-6 md:pt-6 flex items-start justify-between gap-3">
+              <div>
+                <p className="kicker-rr">Vista previa</p>
+                <h2 className="mt-1 text-xl font-semibold">Así se presenta tu negocio</h2>
+              </div>
+              <a className="btn-rr btn-ghost-rr py-2 px-3 text-xs shrink-0" href={`business.html?id=${encodeURIComponent(negocioId)}`} target="_blank" rel="noopener noreferrer">Abrir perfil</a>
+            </div>
+            <div className="m-5 md:m-6 rounded-2xl border border-[var(--border)] overflow-hidden bg-white shadow-sm">
+              <div className="relative h-36 sm:h-44 bg-[var(--bg-muted)] overflow-hidden">
+                {presentation.coverUrl ? (
+                  <img src={presentation.coverUrl} alt="Vista previa de la portada" className="absolute inset-0 w-full h-full object-cover" style={{ objectPosition: `${presentation.coverX}% ${presentation.coverY}%` }} />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-sm text-[var(--text-muted)]">Añade una portada para destacar</div>
+                )}
+                <div className="absolute left-4 -bottom-0.5 translate-y-1/2 w-16 h-16 rounded-2xl border-4 border-white bg-white overflow-hidden shadow-md flex items-center justify-center">
+                  {presentation.logoUrl ? <img src={presentation.logoUrl} alt="Logo del negocio" className="w-full h-full object-cover" /> : <span className="text-lg font-extrabold text-[var(--primary-color)]">{String(presentation.nombre || businessName || 'R').trim().slice(0, 2).toUpperCase()}</span>}
+                </div>
+                <span className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-sm ${isDirectoryReady ? 'bg-green-50 text-green-700' : 'bg-white text-[var(--primary-color)]'}`}>
+                  {isDirectoryReady ? 'Disponible' : 'Próximamente'}
+                </span>
+              </div>
+              <div className="px-4 pt-11 pb-4">
+                <h3 className="text-lg font-semibold truncate">{presentation.nombre || businessName}</h3>
+                <p className="mt-1 text-xs text-[var(--text-muted)] truncate">{[presentation.categoria, presentation.municipio, presentation.provincia].filter(Boolean).join(' · ') || 'Completa la especialidad y ubicación'}</p>
+                <p className="mt-3 text-sm text-[var(--text-muted)] leading-relaxed max-h-12 overflow-hidden">{presentation.descripcion || 'Escribe una descripción para contarle a Cuba qué hace especial a tu negocio.'}</p>
+              </div>
+            </div>
+          </article>
+
+          <article className="surface-rr p-5 md:p-6 flex flex-col" data-name="promotion-center">
+            <div className={`rounded-xl border p-4 ${isDirectoryReady ? 'border-green-200 bg-green-50' : 'border-amber-200 bg-amber-50'}`} role="status">
+              <p className={`text-sm font-semibold ${isDirectoryReady ? 'text-green-800' : 'text-amber-900'}`}>
+                {isDirectoryReady ? 'Tu negocio está visible en el directorio' : esTiendaExterna && hasStoreOffer ? 'Tu tienda está activa; el directorio mostrará “Próximamente”' : 'Tu negocio aparece como “Próximamente”'}
+              </p>
+              <p className={`mt-1 text-xs leading-relaxed ${isDirectoryReady ? 'text-green-700' : 'text-amber-800'}`}>
+                {isDirectoryReady
+                  ? 'Las clientas pueden encontrarte por nombre, ubicación y servicios.'
+                  : esTiendaExterna && hasStoreOffer
+                    ? 'Tus productos y cursos sí pueden venderse y compartirse. El directorio de servicios se activa cuando el negocio tiene servicios publicados.'
+                    : esTiendaExterna
+                      ? 'Publica un producto o curso para comenzar a vender y compartir tu tienda.'
+                      : 'Publica y activa al menos un servicio en Rservasroma para entrar al directorio disponible.'}
+              </p>
+              {!isDirectoryReady && !hasStoreOffer ? (
+                <button type="button" className="mt-3 text-xs font-bold text-[var(--primary-color)] hover:underline" onClick={() => openTask(profileTasks.find((task) => task.id === 'catalogo'))}>Completar oferta ahora</button>
+              ) : null}
+            </div>
+            <div className="mt-5">
+              <p className="kicker-rr">Hazte conocer</p>
+              <h2 className="mt-1 text-xl font-semibold">Promociona tu perfil</h2>
+              <p className="mt-1 mb-4 text-sm text-[var(--text-muted)] leading-relaxed">Comparte el enlace, muestra el QR o usa el texto listo para WhatsApp.</p>
+              <ShareBusiness businessId={negocioId} businessName={presentation.nombre || businessName} compact={true} ownerMode={true} />
+            </div>
+          </article>
         </section>
 
         <nav className="mt-5 surface-rr p-2 grid grid-cols-1 sm:grid-cols-3 gap-2" aria-label="Secciones del panel" data-name="panel-sections" data-file="pages/panel/BusinessPanelPage.js">
@@ -603,7 +677,7 @@
 
               {esTiendaExterna ? (
                 <div className="space-y-4" data-name="external-business-fields" data-file="pages/panel/BusinessPanelPage.js">
-                  <div className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-3" data-name="logo-uploader">
+                  <div className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-3" data-name="logo-uploader" data-task-target="logo">
                     <div className="w-16 h-16 rounded-xl border border-[var(--border)] bg-white overflow-hidden flex items-center justify-center shrink-0">
                       {profileUpload === 'logo' ? <div className="w-5 h-5 rounded-full border-2 border-[var(--border)] border-t-[var(--primary-color)] animate-spin"></div> : presentation.logoUrl ? (
                         <img src={presentation.logoUrl} alt={`Logo de ${businessName}`} className="w-full h-full object-cover" />
@@ -624,7 +698,7 @@
                     <input className="input-rr mt-1" value={presentation.nombre} onChange={(e) => setPresentation((current) => ({ ...current, nombre: e.target.value.slice(0, 100) }))} maxLength={100} required />
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <label className="block">
+                    <label className="block" data-task-target="whatsapp">
                       <span className="text-xs font-semibold text-[var(--text-muted)]">WhatsApp</span>
                       <div className="mt-1 flex rounded-[var(--radius-md)] border border-[var(--border)] bg-white overflow-hidden">
                         <span className="px-3 py-3 text-sm font-semibold text-[var(--primary-color)] border-r border-[var(--border)] bg-[var(--bg-muted)]">+53</span>
@@ -636,7 +710,7 @@
                       <input className="input-rr mt-1" value={presentation.categoria} onChange={(e) => setPresentation((current) => ({ ...current, categoria: e.target.value.slice(0, 80) }))} placeholder="Ej. Uñas, peluquería, cosmética" maxLength={80} />
                     </label>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" data-task-target="ubicacion">
                     <label className="block">
                       <span className="text-xs font-semibold text-[var(--text-muted)]">Provincia</span>
                       <select className="input-rr mt-1 bg-white" value={presentation.provincia} onChange={(e) => setPresentation((current) => ({ ...current, provincia: e.target.value, municipio: '' }))} required>
@@ -654,7 +728,7 @@
                   </div>
                 </div>
               ) : (
-                <div className="flex items-start gap-3 rounded-xl border border-blue-100 bg-blue-50 p-4" data-name="rservas-profile-note" data-file="pages/panel/BusinessPanelPage.js">
+                <div className="flex items-start gap-3 rounded-xl border border-blue-100 bg-blue-50 p-4" data-name="rservas-profile-note" data-task-target="rservas-data" data-file="pages/panel/BusinessPanelPage.js">
                   <div className="icon-info text-xl text-blue-700 mt-0.5"></div>
                   <div>
                     <p className="text-sm font-semibold text-blue-900">Tus datos principales vienen de Rservasroma</p>
@@ -663,7 +737,7 @@
                 </div>
               )}
 
-              <div data-name="cover-position-editor" data-file="pages/panel/BusinessPanelPage.js">
+              <div data-name="cover-position-editor" data-task-target="portada" data-file="pages/panel/BusinessPanelPage.js">
                 <div className="mb-2 flex items-center justify-between gap-3">
                   <span className="text-xs font-semibold text-[var(--text-muted)]">Foto de portada</span>
                   {esTiendaExterna ? (
@@ -754,7 +828,7 @@
                 </div>
               </div>
 
-              <label className="block" data-name="business-description-label" data-file="pages/panel/BusinessPanelPage.js">
+              <label className="block" data-name="business-description-label" data-task-target="descripcion" data-file="pages/panel/BusinessPanelPage.js">
                 <span className="flex items-center justify-between text-xs font-semibold text-[var(--text-muted)]">
                   Descripción del negocio <span>{presentation.descripcion.length}/600</span>
                 </span>
@@ -776,7 +850,7 @@
               </button>
             </form>
 
-            <div className="surface-rr overflow-hidden" data-name="services-organizer" data-file="pages/panel/BusinessPanelPage.js">
+            <div className="surface-rr overflow-hidden" data-name="services-organizer" data-task-target="catalogo" data-file="pages/panel/BusinessPanelPage.js">
               <div className="p-5 md:p-6 border-b border-[var(--border)] flex flex-col sm:flex-row sm:items-start justify-between gap-3" data-name="services-organizer-head" data-file="pages/panel/BusinessPanelPage.js">
                 <div data-name="services-organizer-copy" data-file="pages/panel/BusinessPanelPage.js">
                   <p className="kicker-rr">Catálogo</p>
@@ -928,7 +1002,7 @@
           </section>
         ) : (
         <section className="mt-5 grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-4 items-start" data-name="store-grid" data-file="pages/panel/BusinessPanelPage.js">
-          <form className="surface-rr p-5 md:p-6 space-y-3" onSubmit={saveItem} data-name="store-form" data-file="pages/panel/BusinessPanelPage.js">
+          <form className="surface-rr p-5 md:p-6 space-y-3" onSubmit={saveItem} data-name="store-form" data-task-target="catalogo" data-file="pages/panel/BusinessPanelPage.js">
             <div className="grid grid-cols-2 gap-2" data-name="store-tabs" data-file="pages/panel/BusinessPanelPage.js">
               <button type="button" className={`btn-rr ${isProduct ? 'btn-primary-rr' : 'btn-ghost-rr'}`} onClick={() => { setTab('productos'); resetForm(); }} data-name="tab-products" data-file="pages/panel/BusinessPanelPage.js">Producto</button>
               <button type="button" className={`btn-rr ${!isProduct ? 'btn-primary-rr' : 'btn-ghost-rr'}`} onClick={() => { setTab('cursos'); resetForm(); }} data-name="tab-courses" data-file="pages/panel/BusinessPanelPage.js">Curso</button>

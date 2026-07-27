@@ -1,4 +1,4 @@
-function ShareBusiness({ businessId, businessName, compact = false }) {
+function ShareBusiness({ businessId, businessName, compact = false, ownerMode = false }) {
   try {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState('');
@@ -7,22 +7,29 @@ function ShareBusiness({ businessId, businessName, compact = false }) {
       target.search = new URLSearchParams({ id: String(businessId || '') }).toString();
       return target.toString();
     }, [businessId]);
+    const promotionalText = React.useMemo(() => (
+      `✨ Descubre ${businessName || 'mi negocio'} en RomaHub. Mira nuestros servicios, productos y cursos, y contáctanos directamente.\n\n${url}`
+    ), [businessName, url]);
     const trackShared = () => window.RomaAnalytics?.track?.({ negocioId: businessId, evento: 'compartir' });
+
+    const writeClipboard = async (value) => {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        return;
+      }
+      const input = document.createElement('textarea');
+      input.value = value;
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+    };
 
     const copyLink = async () => {
       try {
-        if (navigator.clipboard?.writeText) {
-          await navigator.clipboard.writeText(url);
-        } else {
-          const input = document.createElement('textarea');
-          input.value = url;
-          input.style.position = 'fixed';
-          input.style.opacity = '0';
-          document.body.appendChild(input);
-          input.select();
-          document.execCommand('copy');
-          input.remove();
-        }
+        await writeClipboard(url);
         trackShared();
         setMessage('Enlace copiado');
         window.setTimeout(() => setMessage(''), 1800);
@@ -32,12 +39,33 @@ function ShareBusiness({ businessId, businessName, compact = false }) {
       }
     };
 
+    const copyPromotion = async () => {
+      try {
+        await writeClipboard(promotionalText);
+        trackShared();
+        setMessage('Texto promocional copiado');
+        window.setTimeout(() => setMessage(''), 2200);
+      } catch (error) {
+        console.error('ShareBusiness.copyPromotion error:', error);
+        setMessage('No se pudo copiar el texto');
+      }
+    };
+
+    const shareOnWhatsApp = () => {
+      try {
+        trackShared();
+        window.open(`https://wa.me/?text=${encodeURIComponent(promotionalText)}`, '_blank', 'noopener,noreferrer');
+      } catch (error) {
+        console.error('ShareBusiness.shareOnWhatsApp error:', error);
+      }
+    };
+
     const share = async () => {
       try {
         if (navigator.share) {
           await navigator.share({
             title: businessName || 'RomaHub',
-            text: `Mira ${businessName || 'este negocio'} en RomaHub`,
+            text: `Descubre ${businessName || 'este negocio'} en RomaHub`,
             url
           });
           trackShared();
@@ -69,7 +97,20 @@ function ShareBusiness({ businessId, businessName, compact = false }) {
             QR
           </button>
         </div>
-        {message ? <p className="mt-1 text-center text-[11px] text-green-700" role="status">{message}</p> : null}
+        {ownerMode ? (
+          <div className="mt-2 space-y-2" data-name="owner-promotion-tools">
+            <button type="button" className="btn-rr btn-primary-rr w-full flex items-center justify-center gap-2" onClick={shareOnWhatsApp}>
+              <span className="icon-message-circle text-base text-white"></span>
+              Promocionar por WhatsApp
+            </button>
+            <button type="button" className="btn-rr btn-ghost-rr w-full flex items-center justify-center gap-2" onClick={copyPromotion}>
+              <span className="icon-copy text-base"></span>
+              Copiar texto promocional
+            </button>
+            <p className="rounded-xl bg-[var(--bg-muted)] p-3 text-xs text-[var(--text-muted)] leading-relaxed whitespace-pre-line" data-name="promotion-preview">{promotionalText}</p>
+          </div>
+        ) : null}
+        {message ? <p className="mt-2 text-center text-[11px] font-semibold text-green-700" role="status" aria-live="polite">{message}</p> : null}
         {open ? (
           <div className="absolute z-40 right-0 mt-2 w-[280px] max-w-[85vw] rounded-2xl border border-[var(--border)] bg-white p-4 shadow-xl text-center" data-name="share-qr">
             <p className="text-sm font-semibold">Escanea para abrir el negocio</p>
