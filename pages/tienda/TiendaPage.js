@@ -91,7 +91,7 @@ function TiendaPage() {
                   : '¿Vendes productos o das cursos? Abre tu tienda gratis y aparece aquí.'}
               </p>
               {!busqueda && tipo === 'todos' ? (
-                <a className="mt-5 btn-rr btn-primary-rr inline-flex items-center gap-2" href="crear-tienda.html" data-name="tienda-vacia-cta" data-file="pages/tienda/TiendaPage.js">
+                <a className="mt-5 btn-rr btn-primary-rr inline-flex items-center gap-2" href="register.html" data-name="tienda-vacia-cta" data-file="pages/tienda/TiendaPage.js">
                   Abrir mi tienda gratis
                   <div className="icon-arrow-right text-xl text-white"></div>
                 </a>

@@ -68,7 +68,7 @@ function Header({ currentParams }) {
                 data-name="nav-register"
                 data-file="components/Header.js"
               >
-                Registrar negocio
+                Abrir tienda gratis
               </a>
               <a
                 className={`btn-rr ${page === 'login.html' || page === 'panel.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
@@ -108,7 +108,7 @@ function Header({ currentParams }) {
                     <div className={`icon-shopping-bag text-xl ${page === 'tienda.html' ? 'text-white' : 'text-[#e83387]'}`} data-name="m-tienda-icon" data-file="components/Header.js"></div>
                   </a>
                   <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="register.html" data-name="m-register" data-file="components/Header.js">
-                    <span data-name="m-register-text" data-file="components/Header.js">Registrar negocio</span>
+                    <span data-name="m-register-text" data-file="components/Header.js">Abrir tienda gratis</span>
                     <div className="icon-arrow-right text-xl text-[#e83387]" data-name="m-register-icon" data-file="components/Header.js"></div>
                   </a>
                   <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="login.html" data-name="m-login" data-file="components/Header.js">

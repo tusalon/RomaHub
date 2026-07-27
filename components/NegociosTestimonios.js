@@ -80,7 +80,7 @@ function NegociosTestimonios() {
               data-name="testimonios-cta-btn"
               data-file="components/NegociosTestimonios.js"
             >
-              Registrar mi negocio
+              Abrir mi tienda gratis
               <div className="icon-arrow-right text-xl text-white" aria-hidden="true" data-name="testimonios-cta-i" data-file="components/NegociosTestimonios.js"></div>
             </a>
           </div>

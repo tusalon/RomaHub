@@ -15,8 +15,7 @@ function Footer() {
       {
         titulo: 'Para negocios',
         enlaces: [
-          { texto: 'Registrar negocio', href: 'register.html' },
-          { texto: 'Abrir tienda gratis', href: 'crear-tienda.html' },
+          { texto: 'Abrir tienda gratis', href: 'register.html' },
           { texto: 'Acceso negocio', href: 'login.html' }
         ]
       },

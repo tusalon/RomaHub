@@ -92,26 +92,15 @@ function HomeHero({ initialParams }) {
               </button>
             </div>
 
-            {/* Las clientas y los negocios son dos publicos distintos: antes
-                "Registrar negocio" y "Abrir tienda" tenian el mismo peso
-                visual que la busqueda de arriba, como si fueran la misma
-                prioridad. Agrupados y etiquetados queda claro que es una
-                invitacion aparte, para quien tiene un salon. */}
             <div className="mt-6 surface-rr p-4 flex flex-col sm:flex-row sm:items-center gap-3 justify-between" data-name="hero-business-cta" data-file="pages/home/HomeHero.js">
               <div data-name="hero-business-copy" data-file="pages/home/HomeHero.js">
                 <p className="text-sm font-bold text-[#111827]" data-name="hero-business-title" data-file="pages/home/HomeHero.js">¿Tienes un salón o negocio de belleza?</p>
-                <p className="text-xs text-[var(--text-muted)] mt-0.5" data-name="hero-business-sub" data-file="pages/home/HomeHero.js">Aparece en RomaHub gratis, sin cuenta ni compromiso.</p>
+                <p className="text-xs text-[var(--text-muted)] mt-0.5" data-name="hero-business-sub" data-file="pages/home/HomeHero.js">Crea tu espacio gratis y recibe pedidos directamente por WhatsApp.</p>
               </div>
-              <div className="flex gap-2 shrink-0" data-name="hero-business-actions" data-file="pages/home/HomeHero.js">
-                <a className="btn-rr btn-ghost-rr text-sm py-2 px-4 flex items-center gap-1.5" href="register.html" data-name="hero-list" data-file="pages/home/HomeHero.js">
-                  Registrar negocio
-                  <div className="icon-sparkles text-base text-[#e83387]" data-name="hero-list-i" data-file="pages/home/HomeHero.js"></div>
-                </a>
-                <a className="btn-rr btn-ghost-rr text-sm py-2 px-4 flex items-center gap-1.5" href="crear-tienda.html" data-name="hero-store" data-file="pages/home/HomeHero.js">
-                  Abrir tienda
-                  <div className="icon-shopping-bag text-base text-[#e83387]" data-name="hero-store-i" data-file="pages/home/HomeHero.js"></div>
-                </a>
-              </div>
+              <a className="btn-rr btn-primary-rr text-sm py-2 px-4 flex items-center justify-center gap-1.5 shrink-0" href="register.html" data-name="hero-store" data-file="pages/home/HomeHero.js">
+                Abrir mi tienda gratis
+                <div className="icon-arrow-right text-base text-white" data-name="hero-store-i" data-file="pages/home/HomeHero.js"></div>
+              </a>
             </div>
 
             <div className="mt-7 flex gap-1" data-name="hero-stats" data-file="pages/home/HomeHero.js">

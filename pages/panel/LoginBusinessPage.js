@@ -109,7 +109,7 @@
               </button>
 
               <a className="mt-3 btn-rr btn-ghost-rr w-full flex items-center justify-center gap-2" href="register.html" data-name="register-link" data-file="pages/panel/LoginBusinessPage.js">
-                Registrar mi negocio
+                Crear mi negocio gratis
               </a>
             </form>
           </div>

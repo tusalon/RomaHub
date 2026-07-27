@@ -1,4 +1,4 @@
-const CACHE_NAME = 'romahub-v19';
+const CACHE_NAME = 'romahub-v20';
 const APP_SHELL = [
   './index.html',
   './manifest.webmanifest',
@@ -89,5 +89,4 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
-
 
