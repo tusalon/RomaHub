@@ -1,6 +1,7 @@
-const CACHE_NAME = 'romahub-v24';
+const CACHE_NAME = 'romahub-v25';
 const APP_SHELL = [
   './index.html',
+  './favoritos.html',
   './manifest.webmanifest',
   './styles/tailwind.css',
   './styles/global.css',

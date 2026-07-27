@@ -11,6 +11,7 @@ const bundles = {
     'utils/navigation.js',
     'utils/format.js',
     'utils/romahub-analytics.js',
+    'utils/romahub-saved.js',
     'data/mockData.js',
     'components/ToastProvider.js',
     'components/Header.js',
@@ -18,6 +19,7 @@ const bundles = {
     'components/Badge.js',
     'components/StarRating.js',
     'components/SearchBar.js',
+    'components/FavoriteButton.js',
     'components/BusinessLogoCard.js',
     'components/BusinessRail.js',
     'components/ProductCard.js',
@@ -34,6 +36,7 @@ const bundles = {
     'utils/navigation.js',
     'utils/format.js',
     'utils/romahub-analytics.js',
+    'utils/romahub-saved.js',
     'data/mockData.js',
     'components/ToastProvider.js',
     'components/Header.js',
@@ -41,6 +44,7 @@ const bundles = {
     'components/Badge.js',
     'components/StarRating.js',
     'components/SearchBar.js',
+    'components/FavoriteButton.js',
     'components/BusinessCard.js',
     'pages/search/SearchPage.js',
     'search-app.js'
@@ -49,6 +53,7 @@ const bundles = {
     'utils/navigation.js',
     'utils/format.js',
     'utils/romahub-analytics.js',
+    'utils/romahub-saved.js',
     'data/mockData.js',
     'components/ToastProvider.js',
     'components/Header.js',
@@ -63,6 +68,7 @@ const bundles = {
     'components/RomaHubUpgradePromo.js',
     'components/NegociosCerca.js',
     'components/ShareBusiness.js',
+    'components/FavoriteButton.js',
     'pages/business/BusinessHeader.js',
     'pages/business/BusinessTabs.js',
     'pages/business/BusinessCatalog.js',
@@ -72,6 +78,7 @@ const bundles = {
   ],
   'register.bundle.js': [
     'utils/navigation.js',
+    'utils/romahub-saved.js',
     'components/ToastProvider.js',
     'components/Header.js',
     'components/Footer.js',
@@ -80,6 +87,7 @@ const bundles = {
   ],
   'login.bundle.js': [
     'utils/navigation.js',
+    'utils/romahub-saved.js',
     'utils/supabase-auth.js',
     'components/ToastProvider.js',
     'components/Header.js',
@@ -91,16 +99,19 @@ const bundles = {
     'utils/navigation.js',
     'utils/format.js',
     'utils/romahub-analytics.js',
+    'utils/romahub-saved.js',
     'data/mockData.js',
     'components/ToastProvider.js',
     'components/Header.js',
     'components/Footer.js',
+    'components/FavoriteButton.js',
     'components/ProductCard.js',
     'pages/tienda/TiendaPage.js',
     'tienda-app.js'
   ],
   'crear-tienda.bundle.js': [
     'utils/navigation.js',
+    'utils/romahub-saved.js',
     'components/ToastProvider.js',
     'components/Header.js',
     'components/Footer.js',
@@ -111,6 +122,7 @@ const bundles = {
     'utils/navigation.js',
     'utils/format.js',
     'utils/romahub-analytics.js',
+    'utils/romahub-saved.js',
     'utils/supabase-auth.js',
     'components/ToastProvider.js',
     'components/Header.js',
@@ -118,6 +130,17 @@ const bundles = {
     'components/ShareBusiness.js',
     'pages/panel/BusinessPanelPage.js',
     'panel-app.js'
+  ],
+  'favorites.bundle.js': [
+    'utils/navigation.js',
+    'utils/format.js',
+    'utils/romahub-saved.js',
+    'components/ToastProvider.js',
+    'components/Header.js',
+    'components/Footer.js',
+    'components/FavoriteButton.js',
+    'pages/favorites/FavoritesPage.js',
+    'favorites-app.js'
   ]
 };
 

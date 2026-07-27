@@ -2,7 +2,7 @@
 // Solo envía el negocio, el tipo de acción y, cuando aplica, el elemento del
 // catálogo. No guarda IP, WhatsApp, nombre de clienta ni otros datos personales.
 window.RomaAnalytics = (function () {
-  var EVENTOS = ['perfil_vista', 'producto_visto', 'whatsapp_click', 'reserva_click', 'compartir'];
+  var EVENTOS = ['perfil_vista', 'producto_visto', 'whatsapp_click', 'reserva_click', 'compartir', 'favorito'];
   var pendientes = new Set();
 
   function config() {

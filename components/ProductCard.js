@@ -15,6 +15,7 @@ function ProductCard({ item }) {
       itemId,
       itemNombre: it.nombre
     };
+    const favoriteEntry = window.RomaSaved?.showcaseEntry?.(it);
     const trackView = () => window.RomaAnalytics?.track?.({ ...analyticsItem, evento: 'producto_visto' }, { oncePerDay: true });
     const trackContact = () => {
       if (whatsappCompleto) window.RomaAnalytics?.track?.({ ...analyticsItem, evento: 'whatsapp_click' });
@@ -22,10 +23,11 @@ function ProductCard({ item }) {
 
     return (
       <article
-        className="reveal-card-rr group surface-rr card-lift-rr overflow-hidden flex flex-col"
+        className="relative reveal-card-rr group surface-rr card-lift-rr overflow-hidden flex flex-col"
         data-name="product-card"
         data-file="components/ProductCard.js"
       >
+        {favoriteEntry ? <FavoriteButton entry={favoriteEntry} className="absolute top-2.5 right-2.5 z-20" /> : null}
         <a href={detailUrl} onClick={trackView} className="relative aspect-square overflow-hidden bg-[#F3F4F6] block" data-name="product-media" data-file="components/ProductCard.js" aria-label={`Ver ${it.nombre} en ${it.negocioNombre}`}>
           {it.imagen ? (
             <img loading="lazy" decoding="async" src={it.imagen} alt={it.nombre} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-name="product-img" data-file="components/ProductCard.js" />
@@ -38,7 +40,7 @@ function ProductCard({ item }) {
             <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-[#111827] text-white text-[10px] font-bold shadow-sm" data-name="product-type" data-file="components/ProductCard.js">Curso</span>
           ) : null}
           {it.destacado ? (
-            <span className="absolute top-2.5 right-2.5 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/95 backdrop-blur text-[10px] font-bold text-[#F59E0B] shadow-sm" data-name="product-featured" data-file="components/ProductCard.js">
+            <span className="absolute top-14 right-2.5 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/95 backdrop-blur text-[10px] font-bold text-[#F59E0B] shadow-sm" data-name="product-featured" data-file="components/ProductCard.js">
               <div className="icon-star text-xs text-[#F59E0B]"></div> Destacado
             </span>
           ) : null}

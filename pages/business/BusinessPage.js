@@ -24,6 +24,7 @@
 
     React.useEffect(() => {
       window.RomaAnalytics?.track?.({ negocioId: b.id, evento: 'perfil_vista' }, { oncePerDay: true });
+      window.RomaSaved?.addRecentBusiness?.(b);
     }, [b.id]);
 
     React.useEffect(() => {

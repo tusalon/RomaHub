@@ -32,6 +32,7 @@ const Navigation = (() => {
       if (n) params.set('nombre', n);
       if (s) params.set('servicio', s);
       if (u) params.set('ubicacion', u);
+      window.RomaSaved?.saveSearch?.({ nombre: n, servicio: s, ubicacion: u });
       window.location.href = `search.html?${params.toString()}`;
     } catch (error) {
       console.error('Navigation.goToSearch error:', error);

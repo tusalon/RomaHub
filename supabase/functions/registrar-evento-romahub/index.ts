@@ -14,6 +14,7 @@ const EVENTOS = new Set([
   "whatsapp_click",
   "reserva_click",
   "compartir",
+  "favorito",
 ]);
 
 const TIPOS = new Set(["producto", "curso", "servicio"]);

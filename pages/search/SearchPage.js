@@ -78,6 +78,7 @@ function SearchPage({ query, onQueryChange }) {
       try {
         const next = { ...(query || {}), [key]: value };
         onQueryChange?.(next);
+        window.RomaSaved?.saveSearch?.(next);
         const params = new URLSearchParams();
         if (next.nombre) params.set('nombre', next.nombre);
         if (next.servicio) params.set('servicio', next.servicio);
@@ -205,4 +206,3 @@ function SearchPage({ query, onQueryChange }) {
     return null;
   }
 }
-

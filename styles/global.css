@@ -31,6 +31,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .icon-chevron-down::before { content: "\2304"; }
 .icon-check::before, .icon-circle-check::before { content: "\2713"; }
 .icon-copy::before { content: "\2398"; }
+.icon-heart::before { content: "\2661"; }
+.is-favorite .icon-heart::before { content: "\2665"; }
 .icon-x::before { content: "\00D7"; }
 .icon-star::before, .icon-award::before { content: "\2605"; }
 .icon-sparkles::before { content: "\2726"; }

@@ -42,6 +42,7 @@
       contactos: 0,
       productos_vistos: 0,
       compartidos: 0,
+      favoritos: 0,
       conversion_pct: 0,
       dias: [],
       top_items: []
@@ -927,13 +928,14 @@
 
             {statsMessage ? <div className="surface-rr p-4 text-sm text-red-600">{statsMessage}</div> : null}
 
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3" data-name="stats-cards">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3" data-name="stats-cards">
               {[
                 { label: 'Visitas al perfil', value: stats.visitas, icon: 'icon-eye' },
                 { label: 'Contactos', value: stats.contactos, icon: 'icon-message-circle' },
                 { label: 'Intentos de reserva', value: stats.reservas, icon: 'icon-calendar-check' },
                 { label: 'Productos vistos', value: stats.productos_vistos, icon: 'icon-shopping-bag' },
-                { label: 'Veces compartido', value: stats.compartidos, icon: 'icon-share-2' }
+                { label: 'Veces compartido', value: stats.compartidos, icon: 'icon-share-2' },
+                { label: 'Veces guardado', value: stats.favoritos, icon: 'icon-heart' }
               ].map((metric) => (
                 <article key={metric.label} className="surface-rr p-4 md:p-5" data-name="stats-card">
                   <div className="w-10 h-10 rounded-xl bg-[var(--secondary-color)] flex items-center justify-center">

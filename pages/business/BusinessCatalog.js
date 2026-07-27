@@ -34,6 +34,7 @@ function BusinessCatalog({ business, onAddToCart, selectedItemId = '' }) {
       try {
         const esCurso = type === 'curso';
         const selected = String(item.id || '') === String(selectedItemId || '');
+        const favoriteEntry = window.RomaSaved?.catalogEntry?.(item, type, b);
         const addItem = () => {
           window.RomaAnalytics?.track?.({ negocioId: b.id, evento: 'producto_visto', itemTipo: type, itemId: item.id, itemNombre: item.nombre }, { oncePerDay: true });
           onAddToCart?.(item, type);
@@ -41,6 +42,7 @@ function BusinessCatalog({ business, onAddToCart, selectedItemId = '' }) {
         return (
           <div id={`catalog-item-${item.id}`} className={`surface-rr overflow-hidden flex flex-col scroll-mt-28 transition-shadow ${selected ? 'ring-2 ring-[var(--primary-color)] shadow-lg' : ''}`} data-name="store-card" data-file="pages/business/BusinessCatalog.js">
             <div className="relative aspect-square bg-[#F3F4F6]" data-name="store-image" data-file="pages/business/BusinessCatalog.js">
+              {favoriteEntry ? <FavoriteButton entry={favoriteEntry} className="absolute top-2 right-2 z-20" /> : null}
               {item.imagen ? (
                 <img loading="lazy" decoding="async" src={item.imagen} alt={item.nombre} className="absolute inset-0 w-full h-full object-cover" data-name="store-img" data-file="pages/business/BusinessCatalog.js" />
               ) : (

@@ -8,6 +8,7 @@
     const courses = catalog.find((section) => section.tipo === 'cursos')?.items || [];
     const firstPrice = services[0] ? Format.formatPrecioCUP(services[0].precio, services[0].moneda) : Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max, b.rangoPrecio?.moneda);
     const initials = String(b.nombre || 'N').trim().slice(0, 2).toUpperCase();
+    const favoriteEntry = window.RomaSaved?.businessEntry?.(b);
 
     return (
       <section className="bg-white border-b border-[var(--border)]" data-name="business-header" data-file="pages/business/BusinessHeader.js">
@@ -84,6 +85,7 @@
                   Reservar
                 </a>
               ) : null}
+              {favoriteEntry ? <FavoriteButton entry={favoriteEntry} showLabel={true} className="w-full" /> : null}
               <ShareBusiness businessId={b.id} businessName={b.nombre} compact={true} />
             </div>
           </div>

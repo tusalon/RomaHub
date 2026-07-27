@@ -4,14 +4,17 @@ function BusinessLogoCard({ business, onOpen }) {
     const initials = String(b.nombre || 'N').trim().slice(0, 2).toUpperCase();
     const productCount = ((b.categoriasCatalogo || []).find((section) => section.tipo === 'productos')?.items || []).length;
     const courseCount = ((b.categoriasCatalogo || []).find((section) => section.tipo === 'cursos')?.items || []).length;
+    const favoriteEntry = window.RomaSaved?.businessEntry?.(b);
 
     return (
-      <button
-        className="group surface-rr card-lift-rr p-0 text-left overflow-hidden focus:outline-none"
-        onClick={() => onOpen?.(b)}
-        data-name="business-logo-card"
-        data-file="components/BusinessLogoCard.js"
-      >
+      <article className="relative h-full" data-name="business-logo-card-wrap">
+        {favoriteEntry ? <FavoriteButton entry={favoriteEntry} className="absolute top-3 right-3 z-20" /> : null}
+        <button
+          className="group surface-rr card-lift-rr p-0 text-left overflow-hidden focus:outline-none w-full h-full"
+          onClick={() => onOpen?.(b)}
+          data-name="business-logo-card"
+          data-file="components/BusinessLogoCard.js"
+        >
         <div className="relative h-36 overflow-hidden bg-[#F3F4F6]" data-name="logo-card-media" data-file="components/BusinessLogoCard.js">
           {b.portadaUrl ? (
             <img loading="lazy" decoding="async" src={b.portadaUrl} alt={`Imagen de ${b.nombre}`} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" style={{ objectPosition: `${b.portadaPosicion?.x ?? 50}% ${b.portadaPosicion?.y ?? 50}%` }} data-name="logo-card-cover" data-file="components/BusinessLogoCard.js" />
@@ -19,11 +22,11 @@ function BusinessLogoCard({ business, onOpen }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" data-name="logo-card-gradient" data-file="components/BusinessLogoCard.js"></div>
 
           {b.enRanking ? (
-            <span className="absolute top-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#22C55E] text-white text-[10px] font-bold shadow-[0_4px_12px_rgba(34,197,94,0.35)]" data-name="verified-badge" data-file="components/BusinessLogoCard.js">
+            <span className="absolute top-3 right-14 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#22C55E] text-white text-[10px] font-bold shadow-[0_4px_12px_rgba(34,197,94,0.35)]" data-name="verified-badge" data-file="components/BusinessLogoCard.js">
               <span>&#10003;</span> Verificado
             </span>
           ) : (
-            <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur text-[10px] font-semibold text-[var(--text-muted)] shadow-sm" data-name="new-badge" data-file="components/BusinessLogoCard.js">Nuevo</span>
+            <span className="absolute top-3 right-14 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur text-[10px] font-semibold text-[var(--text-muted)] shadow-sm" data-name="new-badge" data-file="components/BusinessLogoCard.js">Nuevo</span>
           )}
 
           {b.estrellas > 0 ? (
@@ -68,7 +71,8 @@ function BusinessLogoCard({ business, onOpen }) {
             </div>
           </div>
         </div>
-      </button>
+        </button>
+      </article>
     );
   } catch (error) {
     console.error('BusinessLogoCard component error:', error);

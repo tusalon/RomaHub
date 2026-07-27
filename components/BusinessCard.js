@@ -11,6 +11,7 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
     const firstService = serviceSection?.items?.[0] || null;
     const initials = String(b.nombre || 'N').trim().slice(0, 2).toUpperCase();
     const profileHref = `business.html?id=${encodeURIComponent(b.id)}`;
+    const favoriteEntry = window.RomaSaved?.businessEntry?.(b);
 
     const onContact = (e) => {
       try {
@@ -70,6 +71,7 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
                   {[b.categoria, b.ubicacionCorta || b.ubicacion?.zona].filter(Boolean).join(' · ')}
                 </p>
               </div>
+              {favoriteEntry ? <FavoriteButton entry={favoriteEntry} className="shrink-0 w-9 h-9" /> : null}
               {!upcoming ? (
                 <div className="ml-auto hidden sm:flex flex-col items-end gap-1" data-name="top-right" data-file="components/BusinessCard.js">
                   {b.estrellas > 0 ? (

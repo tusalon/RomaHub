@@ -3,6 +3,9 @@ function Header({ currentParams }) {
     const page = Navigation.getCurrentPage();
 
     const [open, setOpen] = React.useState(false);
+    const [savedCount, setSavedCount] = React.useState(() => window.RomaSaved?.count?.() || 0);
+
+    React.useEffect(() => window.RomaSaved?.subscribe?.(() => setSavedCount(window.RomaSaved?.count?.() || 0)), []);
 
     const onGoHome = () => {
       try {
@@ -14,7 +17,9 @@ function Header({ currentParams }) {
 
     const onGoSearch = () => {
       try {
-        const q = currentParams || Navigation.getSearchParams();
+        const current = currentParams || Navigation.getSearchParams();
+        const remembered = window.RomaSaved?.getSearch?.() || {};
+        const q = current?.nombre || current?.servicio || current?.ubicacion ? current : remembered;
         Navigation.goToSearch(q?.servicio || '', q?.ubicacion || '', q?.nombre || '');
       } catch (error) {
         console.error('Header.onGoSearch error:', error);
@@ -63,6 +68,15 @@ function Header({ currentParams }) {
                 Tienda
               </a>
               <a
+                className={`btn-rr flex items-center gap-2 ${page === 'favoritos.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+                href="favoritos.html"
+                data-name="nav-favorites"
+                data-file="components/Header.js"
+              >
+                <span className="icon-heart text-base"></span>
+                Guardados{savedCount ? ` (${savedCount})` : ''}
+              </a>
+              <a
                 className={`btn-rr ${page === 'register.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 href="register.html"
                 data-name="nav-register"
@@ -106,6 +120,10 @@ function Header({ currentParams }) {
                   <a className={`btn-rr w-full flex items-center justify-between ${page === 'tienda.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`} href="tienda.html" data-name="m-tienda" data-file="components/Header.js">
                     <span data-name="m-tienda-text" data-file="components/Header.js">Tienda</span>
                     <div className={`icon-shopping-bag text-xl ${page === 'tienda.html' ? 'text-white' : 'text-[#e83387]'}`} data-name="m-tienda-icon" data-file="components/Header.js"></div>
+                  </a>
+                  <a className={`btn-rr w-full flex items-center justify-between ${page === 'favoritos.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`} href="favoritos.html" data-name="m-favorites" data-file="components/Header.js">
+                    <span data-name="m-favorites-text">Guardados{savedCount ? ` (${savedCount})` : ''}</span>
+                    <div className={`icon-heart text-xl ${page === 'favoritos.html' ? 'text-white' : 'text-[#e83387]'}`}></div>
                   </a>
                   <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="register.html" data-name="m-register" data-file="components/Header.js">
                     <span data-name="m-register-text" data-file="components/Header.js">Abrir tienda gratis</span>

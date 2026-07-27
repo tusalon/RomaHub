@@ -46,7 +46,10 @@ function SearchApp() {
     const [dataError, setDataError] = React.useState('');
     const [query, setQuery] = React.useState(() => {
       try {
-        return Navigation.getSearchParams();
+        const current = Navigation.getSearchParams();
+        return current.nombre || current.servicio || current.ubicacion
+          ? current
+          : (window.RomaSaved?.getSearch?.() || current);
       } catch (e) {
         return { nombre: '', servicio: '', ubicacion: '' };
       }
