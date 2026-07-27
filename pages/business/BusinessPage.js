@@ -110,7 +110,7 @@
         ].filter(Boolean);
 
         try {
-          await MockData.addOrder(b.id, {
+          const createdOrder = await MockData.addOrder(b.id, {
             cliente_nombre: nombre,
             cliente_whatsapp: whatsappCliente,
             items: cart.map((entry) => ({
@@ -124,6 +124,9 @@
             })),
             total
           });
+          if (createdOrder?.tracking_token) {
+            lines.push('', `Seguimiento del pedido: ${new URL('pedidos.html', window.location.href).href}`);
+          }
         } catch (error) {
           console.warn('No se pudo guardar el pedido antes de WhatsApp:', error);
         }

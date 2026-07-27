@@ -57,7 +57,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .icon-share-2::before { content: "\2197"; }
 .icon-tag::before { content: "%"; }
 .icon-qr-code::before { content: "#"; }
-.icon-shield-check::before { content: "\2713"; }
+.icon-shield::before, .icon-shield-check::before { content: "\2713"; }
 .icon-trophy::before { content: "\2605"; }
 .icon-chart-no-axes-column::before { content: "\25A5"; }
 

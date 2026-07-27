@@ -825,6 +825,9 @@ const MockData = (() => {
       total: Number(order.total || 0),
       estado: 'enviado_whatsapp'
     };
+    if (window.RomaOrders?.createOrder) {
+      return window.RomaOrders.createOrder(negocioId, payload);
+    }
     const inserted = await supabaseInsert('pedidos_whatsapp', payload);
     return inserted?.[0] || payload;
   }

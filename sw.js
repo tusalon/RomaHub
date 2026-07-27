@@ -1,13 +1,15 @@
-const CACHE_NAME = 'romahub-v27';
+const CACHE_NAME = 'romahub-v28';
 const APP_SHELL = [
   './index.html',
   './favoritos.html',
+  './pedidos.html',
   './manifest.webmanifest',
   './styles/tailwind.css',
   './styles/global.css',
   './utils/pwa.js',
   './utils/reveal.js',
   './dist/index.bundle.js',
+  './dist/orders.bundle.js',
   './assets/cuba-provinces.svg',
   './icons/icon-72x72.png',
   './icons/icon-96x96.png',

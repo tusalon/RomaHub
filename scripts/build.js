@@ -55,6 +55,7 @@ const bundles = {
     'utils/format.js',
     'utils/romahub-analytics.js',
     'utils/romahub-saved.js',
+    'utils/romahub-orders.js',
     'data/mockData.js',
     'components/ToastProvider.js',
     'components/Header.js',
@@ -78,6 +79,17 @@ const bundles = {
     'pages/business/BusinessPromotions.js',
     'pages/business/BusinessPage.js',
     'business-app.js'
+  ],
+  'orders.bundle.js': [
+    'utils/navigation.js',
+    'utils/format.js',
+    'utils/romahub-saved.js',
+    'utils/romahub-orders.js',
+    'components/ToastProvider.js',
+    'components/Header.js',
+    'components/Footer.js',
+    'pages/orders/RecentOrdersPage.js',
+    'orders-app.js'
   ],
   'register.bundle.js': [
     'utils/navigation.js',

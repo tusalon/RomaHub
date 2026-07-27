@@ -42,7 +42,7 @@ function Header({ currentParams }) {
               </div>
             </button>
 
-            <div className="hidden md:flex items-center gap-2 ml-auto" data-name="header-actions-desktop" data-file="components/Header.js">
+            <div className="hidden xl:flex items-center gap-2 ml-auto" data-name="header-actions-desktop" data-file="components/Header.js">
               <button
                 className={`btn-rr ${page === 'index.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 onClick={onGoHome}
@@ -77,6 +77,15 @@ function Header({ currentParams }) {
                 Guardados{savedCount ? ` (${savedCount})` : ''}
               </a>
               <a
+                className={`btn-rr flex items-center gap-2 ${page === 'pedidos.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+                href="pedidos.html"
+                data-name="nav-orders"
+                data-file="components/Header.js"
+              >
+                <span className="icon-receipt-text text-base"></span>
+                Mis pedidos
+              </a>
+              <a
                 className={`btn-rr ${page === 'register.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 href="register.html"
                 data-name="nav-register"
@@ -95,7 +104,7 @@ function Header({ currentParams }) {
             </div>
 
             <button
-              className="ml-auto md:hidden w-11 h-11 rounded-xl border border-[var(--border)] bg-white flex items-center justify-center"
+              className="ml-auto xl:hidden w-11 h-11 rounded-xl border border-[var(--border)] bg-white flex items-center justify-center"
               onClick={() => setOpen((v) => !v)}
               data-name="nav-toggle"
               data-file="components/Header.js"
@@ -106,7 +115,7 @@ function Header({ currentParams }) {
           </div>
 
           {open ? (
-            <div className="md:hidden pt-3" data-name="header-mobile" data-file="components/Header.js">
+            <div className="xl:hidden pt-3" data-name="header-mobile" data-file="components/Header.js">
               <div className="surface-rr p-3" data-name="header-mobile-panel" data-file="components/Header.js">
                 <div className="grid grid-cols-1 gap-2" data-name="header-mobile-actions" data-file="components/Header.js">
                   <button className="btn-rr btn-ghost-rr w-full flex items-center justify-between" onClick={onGoHome} data-name="m-home" data-file="components/Header.js">
@@ -124,6 +133,10 @@ function Header({ currentParams }) {
                   <a className={`btn-rr w-full flex items-center justify-between ${page === 'favoritos.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`} href="favoritos.html" data-name="m-favorites" data-file="components/Header.js">
                     <span data-name="m-favorites-text">Guardados{savedCount ? ` (${savedCount})` : ''}</span>
                     <div className={`icon-heart text-xl ${page === 'favoritos.html' ? 'text-white' : 'text-[#e83387]'}`}></div>
+                  </a>
+                  <a className={`btn-rr w-full flex items-center justify-between ${page === 'pedidos.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`} href="pedidos.html" data-name="m-orders" data-file="components/Header.js">
+                    <span data-name="m-orders-text">Mis pedidos</span>
+                    <div className={`icon-receipt-text text-xl ${page === 'pedidos.html' ? 'text-white' : 'text-[#e83387]'}`}></div>
                   </a>
                   <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="register.html" data-name="m-register" data-file="components/Header.js">
                     <span data-name="m-register-text" data-file="components/Header.js">Abrir tienda gratis</span>

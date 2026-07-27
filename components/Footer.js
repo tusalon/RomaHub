@@ -10,7 +10,8 @@ function Footer() {
           { texto: 'Inicio', href: 'index.html' },
           { texto: 'Reservas', href: 'search.html' },
           { texto: 'Tienda', href: 'tienda.html' },
-          { texto: 'Guardados', href: 'favoritos.html' }
+          { texto: 'Guardados', href: 'favoritos.html' },
+          { texto: 'Mis pedidos', href: 'pedidos.html' }
         ]
       },
       {
