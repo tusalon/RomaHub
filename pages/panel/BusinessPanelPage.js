@@ -67,6 +67,19 @@
     const [promotionMessage, setPromotionMessage] = React.useState('');
     const [promotionForm, setPromotionForm] = React.useState(emptyPromotion);
     const promotionInputRef = React.useRef(null);
+    const [orders, setOrders] = React.useState([]);
+    const [ordersLoading, setOrdersLoading] = React.useState(false);
+    const [ordersMessage, setOrdersMessage] = React.useState('');
+    const [orderFilter, setOrderFilter] = React.useState('todos');
+    const [orderSummary, setOrderSummary] = React.useState({
+      periodo_dias: 90,
+      total: 0,
+      nuevos: 0,
+      contactados: 0,
+      completados: 0,
+      cancelados: 0,
+      top_items: []
+    });
     const [form, setForm] = React.useState({
       id: '',
       nombre: '',
@@ -222,12 +235,36 @@
       }
     };
 
+    const loadOrders = async () => {
+      try {
+        if (!negocioId) return;
+        setOrdersLoading(true);
+        setOrdersMessage('');
+        const encoded = encodeURIComponent(negocioId);
+        const [rows, summary] = await Promise.all([
+          supabaseRequest(`pedidos_whatsapp?negocio_id=eq.${encoded}&select=id,negocio_id,cliente_nombre,cliente_whatsapp,items,total,estado,created_at,updated_at&order=created_at.desc&limit=200`),
+          supabaseRequest('rpc/mis_resumen_pedidos_romahub', {
+            method: 'POST',
+            body: JSON.stringify({ p_negocio_id: negocioId, p_dias: 90 })
+          })
+        ]);
+        setOrders(Array.isArray(rows) ? rows : []);
+        if (summary && typeof summary === 'object') setOrderSummary((current) => ({ ...current, ...summary }));
+      } catch (error) {
+        console.error('BusinessPanelPage.loadOrders error:', error);
+        setOrdersMessage(error.message || 'No se pudieron cargar los pedidos.');
+      } finally {
+        setOrdersLoading(false);
+      }
+    };
+
     React.useEffect(() => {
       if (negocioId) {
         loadStore();
         loadServices();
         loadStats();
         loadPromotions();
+        loadOrders();
       }
     }, [negocioId]);
 
@@ -351,6 +388,38 @@
         setPromotionMessage(error.message || 'No se pudo subir la imagen.');
       } finally {
         setPromotionUploading(false);
+      }
+    };
+
+    const normalizedOrderStatus = (status) => ['enviado_whatsapp', 'nuevo'].includes(status) ? 'nuevo' : status;
+
+    const updateOrderStatus = async (order, status) => {
+      try {
+        if (!order?.id || !['nuevo', 'contactado', 'completado', 'cancelado'].includes(status)) return;
+        setOrdersMessage('');
+        await supabaseRequest(`pedidos_whatsapp?id=eq.${encodeURIComponent(order.id)}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ estado: status })
+        });
+        setOrders((current) => current.map((item) => item.id === order.id ? { ...item, estado: status } : item));
+        await loadOrders();
+      } catch (error) {
+        console.error('BusinessPanelPage.updateOrderStatus error:', error);
+        setOrdersMessage(error.message || 'No se pudo actualizar el pedido.');
+      }
+    };
+
+    const openOrderWhatsApp = (order) => {
+      try {
+        const rawWhatsapp = String(order?.cliente_whatsapp || '').replace(/\D/g, '');
+        const whatsapp = rawWhatsapp.length === 8 ? `53${rawWhatsapp}` : rawWhatsapp;
+        if (!whatsapp) throw new Error('Este pedido no tiene un WhatsApp válido.');
+        const messageText = encodeURIComponent(`Hola ${order.cliente_nombre || ''}, te escribimos de ${businessName} por tu pedido en RomaHub.`);
+        window.open(`https://wa.me/${whatsapp}?text=${messageText}`, '_blank', 'noopener,noreferrer');
+        if (normalizedOrderStatus(order.estado) === 'nuevo') updateOrderStatus(order, 'contactado');
+      } catch (error) {
+        console.error('BusinessPanelPage.openOrderWhatsApp error:', error);
+        setOrdersMessage(error.message || 'No se pudo abrir WhatsApp.');
       }
     };
 
@@ -623,6 +692,10 @@
 
     const currentItems = items[tab] || [];
     const isProduct = tab === 'productos';
+    const newOrdersCount = orders.filter((order) => normalizedOrderStatus(order.estado) === 'nuevo').length;
+    const filteredOrders = orderFilter === 'todos'
+      ? orders
+      : orders.filter((order) => normalizedOrderStatus(order.estado) === orderFilter);
     const serviceCategoryOptions = Array.from(new Set(
       services.map((service) => String(service.categoria || '').trim()).filter(Boolean)
     ));
@@ -780,7 +853,7 @@
           </article>
         </section>
 
-        <nav className="mt-5 surface-rr p-2 grid grid-cols-2 lg:grid-cols-4 gap-2" aria-label="Secciones del panel" data-name="panel-sections" data-file="pages/panel/BusinessPanelPage.js">
+        <nav className="mt-5 surface-rr p-2 grid grid-cols-2 lg:grid-cols-5 gap-2" aria-label="Secciones del panel" data-name="panel-sections" data-file="pages/panel/BusinessPanelPage.js">
           <button
             type="button"
             className={`btn-rr ${section === 'perfil' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
@@ -798,6 +871,16 @@
             data-file="pages/panel/BusinessPanelPage.js"
           >
             Productos y cursos
+          </button>
+          <button
+            type="button"
+            className={`btn-rr flex items-center justify-center gap-2 ${section === 'pedidos' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+            onClick={() => { setSection('pedidos'); loadOrders(); }}
+            data-name="section-orders"
+            data-file="pages/panel/BusinessPanelPage.js"
+          >
+            Pedidos
+            {newOrdersCount ? <span className={`min-w-5 h-5 px-1 rounded-full inline-flex items-center justify-center text-[10px] font-extrabold ${section === 'pedidos' ? 'bg-white text-[var(--primary-color)]' : 'bg-[var(--primary-color)] text-white'}`}>{Math.min(newOrdersCount, 99)}</span> : null}
           </button>
           <button
             type="button"
@@ -1155,6 +1238,154 @@
               <p className="mt-2 text-sm md:text-base font-semibold leading-relaxed">{statsInsight}</p>
               <p className="mt-2 text-xs text-[var(--text-muted)]">Las estadísticas comienzan a registrarse desde esta actualización; no incluyen visitas anteriores.</p>
             </article>
+          </section>
+        ) : section === 'pedidos' ? (
+          <section className="mt-5 space-y-4" data-name="orders-section">
+            <div className="surface-rr p-5 md:p-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+              <div>
+                <p className="kicker-rr">Ventas desde RomaHub</p>
+                <h2 className="mt-1 text-2xl font-semibold">Bandeja de pedidos</h2>
+                <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed">Organiza los pedidos enviados desde tu catálogo y continúa la conversación por WhatsApp.</p>
+              </div>
+              <button type="button" className="btn-rr btn-ghost-rr shrink-0" onClick={loadOrders} disabled={ordersLoading}>{ordersLoading ? 'Actualizando...' : 'Actualizar'}</button>
+            </div>
+
+            {ordersMessage ? <div className="surface-rr p-4 text-sm text-red-600">{ordersMessage}</div> : null}
+
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3" aria-label={`Resumen de pedidos de los últimos ${orderSummary.periodo_dias || 90} días`}>
+              {[
+                { label: 'Pedidos', value: orderSummary.total, icon: 'icon-shopping-bag', tone: 'text-[#111827]' },
+                { label: 'Nuevos', value: orderSummary.nuevos, icon: 'icon-bell', tone: 'text-[var(--primary-color)]' },
+                { label: 'Contactados', value: orderSummary.contactados, icon: 'icon-message-circle', tone: 'text-blue-600' },
+                { label: 'Completados', value: orderSummary.completados, icon: 'icon-circle-check', tone: 'text-green-700' },
+                { label: 'Cancelados', value: orderSummary.cancelados, icon: 'icon-circle-x', tone: 'text-gray-500' }
+              ].map((metric) => (
+                <article key={metric.label} className="surface-rr p-4">
+                  <span className={`${metric.icon} text-lg ${metric.tone}`}></span>
+                  <p className={`mt-3 text-2xl font-extrabold ${metric.tone}`}>{Number(metric.value || 0).toLocaleString('es-ES')}</p>
+                  <p className="mt-1 text-xs text-[var(--text-muted)]">{metric.label}</p>
+                </article>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_300px] gap-4 items-start">
+              <div className="surface-rr overflow-hidden">
+                <div className="p-4 md:p-5 border-b border-[var(--border)]">
+                  <div className="flex flex-wrap gap-2" aria-label="Filtrar pedidos">
+                    {[
+                      { id: 'todos', label: 'Todos', count: orders.length },
+                      { id: 'nuevo', label: 'Nuevos', count: newOrdersCount },
+                      { id: 'contactado', label: 'Contactados', count: orders.filter((order) => normalizedOrderStatus(order.estado) === 'contactado').length },
+                      { id: 'completado', label: 'Completados', count: orders.filter((order) => normalizedOrderStatus(order.estado) === 'completado').length },
+                      { id: 'cancelado', label: 'Cancelados', count: orders.filter((order) => normalizedOrderStatus(order.estado) === 'cancelado').length }
+                    ].map((filter) => (
+                      <button key={filter.id} type="button" className={`chip-rr px-3 py-2 text-xs font-semibold ${orderFilter === filter.id ? 'bg-[var(--primary-color)] text-white border-[var(--primary-color)]' : 'text-[var(--text-muted)]'}`} onClick={() => setOrderFilter(filter.id)}>
+                        {filter.label} ({filter.count})
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {ordersLoading && !orders.length ? (
+                  <p className="p-6 text-sm text-[var(--text-muted)]">Cargando pedidos...</p>
+                ) : filteredOrders.length ? (
+                  <div className="divide-y divide-[var(--border)]">
+                    {filteredOrders.map((order) => {
+                      const status = normalizedOrderStatus(order.estado);
+                      const statusData = {
+                        nuevo: { label: 'Nuevo', className: 'bg-pink-50 text-[var(--primary-color)]' },
+                        contactado: { label: 'Contactado', className: 'bg-blue-50 text-blue-700' },
+                        completado: { label: 'Completado', className: 'bg-green-50 text-green-700' },
+                        cancelado: { label: 'Cancelado', className: 'bg-gray-100 text-gray-600' }
+                      }[status] || { label: 'Nuevo', className: 'bg-pink-50 text-[var(--primary-color)]' };
+                      const orderItems = Array.isArray(order.items) ? order.items : [];
+                      const totalsByCurrency = orderItems.reduce((acc, item) => {
+                        const currency = String(item.moneda || 'CUP').toUpperCase();
+                        const quantity = Math.max(1, Number(item.cantidad || item.qty || 1));
+                        acc[currency] = (acc[currency] || 0) + Number(item.precio || 0) * quantity;
+                        return acc;
+                      }, {});
+                      const totalLabel = Object.entries(totalsByCurrency).map(([currency, value]) => Format.formatPrecioCUP(value, currency)).join(' + ') || Format.formatPrecioCUP(order.total || 0, 'CUP');
+                      return (
+                        <article key={order.id} className={`p-4 md:p-5 ${status === 'nuevo' ? 'bg-[rgba(232,51,135,0.025)]' : ''}`} data-name="order-row">
+                          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                            <div className="min-w-0">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <h3 className="text-base font-semibold">{order.cliente_nombre || 'Clienta de RomaHub'}</h3>
+                                <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${statusData.className}`}>{statusData.label}</span>
+                              </div>
+                              <p className="mt-1 text-xs text-[var(--text-muted)]">{new Date(order.created_at).toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' })} · Pedido #{String(order.id).slice(0, 8)}</p>
+                              <p className="mt-1 text-xs font-semibold text-[#111827]">WhatsApp: {String(order.cliente_whatsapp || '').replace(/\D/g, '').length === 8 ? '+53 ' : '+'}{String(order.cliente_whatsapp || '').replace(/\D/g, '')}</p>
+                            </div>
+                            <p className="text-base font-extrabold text-[var(--primary-color)] shrink-0">{totalLabel}</p>
+                          </div>
+
+                          <div className="mt-4 rounded-xl bg-[var(--bg-muted)] px-3 py-2.5 divide-y divide-[var(--border)]">
+                            {orderItems.map((item, index) => {
+                              const quantity = Math.max(1, Number(item.cantidad || item.qty || 1));
+                              return (
+                                <div key={`${item.id || item.nombre}-${index}`} className="py-2 first:pt-0 last:pb-0 flex items-start justify-between gap-3 text-sm">
+                                  <span className="min-w-0"><strong>{quantity}×</strong> {item.nombre || 'Artículo'}</span>
+                                  <span className="text-xs text-[var(--text-muted)] whitespace-nowrap">{Format.formatPrecioCUP(Number(item.precio || 0) * quantity, item.moneda || 'CUP')}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          <div className="mt-4 flex flex-col md:flex-row md:items-center gap-3">
+                            <button type="button" className="btn-rr btn-primary-rr flex items-center justify-center gap-2" onClick={() => openOrderWhatsApp(order)}>
+                              <span className="icon-message-circle text-lg text-white"></span>
+                              {status === 'nuevo' ? 'Responder y marcar contactado' : 'Responder por WhatsApp'}
+                            </button>
+                            <label className="flex items-center gap-2 md:ml-auto">
+                              <span className="text-xs font-semibold text-[var(--text-muted)]">Estado</span>
+                              <select className="input-rr py-2.5 bg-white min-w-[150px]" value={status} onChange={(e) => updateOrderStatus(order, e.target.value)}>
+                                <option value="nuevo">Nuevo</option>
+                                <option value="contactado">Contactado</option>
+                                <option value="completado">Completado</option>
+                                <option value="cancelado">Cancelado</option>
+                              </select>
+                            </label>
+                          </div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="p-8 text-center">
+                    <span className="icon-shopping-bag text-4xl text-[var(--primary-color)] opacity-50"></span>
+                    <p className="mt-3 text-sm font-semibold">{orders.length ? 'No hay pedidos con este estado' : 'Todavía no tienes pedidos'}</p>
+                    <p className="mt-1 text-sm text-[var(--text-muted)]">{orders.length ? 'Prueba otro filtro.' : 'Cuando una clienta procese un producto o curso desde RomaHub, aparecerá aquí.'}</p>
+                  </div>
+                )}
+              </div>
+
+              <aside className="space-y-4">
+                <article className="surface-rr p-5">
+                  <p className="kicker-rr">Más solicitados</p>
+                  <h3 className="mt-1 text-lg font-semibold">Productos y cursos</h3>
+                  <p className="mt-1 text-xs text-[var(--text-muted)]">Últimos {orderSummary.periodo_dias || 90} días.</p>
+                  {Array.isArray(orderSummary.top_items) && orderSummary.top_items.length ? (
+                    <div className="mt-4 divide-y divide-[var(--border)]">
+                      {orderSummary.top_items.map((item, index) => (
+                        <div key={`${item.tipo}-${item.nombre}`} className="py-3 flex items-center gap-3">
+                          <span className="w-8 h-8 rounded-lg bg-[var(--secondary-color)] flex items-center justify-center text-xs font-bold text-[var(--primary-color)]">{index + 1}</span>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-semibold truncate">{item.nombre}</p>
+                            <p className="text-[11px] text-[var(--text-muted)] capitalize">{item.tipo}</p>
+                          </div>
+                          <span className="text-sm font-extrabold">{Number(item.unidades || 0)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : <p className="mt-4 rounded-xl bg-[var(--bg-muted)] p-4 text-sm text-[var(--text-muted)]">Aún no hay artículos suficientes para crear el ranking.</p>}
+                </article>
+                <article className="surface-rr p-5 border-l-4 border-l-[var(--primary-color)]">
+                  <p className="text-sm font-semibold">Datos privados</p>
+                  <p className="mt-1 text-xs text-[var(--text-muted)] leading-relaxed">Los nombres y WhatsApp solo son visibles para las dueñas y administradoras de este negocio.</p>
+                </article>
+              </aside>
+            </div>
           </section>
         ) : section === 'promociones' ? (
           <section className="mt-5 grid grid-cols-1 lg:grid-cols-[390px_1fr] gap-4 items-start" data-name="promotions-section">
