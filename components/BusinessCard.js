@@ -1,4 +1,4 @@
-﻿function BusinessCard({ business, onHover, active }) {
+function BusinessCard({ business, onHover, active, upcoming = false }) {
   try {
     const b = business;
     const border = active ? 'border-[rgba(232,51,135,0.35)] shadow-[0_16px_40px_rgba(232,51,135,0.10)]' : '';
@@ -10,19 +10,11 @@
     const courseCount = courseSection?.items?.length || 0;
     const firstService = serviceSection?.items?.[0] || null;
     const initials = String(b.nombre || 'N').trim().slice(0, 2).toUpperCase();
-
-    const onOpen = () => {
-      try {
-        Navigation.goToBusiness(b.id);
-      } catch (error) {
-        console.error('BusinessCard.onOpen error:', error);
-      }
-    };
+    const profileHref = `business.html?id=${encodeURIComponent(b.id)}`;
 
     const onContact = (e) => {
       try {
         e?.preventDefault?.();
-        e?.stopPropagation?.();
         const msg = encodeURIComponent(`Hola, quiero reservar en ${b.nombre}. Tienen disponibilidad?`);
         const wa = (b.whatsapp || '').replace(/\s+/g, '');
         const url = b.reservaUrl || `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
@@ -32,29 +24,12 @@
       }
     };
 
-    const onKeyDown = (e) => {
-      try {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onOpen();
-        }
-      } catch (error) {
-        console.error('BusinessCard.onKeyDown error:', error);
-      }
-    };
-
     return (
-      <div
-        className={`surface-rr card-lift-rr w-full text-left overflow-hidden ${border} cursor-pointer`}
+      <article
+        className={`surface-rr card-lift-rr w-full h-full text-left overflow-hidden ${border}`}
         onMouseEnter={() => onHover?.(b)}
-        onFocus={() => onHover?.(b)}
-        onClick={onOpen}
-        onKeyDown={onKeyDown}
-        role="button"
-        tabIndex={0}
         data-name="business-card"
         data-file="components/BusinessCard.js"
-        aria-label={`Abrir perfil de ${b.nombre}`}
       >
         <div className="grid grid-cols-[96px_1fr] gap-4 p-3" data-name="business-card-inner" data-file="components/BusinessCard.js">
           <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-[#F3F4F6]" data-name="photo" data-file="components/BusinessCard.js">
@@ -76,35 +51,43 @@
                 </span>
               </div>
             ) : null}
+            {upcoming ? (
+              <span className="absolute top-2 right-2 inline-flex px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-bold text-[var(--primary-color)] shadow-sm" data-name="upcoming-badge" data-file="components/BusinessCard.js">
+                Próximamente
+              </span>
+            ) : null}
           </div>
 
           <div className="min-w-0" data-name="content" data-file="components/BusinessCard.js">
             <div className="flex items-start gap-3" data-name="top" data-file="components/BusinessCard.js">
               <div className="min-w-0" data-name="title" data-file="components/BusinessCard.js">
-                <p className="text-base font-semibold leading-snug truncate flex items-center gap-1" data-name="name" data-file="components/BusinessCard.js">
+                <a href={profileHref} className="text-base font-semibold leading-snug truncate flex items-center gap-1 hover:text-[var(--primary-color)]" data-name="name" data-file="components/BusinessCard.js">
                   <span className="truncate">{b.nombre}</span>
                   {b.esRservasroma ? <span className="shrink-0" title="Negocio verificado Rservasroma" data-name="diamond-badge" data-file="components/BusinessCard.js">💎</span> : null}
-                </p>
+                </a>
                 <p className="text-xs text-[var(--text-muted)] mt-1 truncate" data-name="meta" data-file="components/BusinessCard.js">
                   {[b.categoria, b.ubicacionCorta || b.ubicacion?.zona].filter(Boolean).join(' · ')}
                 </p>
               </div>
-              <div className="ml-auto hidden sm:flex flex-col items-end gap-1" data-name="top-right" data-file="components/BusinessCard.js">
-                {b.estrellas > 0 ? (
-                  <React.Fragment>
-                    <div className="flex items-center gap-1" data-name="stars" data-file="components/BusinessCard.js">
-                      <div className="icon-star text-base text-[#F59E0B]" data-name="star" data-file="components/BusinessCard.js"></div>
-                      <span className="text-sm font-semibold" data-name="star-val" data-file="components/BusinessCard.js">{Number(b.estrellas).toFixed(1)}</span>
-                    </div>
-                    <span className="text-[11px] text-[var(--text-muted)]" data-name="reviews" data-file="components/BusinessCard.js">{b.totalValoraciones || 0} valoraciones</span>
-                  </React.Fragment>
-                ) : (
-                  <span className="text-[11px] text-[var(--text-muted)]" data-name="reviews" data-file="components/BusinessCard.js">Sin valoraciones</span>
-                )}
-              </div>
+              {!upcoming ? (
+                <div className="ml-auto hidden sm:flex flex-col items-end gap-1" data-name="top-right" data-file="components/BusinessCard.js">
+                  {b.estrellas > 0 ? (
+                    <React.Fragment>
+                      <div className="flex items-center gap-1" data-name="stars" data-file="components/BusinessCard.js">
+                        <div className="icon-star text-base text-[#F59E0B]" data-name="star" data-file="components/BusinessCard.js"></div>
+                        <span className="text-sm font-semibold" data-name="star-val" data-file="components/BusinessCard.js">{Number(b.estrellas).toFixed(1)}</span>
+                      </div>
+                      <span className="text-[11px] text-[var(--text-muted)]" data-name="reviews" data-file="components/BusinessCard.js">{b.totalValoraciones || 0} valoraciones</span>
+                    </React.Fragment>
+                  ) : (
+                    <span className="text-[11px] text-[var(--text-muted)]" data-name="reviews" data-file="components/BusinessCard.js">Sin valoraciones</span>
+                  )}
+                </div>
+              ) : null}
             </div>
 
             <div className="mt-3 flex flex-wrap gap-2" data-name="badges" data-file="components/BusinessCard.js">
+              {upcoming ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--primary-color)]" data-name="services-pending" data-file="components/BusinessCard.js">Preparando servicios</span> : null}
               {serviceCount ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--text-muted)]" data-name="services-count" data-file="components/BusinessCard.js">{serviceCount} servicios</span> : null}
               {productCount ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--text-muted)]" data-name="products-count" data-file="components/BusinessCard.js">Tienda</span> : null}
               {courseCount ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--text-muted)]" data-name="courses-count" data-file="components/BusinessCard.js">Cursos</span> : null}
@@ -112,24 +95,30 @@
 
             <div className="mt-4 flex items-center justify-between gap-3" data-name="bottom" data-file="components/BusinessCard.js">
               <span className="text-xs text-[var(--text-muted)] truncate" data-name="price" data-file="components/BusinessCard.js">
-                {firstService ? `${firstService.nombre} - ${Format.formatPrecioCUP(firstService.precio, firstService.moneda)}` : Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max, b.rangoPrecio?.moneda)}
+                {upcoming ? 'Aún no acepta reservas desde RomaHub' : (firstService ? `${firstService.nombre} - ${Format.formatPrecioCUP(firstService.precio, firstService.moneda)}` : Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max, b.rangoPrecio?.moneda))}
               </span>
 
-              <button
-                type="button"
-                className="btn-rr btn-primary-rr py-2 px-4 text-xs flex items-center gap-2 shadow-md"
-                onClick={onContact}
-                data-name="contact"
-                data-file="components/BusinessCard.js"
-                aria-label={`Reservar en ${b.nombre}`}
-              >
-                <div className="icon-message-circle text-base text-white" data-name="contact-i" data-file="components/BusinessCard.js"></div>
-                Reservar
-              </button>
+              {upcoming ? (
+                <a href={profileHref} className="btn-rr btn-ghost-rr py-2 px-4 text-xs whitespace-nowrap" data-name="profile" data-file="components/BusinessCard.js">
+                  Ver perfil
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  className="btn-rr btn-primary-rr py-2 px-4 text-xs flex items-center gap-2 shadow-md"
+                  onClick={onContact}
+                  data-name="contact"
+                  data-file="components/BusinessCard.js"
+                  aria-label={`Reservar en ${b.nombre}`}
+                >
+                  <div className="icon-message-circle text-base text-white" data-name="contact-i" data-file="components/BusinessCard.js"></div>
+                  Reservar
+                </button>
+              )}
             </div>
           </div>
         </div>
-      </div>
+      </article>
     );
   } catch (error) {
     console.error('BusinessCard component error:', error);

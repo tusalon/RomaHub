@@ -13,7 +13,9 @@ const MockData = (() => {
   // cambiar de seccion recarga toda la app y volvia a pedirlo todo a Supabase:
   // de ahi el "Cargando negocios..." en cada clic. Guardamos el resultado ya
   // normalizado en sessionStorage para pintar al instante y refrescar detras.
-  const CACHE_KEY = 'romahub-negocios-v1';
+  // Cambiar la version invalida caches que pudieron guardar solo los primeros
+  // 1,000 servicios por el limite de filas de Supabase.
+  const CACHE_KEY = 'romahub-negocios-v2';
   const CACHE_TTL_MS = 5 * 60 * 1000;
 
   function leerCache() {
@@ -82,7 +84,7 @@ const MockData = (() => {
     }
   }
 
-  async function supabaseFetch(path) {
+  async function supabaseFetch(path, options = {}) {
     const config = getSupabaseConfig();
     if (!config) throw new Error('Supabase no configurado');
 
@@ -90,7 +92,8 @@ const MockData = (() => {
       headers: {
         apikey: config.key,
         Authorization: `Bearer ${config.key}`,
-        'Cache-Control': 'no-cache'
+        'Cache-Control': 'no-cache',
+        ...(options.headers || {})
       },
       cache: 'no-store'
     });
@@ -101,6 +104,18 @@ const MockData = (() => {
     }
 
     return response.json();
+  }
+
+  async function supabaseFetchAll(path, pageSize = 1000, maxRows = 10000) {
+    const rows = [];
+    for (let from = 0; from < maxRows; from += pageSize) {
+      const page = await supabaseFetch(path, {
+        headers: { Range: `${from}-${from + pageSize - 1}` }
+      });
+      rows.push(...page);
+      if (page.length < pageSize) break;
+    }
+    return rows;
   }
 
   async function fetchOptionalTable(table, ids) {
@@ -119,6 +134,15 @@ const MockData = (() => {
       return await supabaseFetch(path);
     } catch (error) {
       console.warn('Consulta opcional no disponible:', path, error?.message || error);
+      return [];
+    }
+  }
+
+  async function optionalSupabaseFetchAll(path, pageSize = 1000, maxRows = 10000) {
+    try {
+      return await supabaseFetchAll(path, pageSize, maxRows);
+    } catch (error) {
+      console.warn('Consulta paginada opcional no disponible:', path, error?.message || error);
       return [];
     }
   }
@@ -326,6 +350,18 @@ const MockData = (() => {
     const productos = relations.productos[id] || [];
     const cursos = relations.cursos[id] || [];
     const resenas = relations.resenas[id] || [];
+    const descripcionNegocio = valueFrom(row, ['descripcion', 'description', 'mensaje_bienvenida'], '');
+    const tieneServicios = servicios.length > 0;
+    const tieneUbicacion = Boolean(provincia && municipio);
+    const tienePrecioServicio = servicios.some((item) => numberFrom(item, ['precio', 'precio_cup', 'monto'], 0) > 0);
+    const calidadPerfil = [
+      tieneServicios,
+      tieneUbicacion,
+      Boolean(logoUrl),
+      Boolean(coverUrlPropia),
+      Boolean(descripcionNegocio),
+      tienePrecioServicio
+    ].filter(Boolean).length;
 
     // El rango de precio del negocio mezcla servicios+productos+cursos, que
     // pueden estar en monedas distintas (hay negocios con servicios en USD).
@@ -372,6 +408,10 @@ const MockData = (() => {
       totalValoraciones,
       totalResenas: totalValoraciones,
       enRanking,
+      tieneServicios,
+      tieneUbicacion,
+      tienePrecioServicio,
+      calidadPerfil,
       esTiendaExterna,
       // El diamante 💎 y la prioridad los tiene quien NO es tienda externa
       // (un negocio rservasroma con suscripción activa).
@@ -389,7 +429,7 @@ const MockData = (() => {
       // El horario ya venia en la consulta pero se perdia aqui: es justo el
       // dato que la clienta busca antes de decidir si reserva.
       horario: valueFrom(row, ['horario_atencion', 'horario'], ''),
-      descripcion: valueFrom(row, ['descripcion', 'description', 'mensaje_bienvenida'], ''),
+      descripcion: descripcionNegocio,
       categoriasCatalogo: buildCatalogSections({ servicios, productos, cursos }),
       resenas: resenas.map((item, index) => ({
         id: String(item.id || `${id}-resena-${index}`),
@@ -404,8 +444,8 @@ const MockData = (() => {
 
   async function fetchVerifiedRatings() {
     try {
-      const rows = await optionalSupabaseFetch(
-        'reservas?valoracion_servicio=not.is.null&select=negocio_id,valoracion_servicio&limit=10000'
+      const rows = await optionalSupabaseFetchAll(
+        'reservas?valoracion_servicio=not.is.null&select=id,negocio_id,valoracion_servicio&order=negocio_id.asc,id.asc'
       );
       const grouped = {};
       (rows || []).forEach((row) => {
@@ -465,9 +505,9 @@ const MockData = (() => {
           // por es_tienda_externa), asi que quitar el filtro no le quita
           // significado. La curaduria de quien se ve ahora es manual, via el
           // propio campo "configurado" de cada negocio.
-          supabaseFetch(`negocios?configurado=eq.true&select=${CAMPOS_NEGOCIO}&order=nombre.asc`),
+          supabaseFetchAll(`negocios?configurado=eq.true&select=${CAMPOS_NEGOCIO}&order=nombre.asc,id.asc`),
           // Tiendas externas: se identifican por el flag, no por suscripcion.
-          optionalSupabaseFetch(`negocios?configurado=eq.true&es_tienda_externa=eq.true&select=${CAMPOS_NEGOCIO}&order=nombre.asc`),
+          optionalSupabaseFetchAll(`negocios?configurado=eq.true&es_tienda_externa=eq.true&select=${CAMPOS_NEGOCIO}&order=nombre.asc,id.asc`),
           fetchVerifiedRatings()
         ]);
 
@@ -493,13 +533,13 @@ const MockData = (() => {
           cursosTiendaRows
         ] = await Promise.all([
           optionalSupabaseCount('reservas?created_at=gte.' + encodeURIComponent(getTodayStartIso()) + '&select=id'),
-          optionalSupabaseFetch('servicios?activo=eq.true&select=id,negocio_id,nombre,duracion,precio,precio_moneda,descripcion,activo,imagen,categoria,orden&order=orden.asc,nombre.asc&limit=5000'),
-          optionalSupabaseFetch('reservas?created_at=gte.' + encodeURIComponent(getWeekStartIso()) + '&select=negocio_id,created_at,estado&limit=5000'),
+          optionalSupabaseFetchAll('servicios?activo=eq.true&select=id,negocio_id,nombre,precio,precio_moneda,categoria,orden&order=negocio_id.asc,orden.asc,nombre.asc,id.asc'),
+          optionalSupabaseFetchAll('reservas?created_at=gte.' + encodeURIComponent(getWeekStartIso()) + '&select=id,negocio_id,created_at,estado&order=created_at.asc,id.asc'),
           tiendaTablesEnabled()
-            ? optionalSupabaseFetch('productos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,stock,activo,destacado,orden&order=destacado.desc,orden.asc,nombre.asc&limit=5000')
+            ? optionalSupabaseFetchAll('productos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,stock,activo,destacado,orden&order=negocio_id.asc,destacado.desc,orden.asc,nombre.asc,id.asc')
             : Promise.resolve([]),
           tiendaTablesEnabled()
-            ? optionalSupabaseFetch('cursos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=destacado.desc,orden.asc,fecha.asc,nombre.asc&limit=5000')
+            ? optionalSupabaseFetchAll('cursos?activo=eq.true&select=id,negocio_id,nombre,descripcion,precio,moneda,imagen_url,categoria,fecha,ubicacion,duracion,cupos,activo,destacado,orden&order=negocio_id.asc,destacado.desc,orden.asc,fecha.asc,nombre.asc,id.asc')
             : Promise.resolve([])
         ]);
         totalReservasHoy = reservasHoyCount;
@@ -623,12 +663,19 @@ const MockData = (() => {
 
   // Los negocios rservasroma van primero; las tiendas externas, más abajo.
   function ordenNegocio(a, b) {
+    if (a.tieneServicios !== b.tieneServicios) return a.tieneServicios ? -1 : 1;
     if (a.esRservasroma !== b.esRservasroma) return a.esRservasroma ? -1 : 1;
+    if ((a.calidadPerfil || 0) !== (b.calidadPerfil || 0)) return (b.calidadPerfil || 0) - (a.calidadPerfil || 0);
     return String(a.nombre).localeCompare(String(b.nombre));
   }
 
   function listBusinesses() {
-    return businesses.slice().sort(ordenNegocio);
+    return businesses.filter((business) => business.tieneServicios).sort(ordenNegocio);
+  }
+
+  function listUpcomingBusinesses(limit) {
+    const list = businesses.filter((business) => !business.tieneServicios).sort(ordenNegocio);
+    return limit ? list.slice(0, limit) : list;
   }
 
   function getLoadError() {
@@ -642,7 +689,7 @@ const MockData = (() => {
   function listTopRated() {
     return businesses
       .slice()
-      .filter((b) => b.enRanking)
+      .filter((b) => b.tieneServicios && b.enRanking)
       .sort((a, b) => (b.estrellas - a.estrellas) || (b.totalValoraciones - a.totalValoraciones))
       .slice(0, 12);
   }
@@ -650,6 +697,7 @@ const MockData = (() => {
   function listWeeklyFeatured() {
     return businesses
       .slice()
+      .filter((b) => b.tieneServicios)
       .sort((a, b) => (b.reservasSemana || 0) - (a.reservasSemana || 0) || a.nombre.localeCompare(b.nombre))
       .slice(0, 10);
   }
@@ -747,38 +795,52 @@ const MockData = (() => {
       .replace(/[̀-ͯ]/g, '');
   }
 
-  function searchBusinesses(query) {
+  function matchesBusiness(b, query, includeCatalog = true) {
     const q = query || { nombre: '', servicio: '', ubicacion: '' };
     const nombre = normalizeText(q.nombre);
     const servicio = normalizeText(q.servicio);
     const ubicacion = normalizeText(q.ubicacion);
 
-    return businesses.filter((b) => {
-      const catalogTerms = (b.categoriasCatalogo || [])
+    const catalogTerms = includeCatalog
+      ? (b.categoriasCatalogo || [])
         .flatMap((section) => [
           section.titulo,
           section.tipo,
           ...(section.items || []).flatMap((item) => [item.nombre, item.descripcion, item.categoria])
         ])
-        .filter(Boolean);
+        .filter(Boolean)
+      : [];
 
-      const hayNombre = !nombre || normalizeText(b.nombre).includes(nombre);
+    const hayNombre = !nombre || normalizeText(b.nombre).includes(nombre);
 
-      const hayServicio = !servicio
-        ? true
-        : [b.nombre, b.categoria, b.descripcion, ...catalogTerms]
-          .filter(Boolean)
-          .some((t) => normalizeText(t).includes(servicio));
+    const hayServicio = !servicio
+      ? true
+      : [b.categoria, b.descripcion, ...catalogTerms]
+        .filter(Boolean)
+        .some((t) => normalizeText(t).includes(servicio));
 
-      const hayUbicacion = !ubicacion
-        ? true
-        : [b.ubicacion?.provincia, b.ubicacion?.ciudad, b.ubicacion?.zona, b.ubicacion?.direccion]
-          .filter(Boolean)
-          .some((t) => normalizeText(t).includes(ubicacion));
+    const hayUbicacion = !ubicacion
+      ? true
+      : [b.ubicacion?.provincia, b.ubicacion?.municipio]
+        .filter(Boolean)
+        .some((t) => normalizeText(t).includes(ubicacion));
 
-      return hayNombre && hayServicio && hayUbicacion;
-    });
+    return hayNombre && hayServicio && hayUbicacion;
   }
 
-  return { listBusinesses, listTopRated, listWeeklyFeatured, listRomaStores, listShowcaseProducts, getShowcaseCount, listRomaReviews, searchBusinesses, getBusinessById, loadBusinesses, loadBusinessDetails, getLoadError, getTodayReservations, addReview, addOrder };
+  function searchBusinesses(query) {
+    return businesses
+      .filter((business) => business.tieneServicios && matchesBusiness(business, query))
+      .sort(ordenNegocio);
+  }
+
+  function searchUpcomingBusinesses(query) {
+    const q = query || {};
+    if (!String(q.nombre || '').trim() || String(q.servicio || '').trim()) return [];
+    return businesses
+      .filter((business) => !business.tieneServicios && matchesBusiness(business, q, false))
+      .sort(ordenNegocio);
+  }
+
+  return { listBusinesses, listUpcomingBusinesses, listTopRated, listWeeklyFeatured, listRomaStores, listShowcaseProducts, getShowcaseCount, listRomaReviews, searchBusinesses, searchUpcomingBusinesses, getBusinessById, loadBusinesses, loadBusinessDetails, getLoadError, getTodayReservations, addReview, addOrder };
 })();

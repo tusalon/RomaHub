@@ -40,7 +40,6 @@ const bundles = {
     'components/StarRating.js',
     'components/SearchBar.js',
     'components/BusinessCard.js',
-    'components/MapSplitView.js',
     'pages/search/SearchPage.js',
     'search-app.js'
   ],
@@ -142,4 +141,3 @@ execFileSync(
   [tailwindBin, '-i', 'styles/tailwind-input.css', '-o', 'styles/tailwind.css', '--minify'],
   { cwd: root, stdio: 'inherit' }
 );
-

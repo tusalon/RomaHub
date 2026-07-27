@@ -70,14 +70,14 @@
                 </p>
               ) : null}
               <div className="mt-4 flex flex-wrap gap-2" data-name="quick-facts" data-file="pages/business/BusinessHeader.js">
-                <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="services-count" data-file="pages/business/BusinessHeader.js">{services.length} servicios</span>
+                {services.length ? <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="services-count" data-file="pages/business/BusinessHeader.js">{services.length} servicios</span> : <span className="chip-rr px-3 py-1.5 text-xs text-[var(--primary-color)]" data-name="services-upcoming" data-file="pages/business/BusinessHeader.js">Próximamente · preparando servicios</span>}
                 {products.length ? <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="products-count" data-file="pages/business/BusinessHeader.js">{products.length} productos</span> : null}
                 {courses.length ? <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="courses-count" data-file="pages/business/BusinessHeader.js">{courses.length} cursos</span> : null}
-                <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="first-price" data-file="pages/business/BusinessHeader.js">Desde {firstPrice}</span>
+                {services.length ? <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="first-price" data-file="pages/business/BusinessHeader.js">Desde {firstPrice}</span> : null}
               </div>
             </div>
 
-            {!b.esTiendaExterna ? (
+            {!b.esTiendaExterna && services.length ? (
               <div className="w-full lg:w-[230px]" data-name="header-action" data-file="pages/business/BusinessHeader.js">
                 <a className="btn-rr btn-primary-rr w-full flex items-center justify-center gap-2" href={b.reservaUrl || `https://wa.me/${String(b.whatsapp||'').replace('+','')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}. Tienen disponibilidad?`)}`} target="_blank" rel="noopener noreferrer" data-name="cta-wa" data-file="pages/business/BusinessHeader.js">
                   <div className="icon-message-circle text-xl text-white" data-name="cta-wa-i" data-file="pages/business/BusinessHeader.js"></div>

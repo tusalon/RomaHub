@@ -2,7 +2,7 @@ const Format = (() => {
   function formatPrecio(value, moneda) {
     try {
       const n = Number(value);
-      if (Number.isNaN(n)) return '—';
+      if (!Number.isFinite(n) || n <= 0) return 'Consultar precio';
       const codigo = String(moneda || 'CUP').toUpperCase();
       return `${Math.round(n).toLocaleString('es-ES')} ${codigo}`;
     } catch (error) {
@@ -19,9 +19,14 @@ const Format = (() => {
 
   function formatRangoPrecio(min, max, moneda) {
     try {
-      if (min == null && max == null) return '—';
-      if (min != null && max != null) return `${formatPrecio(min, moneda)} – ${formatPrecio(max, moneda)}`;
-      return min != null ? formatPrecio(min, moneda) : formatPrecio(max, moneda);
+      const minValido = Number.isFinite(Number(min)) && Number(min) > 0 ? Number(min) : null;
+      const maxValido = Number.isFinite(Number(max)) && Number(max) > 0 ? Number(max) : null;
+      if (minValido == null && maxValido == null) return 'Consultar precio';
+      if (minValido != null && maxValido != null) {
+        if (minValido === maxValido) return formatPrecio(minValido, moneda);
+        return `${formatPrecio(minValido, moneda)} – ${formatPrecio(maxValido, moneda)}`;
+      }
+      return formatPrecio(minValido ?? maxValido, moneda);
     } catch (error) {
       console.error('Format.formatRangoPrecio error:', error);
       return '—';

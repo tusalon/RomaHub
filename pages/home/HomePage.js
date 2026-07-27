@@ -76,7 +76,7 @@ function HomePage({ initialParams }) {
           badge="Productos y cursos"
           subtitle="Compra directo por WhatsApp con el negocio."
           items={showcase}
-          verTodosHref="search.html"
+          verTodosHref="tienda.html"
           data-name="marketplace-showcase"
           data-file="pages/home/HomePage.js"
         />
@@ -90,9 +90,9 @@ function HomePage({ initialParams }) {
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(34,197,94,0.08)]" data-name="trust-1-iw" data-file="pages/home/HomePage.js">
                   <div className="icon-circle-check text-xl text-[#22C55E]" data-name="trust-1-i" data-file="pages/home/HomePage.js"></div>
                 </div>
-                <p className="mt-4 text-sm font-semibold" data-name="trust-1-t" data-file="pages/home/HomePage.js">Valoraciones verificadas</p>
+                <p className="mt-4 text-sm font-semibold" data-name="trust-1-t" data-file="pages/home/HomePage.js">Servicios publicados</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed" data-name="trust-1-d" data-file="pages/home/HomePage.js">
-                  Solo puntuan clientas que completaron su visita. Cero valoraciones inventadas.
+                  Consulta los servicios activos y sus precios antes de abrir el perfil del negocio.
                 </p>
               </div>
 
@@ -100,9 +100,9 @@ function HomePage({ initialParams }) {
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(232,51,135,0.08)]" data-name="trust-2-iw" data-file="pages/home/HomePage.js">
                   <div className="icon-trophy text-xl text-[#e83387]" data-name="trust-2-i" data-file="pages/home/HomePage.js"></div>
                 </div>
-                <p className="mt-4 text-sm font-semibold" data-name="trust-2-t" data-file="pages/home/HomePage.js">Ranking competitivo</p>
+                <p className="mt-4 text-sm font-semibold" data-name="trust-2-t" data-file="pages/home/HomePage.js">Negocios listos</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed" data-name="trust-2-d" data-file="pages/home/HomePage.js">
-                  Los negocios con mejor servicio suben en el ranking. Minimo 3 valoraciones para competir.
+                  En el directorio aparecen primero los negocios que ya tienen servicios disponibles.
                 </p>
               </div>
 
@@ -110,9 +110,9 @@ function HomePage({ initialParams }) {
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(232,51,135,0.08)]" data-name="trust-3-iw" data-file="pages/home/HomePage.js">
                   <div className="icon-map-pin text-xl text-[#e83387]" data-name="trust-3-i" data-file="pages/home/HomePage.js"></div>
                 </div>
-                <p className="mt-4 text-sm font-semibold" data-name="trust-3-t" data-file="pages/home/HomePage.js">Toda Cuba</p>
+                <p className="mt-4 text-sm font-semibold" data-name="trust-3-t" data-file="pages/home/HomePage.js">Directorio en crecimiento</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed" data-name="trust-3-d" data-file="pages/home/HomePage.js">
-                  Encuentra negocios por provincia. RomaHub crece en toda la isla.
+                  Busca por provincia o municipio y descubre nuevos negocios de belleza en Cuba.
                 </p>
               </div>
             </div>

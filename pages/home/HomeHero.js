@@ -64,7 +64,7 @@ function HomeHero({ initialParams }) {
               </span>
             </h1>
             <p className="mt-5 text-base md:text-lg text-[var(--text-muted)] leading-relaxed max-w-xl" data-name="hero-sub" data-file="pages/home/HomeHero.js">
-              Salones, manicuristas, barberos y especialistas de toda la isla. Mira sus servicios y precios, y reserva tu turno online.
+              Salones, manicuristas, barberos y especialistas de toda la isla. Mira sus servicios y precios, y contacta directamente al negocio.
             </p>
 
             <div className="mt-8 max-w-[760px]" data-name="hero-search" data-file="pages/home/HomeHero.js">
@@ -191,8 +191,8 @@ function HomeHero({ initialParams }) {
                     negocios activos", pero el directorio de abajo lista los que
                     tienen la suscripcion al dia: la clienta leia una promesa y
                     justo debajo contaba otra cifra distinta. */}
-                <p className="text-xs lg:text-sm font-bold text-[#111827] leading-none" data-name="hero-visual-badge-title" data-file="pages/home/HomeHero.js">{totalBusinesses} negocios con reserva online</p>
-                <p className="text-[10px] lg:text-[11px] text-[var(--text-muted)] mt-1" data-name="hero-visual-badge-sub" data-file="pages/home/HomeHero.js">agenda real, disponibilidad al dia</p>
+                <p className="text-xs lg:text-sm font-bold text-[#111827] leading-none" data-name="hero-visual-badge-title" data-file="pages/home/HomeHero.js">{totalBusinesses} negocios con servicios publicados</p>
+                <p className="text-[10px] lg:text-[11px] text-[var(--text-muted)] mt-1" data-name="hero-visual-badge-sub" data-file="pages/home/HomeHero.js">consulta opciones y precios antes de elegir</p>
               </div>
             </div>
           </div>

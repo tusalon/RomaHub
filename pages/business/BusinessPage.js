@@ -197,7 +197,7 @@
               {hasStore ? <div className="lg:hidden mt-4" data-name="mobile-cart" data-file="pages/business/BusinessPage.js">
                 {renderCartCard()}
               </div> : null}
-              <BusinessReviews business={b} data-name="reviews" data-file="pages/business/BusinessPage.js" />
+              {b.tieneServicios ? <BusinessReviews business={b} data-name="reviews" data-file="pages/business/BusinessPage.js" /> : null}
               {b.esTiendaExterna ? (
                 <div className="mt-4 lg:hidden" data-name="mobile-upgrade-promo" data-file="pages/business/BusinessPage.js">
                   <RomaHubUpgradePromo nombreNegocio={b.nombre} data-name="upgrade-promo-mobile" data-file="pages/business/BusinessPage.js" />
@@ -225,7 +225,7 @@
                   </div>
                 </div>
 
-                {!b.esTiendaExterna ? (
+                {!b.esTiendaExterna && b.tieneServicios ? (
                   <React.Fragment>
                     <div className="divider-rr my-4" data-name="contact-div" data-file="pages/business/BusinessPage.js"></div>
                     <a
@@ -258,7 +258,7 @@
           </div>
         </div>
 
-        {!b.esTiendaExterna ? (
+        {!b.esTiendaExterna && b.tieneServicios ? (
           <MobileWhatsAppBar whatsapp={b.whatsapp} nombre={b.nombre} reservaUrl={b.reservaUrl} data-name="wa" data-file="pages/business/BusinessPage.js" />
         ) : null}
       </div>
@@ -268,4 +268,3 @@
     return null;
   }
 }
-
