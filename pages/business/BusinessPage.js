@@ -23,6 +23,24 @@
       .join(' + ') || Format.formatPrecio(0);
 
     React.useEffect(() => {
+      window.RomaAnalytics?.track?.({ negocioId: b.id, evento: 'perfil_vista' }, { oncePerDay: true });
+    }, [b.id]);
+
+    React.useEffect(() => {
+      if (!selectedItemId) return;
+      const section = catalog.find((item) => (item.items || []).some((catalogItem) => String(catalogItem.id) === String(selectedItemId)));
+      const selectedItem = section?.items?.find((item) => String(item.id) === String(selectedItemId));
+      if (!selectedItem) return;
+      window.RomaAnalytics?.track?.({
+        negocioId: b.id,
+        evento: 'producto_visto',
+        itemTipo: section.tipo === 'cursos' ? 'curso' : 'producto',
+        itemId: selectedItem.id,
+        itemNombre: selectedItem.nombre
+      }, { oncePerDay: true });
+    }, [b.id, selectedItemId]);
+
+    React.useEffect(() => {
       if (!selectedItemId) return;
       const timer = window.setTimeout(() => {
         document.getElementById(`catalog-item-${selectedItemId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -113,6 +131,7 @@
           setCartMessage('Este negocio no tiene WhatsApp configurado.');
           return;
         }
+        window.RomaAnalytics?.track?.({ negocioId: b.id, evento: 'whatsapp_click' });
         window.location.href = `https://wa.me/${wa}?text=${encodeURIComponent(lines.join('\n'))}`;
       } catch (error) {
         console.error('BusinessPage.processCart error:', error);
@@ -242,6 +261,7 @@
                       href={b.reservaUrl || `https://wa.me/${String(b.whatsapp||'').replace('+','')}?text=${encodeURIComponent(`Hola, quiero reservar en ${b.nombre}.`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => window.RomaAnalytics?.track?.({ negocioId: b.id, evento: 'reserva_click' })}
                       data-name="sticky-wa"
                       data-file="pages/business/BusinessPage.js"
                     >
@@ -268,7 +288,7 @@
         </div>
 
         {!b.esTiendaExterna && b.tieneServicios ? (
-          <MobileWhatsAppBar whatsapp={b.whatsapp} nombre={b.nombre} reservaUrl={b.reservaUrl} data-name="wa" data-file="pages/business/BusinessPage.js" />
+          <MobileWhatsAppBar whatsapp={b.whatsapp} nombre={b.nombre} reservaUrl={b.reservaUrl} negocioId={b.id} data-name="wa" data-file="pages/business/BusinessPage.js" />
         ) : null}
       </div>
     );

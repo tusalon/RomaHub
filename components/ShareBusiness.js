@@ -7,6 +7,7 @@ function ShareBusiness({ businessId, businessName, compact = false }) {
       target.search = new URLSearchParams({ id: String(businessId || '') }).toString();
       return target.toString();
     }, [businessId]);
+    const trackShared = () => window.RomaAnalytics?.track?.({ negocioId: businessId, evento: 'compartir' });
 
     const copyLink = async () => {
       try {
@@ -22,6 +23,7 @@ function ShareBusiness({ businessId, businessName, compact = false }) {
           document.execCommand('copy');
           input.remove();
         }
+        trackShared();
         setMessage('Enlace copiado');
         window.setTimeout(() => setMessage(''), 1800);
       } catch (error) {
@@ -38,6 +40,7 @@ function ShareBusiness({ businessId, businessName, compact = false }) {
             text: `Mira ${businessName || 'este negocio'} en RomaHub`,
             url
           });
+          trackShared();
           return;
         }
         await copyLink();
@@ -47,6 +50,12 @@ function ShareBusiness({ businessId, businessName, compact = false }) {
     };
 
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data=${encodeURIComponent(url)}`;
+    const toggleQr = () => {
+      setOpen((value) => {
+        if (!value) trackShared();
+        return !value;
+      });
+    };
 
     return (
       <div className="relative" data-name="share-business" data-file="components/ShareBusiness.js">
@@ -55,7 +64,7 @@ function ShareBusiness({ businessId, businessName, compact = false }) {
             <span className="icon-share-2 text-base"></span>
             Compartir
           </button>
-          <button type="button" className="btn-rr btn-ghost-rr flex items-center justify-center gap-2" onClick={() => setOpen((value) => !value)} aria-expanded={open}>
+          <button type="button" className="btn-rr btn-ghost-rr flex items-center justify-center gap-2" onClick={toggleQr} aria-expanded={open}>
             <span className="icon-qr-code text-base"></span>
             QR
           </button>

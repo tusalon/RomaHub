@@ -34,6 +34,20 @@
     const [servicesLoading, setServicesLoading] = React.useState(false);
     const [servicesSaving, setServicesSaving] = React.useState(false);
     const [servicesMessage, setServicesMessage] = React.useState('');
+    const [stats, setStats] = React.useState({
+      periodo_dias: 30,
+      visitas: 0,
+      whatsapp: 0,
+      reservas: 0,
+      contactos: 0,
+      productos_vistos: 0,
+      compartidos: 0,
+      conversion_pct: 0,
+      dias: [],
+      top_items: []
+    });
+    const [statsLoading, setStatsLoading] = React.useState(false);
+    const [statsMessage, setStatsMessage] = React.useState('');
     const [form, setForm] = React.useState({
       id: '',
       nombre: '',
@@ -145,10 +159,29 @@
       }
     };
 
+    const loadStats = async () => {
+      try {
+        if (!negocioId) return;
+        setStatsLoading(true);
+        setStatsMessage('');
+        const data = await supabaseRequest('rpc/mis_estadisticas_romahub', {
+          method: 'POST',
+          body: JSON.stringify({ p_negocio_id: negocioId, p_dias: 30 })
+        });
+        if (data && typeof data === 'object') setStats((current) => ({ ...current, ...data }));
+      } catch (error) {
+        console.error('BusinessPanelPage.loadStats error:', error);
+        setStatsMessage(error.message || 'No se pudieron cargar las estadísticas.');
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+
     React.useEffect(() => {
       if (negocioId) {
         loadStore();
         loadServices();
+        loadStats();
       }
     }, [negocioId]);
 
@@ -447,6 +480,15 @@
     const completedTasks = profileTasks.filter((task) => task.done).length;
     const profileProgress = Math.round((completedTasks / profileTasks.length) * 100);
     const nextTask = profileTasks.find((task) => !task.done);
+    const statsDays = Array.isArray(stats.dias) ? stats.dias : [];
+    const maxDailyValue = Math.max(1, ...statsDays.map((day) => Math.max(Number(day.visitas || 0), Number(day.contactos || 0))));
+    const statsInsight = Number(stats.visitas || 0) === 0
+      ? 'Comparte tu enlace o QR para comenzar a traer visitas y medir qué funciona.'
+      : Number(stats.contactos || 0) === 0
+        ? 'Ya tienes visitas. Refuerza la descripción, la portada y el llamado a reservar o comprar.'
+        : Number(stats.conversion_pct || 0) < 5
+          ? 'Hay interés, pero pocas personas contactan. Revisa precios, descripción y WhatsApp.'
+          : 'Tu perfil está convirtiendo visitas en contactos. Mantén el catálogo actualizado y sigue compartiéndolo.';
 
     if (authLoading) {
       return <div className="container-rr py-16 text-sm text-[var(--text-muted)]">Abriendo panel...</div>;
@@ -518,7 +560,7 @@
           </div>
         </section>
 
-        <nav className="mt-5 surface-rr p-2 grid grid-cols-2 gap-2" aria-label="Secciones del panel" data-name="panel-sections" data-file="pages/panel/BusinessPanelPage.js">
+        <nav className="mt-5 surface-rr p-2 grid grid-cols-1 sm:grid-cols-3 gap-2" aria-label="Secciones del panel" data-name="panel-sections" data-file="pages/panel/BusinessPanelPage.js">
           <button
             type="button"
             className={`btn-rr ${section === 'perfil' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
@@ -536,6 +578,15 @@
             data-file="pages/panel/BusinessPanelPage.js"
           >
             Productos y cursos
+          </button>
+          <button
+            type="button"
+            className={`btn-rr ${section === 'estadisticas' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+            onClick={() => { setSection('estadisticas'); loadStats(); }}
+            data-name="section-stats"
+            data-file="pages/panel/BusinessPanelPage.js"
+          >
+            Estadísticas
           </button>
         </nav>
 
@@ -786,6 +837,94 @@
                 </button>
               </div>
             </div>
+          </section>
+        ) : section === 'estadisticas' ? (
+          <section className="mt-5 space-y-4" data-name="stats-section" data-file="pages/panel/BusinessPanelPage.js">
+            <div className="surface-rr p-5 md:p-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4" data-name="stats-head">
+              <div>
+                <p className="kicker-rr">Resultados en RomaHub</p>
+                <h2 className="mt-2 text-2xl font-semibold">Qué hacen las clientas en tu perfil</h2>
+                <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed">Últimos {stats.periodo_dias || 30} días. Medimos acciones, no datos personales de las visitantes.</p>
+              </div>
+              <button type="button" className="btn-rr btn-ghost-rr shrink-0" onClick={loadStats} disabled={statsLoading}>
+                {statsLoading ? 'Actualizando...' : 'Actualizar'}
+              </button>
+            </div>
+
+            {statsMessage ? <div className="surface-rr p-4 text-sm text-red-600">{statsMessage}</div> : null}
+
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3" data-name="stats-cards">
+              {[
+                { label: 'Visitas al perfil', value: stats.visitas, icon: 'icon-eye' },
+                { label: 'Contactos', value: stats.contactos, icon: 'icon-message-circle' },
+                { label: 'Intentos de reserva', value: stats.reservas, icon: 'icon-calendar-check' },
+                { label: 'Productos vistos', value: stats.productos_vistos, icon: 'icon-shopping-bag' },
+                { label: 'Veces compartido', value: stats.compartidos, icon: 'icon-share-2' }
+              ].map((metric) => (
+                <article key={metric.label} className="surface-rr p-4 md:p-5" data-name="stats-card">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--secondary-color)] flex items-center justify-center">
+                    <span className={`${metric.icon} text-lg text-[var(--primary-color)]`}></span>
+                  </div>
+                  <p className="mt-4 text-2xl md:text-3xl font-extrabold text-[#111827]">{Number(metric.value || 0).toLocaleString('es-ES')}</p>
+                  <p className="mt-1 text-xs text-[var(--text-muted)] leading-snug">{metric.label}</p>
+                </article>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)] gap-4 items-stretch">
+              <article className="surface-rr p-5 md:p-6" data-name="weekly-chart">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold">Actividad de los últimos 7 días</p>
+                    <p className="mt-1 text-xs text-[var(--text-muted)]">Rosa: visitas · Oscuro: contactos</p>
+                  </div>
+                  <span className="chip-rr px-3 py-1.5 text-xs text-[var(--primary-color)]">{Number(stats.conversion_pct || 0)}% conversión</span>
+                </div>
+                <div className="mt-6 grid grid-cols-7 gap-2 h-44 items-end" aria-label="Actividad diaria">
+                  {statsDays.map((day) => {
+                    const visitas = Number(day.visitas || 0);
+                    const contactos = Number(day.contactos || 0);
+                    const label = new Date(`${day.fecha}T12:00:00`).toLocaleDateString('es-ES', { weekday: 'short' }).replace('.', '').slice(0, 3);
+                    return (
+                      <div key={day.fecha} className="h-full flex flex-col justify-end items-center gap-2" title={`${day.fecha}: ${visitas} visitas, ${contactos} contactos`}>
+                        <div className="h-[118px] w-full flex items-end justify-center gap-1 border-b border-[var(--border)]">
+                          <span className="w-2.5 sm:w-4 rounded-t bg-[var(--primary-color)] min-h-[2px]" style={{ height: visitas ? `${Math.max(8, (visitas / maxDailyValue) * 100)}%` : '2px' }}></span>
+                          <span className="w-2.5 sm:w-4 rounded-t bg-[#111827] min-h-[2px]" style={{ height: contactos ? `${Math.max(8, (contactos / maxDailyValue) * 100)}%` : '2px' }}></span>
+                        </div>
+                        <span className="text-[10px] text-[var(--text-muted)] capitalize">{label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </article>
+
+              <article className="surface-rr p-5 md:p-6" data-name="top-items">
+                <p className="text-sm font-semibold">Productos y cursos con más interés</p>
+                <p className="mt-1 text-xs text-[var(--text-muted)]">Según aperturas y selecciones.</p>
+                {Array.isArray(stats.top_items) && stats.top_items.length ? (
+                  <div className="mt-4 divide-y divide-[var(--border)]">
+                    {stats.top_items.map((item, index) => (
+                      <div key={`${item.tipo}-${item.nombre}`} className="py-3 flex items-center gap-3">
+                        <span className="w-8 h-8 rounded-lg bg-[var(--bg-muted)] flex items-center justify-center text-xs font-bold text-[var(--primary-color)]">{index + 1}</span>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-semibold truncate">{item.nombre}</p>
+                          <p className="text-[11px] text-[var(--text-muted)] capitalize">{item.tipo}</p>
+                        </div>
+                        <span className="text-sm font-bold">{Number(item.vistas || 0)}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="mt-4 rounded-xl bg-[var(--bg-muted)] p-4 text-sm text-[var(--text-muted)] leading-relaxed">Todavía no hay suficientes vistas de productos o cursos.</div>
+                )}
+              </article>
+            </div>
+
+            <article className="surface-rr p-5 md:p-6 border-l-4 border-l-[var(--primary-color)]" data-name="stats-recommendation">
+              <p className="text-xs font-bold uppercase tracking-wide text-[var(--primary-color)]">Recomendación para crecer</p>
+              <p className="mt-2 text-sm md:text-base font-semibold leading-relaxed">{statsInsight}</p>
+              <p className="mt-2 text-xs text-[var(--text-muted)]">Las estadísticas comienzan a registrarse desde esta actualización; no incluyen visitas anteriores.</p>
+            </article>
           </section>
         ) : (
         <section className="mt-5 grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-4 items-start" data-name="store-grid" data-file="pages/panel/BusinessPanelPage.js">

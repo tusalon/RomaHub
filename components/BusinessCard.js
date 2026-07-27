@@ -18,6 +18,7 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
         const msg = encodeURIComponent(`Hola, quiero reservar en ${b.nombre}. Tienen disponibilidad?`);
         const wa = (b.whatsapp || '').replace(/\s+/g, '');
         const url = b.reservaUrl || `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
+        window.RomaAnalytics?.track?.({ negocioId: b.id, evento: 'reserva_click' });
         window.open(url, '_blank', 'noopener,noreferrer');
       } catch (error) {
         console.error('BusinessCard.onContact error:', error);
@@ -125,4 +126,3 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
     return null;
   }
 }
-

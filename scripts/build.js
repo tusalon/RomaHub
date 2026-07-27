@@ -10,6 +10,7 @@ const bundles = {
   'index.bundle.js': [
     'utils/navigation.js',
     'utils/format.js',
+    'utils/romahub-analytics.js',
     'data/mockData.js',
     'components/ToastProvider.js',
     'components/Header.js',
@@ -32,6 +33,7 @@ const bundles = {
   'search.bundle.js': [
     'utils/navigation.js',
     'utils/format.js',
+    'utils/romahub-analytics.js',
     'data/mockData.js',
     'components/ToastProvider.js',
     'components/Header.js',
@@ -46,6 +48,7 @@ const bundles = {
   'business.bundle.js': [
     'utils/navigation.js',
     'utils/format.js',
+    'utils/romahub-analytics.js',
     'data/mockData.js',
     'components/ToastProvider.js',
     'components/Header.js',
@@ -87,6 +90,7 @@ const bundles = {
   'tienda.bundle.js': [
     'utils/navigation.js',
     'utils/format.js',
+    'utils/romahub-analytics.js',
     'data/mockData.js',
     'components/ToastProvider.js',
     'components/Header.js',
@@ -106,6 +110,7 @@ const bundles = {
   'panel.bundle.js': [
     'utils/navigation.js',
     'utils/format.js',
+    'utils/romahub-analytics.js',
     'utils/supabase-auth.js',
     'components/ToastProvider.js',
     'components/Header.js',

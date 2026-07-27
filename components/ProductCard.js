@@ -9,6 +9,16 @@ function ProductCard({ item }) {
     const contactUrl = whatsappCompleto
       ? `https://wa.me/${whatsappCompleto}?text=${encodeURIComponent(`Hola, vi ${it.nombre} en RomaHub y quiero ${esCurso ? 'más información' : 'comprarlo'}.`)}`
       : detailUrl;
+    const analyticsItem = {
+      negocioId: it.negocioId,
+      itemTipo: esCurso ? 'curso' : 'producto',
+      itemId,
+      itemNombre: it.nombre
+    };
+    const trackView = () => window.RomaAnalytics?.track?.({ ...analyticsItem, evento: 'producto_visto' }, { oncePerDay: true });
+    const trackContact = () => {
+      if (whatsappCompleto) window.RomaAnalytics?.track?.({ ...analyticsItem, evento: 'whatsapp_click' });
+    };
 
     return (
       <article
@@ -16,7 +26,7 @@ function ProductCard({ item }) {
         data-name="product-card"
         data-file="components/ProductCard.js"
       >
-        <a href={detailUrl} className="relative aspect-square overflow-hidden bg-[#F3F4F6] block" data-name="product-media" data-file="components/ProductCard.js" aria-label={`Ver ${it.nombre} en ${it.negocioNombre}`}>
+        <a href={detailUrl} onClick={trackView} className="relative aspect-square overflow-hidden bg-[#F3F4F6] block" data-name="product-media" data-file="components/ProductCard.js" aria-label={`Ver ${it.nombre} en ${it.negocioNombre}`}>
           {it.imagen ? (
             <img loading="lazy" decoding="async" src={it.imagen} alt={it.nombre} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-name="product-img" data-file="components/ProductCard.js" />
           ) : (
@@ -50,11 +60,11 @@ function ProductCard({ item }) {
             {it.negocioEsRservasroma ? <span className="text-xs shrink-0" title="Negocio verificado Rservasroma" data-name="diamond-badge" data-file="components/ProductCard.js">💎</span> : null}
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2" data-name="product-actions" data-file="components/ProductCard.js">
-            <a className="btn-rr btn-primary-rr py-2 px-2 text-xs flex items-center justify-center gap-1" href={contactUrl} target={whatsappCompleto ? '_blank' : undefined} rel={whatsappCompleto ? 'noopener noreferrer' : undefined} data-name="product-contact">
+            <a className="btn-rr btn-primary-rr py-2 px-2 text-xs flex items-center justify-center gap-1" href={contactUrl} onClick={whatsappCompleto ? trackContact : trackView} target={whatsappCompleto ? '_blank' : undefined} rel={whatsappCompleto ? 'noopener noreferrer' : undefined} data-name="product-contact">
               <span className="icon-message-circle text-sm text-white"></span>
               {esCurso ? 'Me interesa' : 'Comprar'}
             </a>
-            <a className="btn-rr btn-ghost-rr py-2 px-2 text-xs flex items-center justify-center" href={detailUrl} data-name="product-detail">Ver detalle</a>
+            <a className="btn-rr btn-ghost-rr py-2 px-2 text-xs flex items-center justify-center" href={detailUrl} onClick={trackView} data-name="product-detail">Ver detalle</a>
           </div>
         </div>
       </article>

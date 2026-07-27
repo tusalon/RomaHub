@@ -1,10 +1,11 @@
-function MobileWhatsAppBar({ whatsapp, nombre, reservaUrl }) {
+function MobileWhatsAppBar({ whatsapp, nombre, reservaUrl, negocioId }) {
   try {
     const onWhatsApp = () => {
       try {
         const wa = String(whatsapp || '').replace(/\s+/g, '');
         const msg = encodeURIComponent(`Hola, quiero reservar en ${nombre}. ¿Me ayudas con disponibilidad y precios?`);
         const url = reservaUrl || `https://wa.me/${wa.replace('+', '')}?text=${msg}`;
+        window.RomaAnalytics?.track?.({ negocioId, evento: 'reserva_click' });
         // _blank y no window.location: navegar en el mismo contexto deja que
         // Android entregue el enlace a la PWA/APK de clientas instalada, que lo
         // abre en SU negocio (con el que se instaló), no en el que se tocó.
