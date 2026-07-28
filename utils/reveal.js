@@ -28,7 +28,10 @@
         revealObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' }) : null;
+  // Las secciones de resultados pueden medir decenas de pantallas. Un umbral
+  // porcentual alto nunca se alcanza en esos casos y dejaria todo el
+  // directorio en opacity: 0. Basta con que la seccion entre en pantalla.
+  }, { threshold: 0, rootMargin: '0px 0px -60px 0px' }) : null;
 
   var countObserver = hasIO ? new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
