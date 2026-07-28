@@ -704,14 +704,15 @@
     const municipios = window.getMunicipiosDeProvincia?.(presentation.provincia, presentation.municipio) || [];
     const activeServices = services.filter((service) => service.activo !== false);
     const isDirectoryReady = activeServices.length > 0;
-    const hasStoreOffer = esTiendaExterna ? totalActivosExterna > 0 : isDirectoryReady;
+    const hasStoreOffer = totalActivosExterna > 0;
+    const isPublicReady = esTiendaExterna ? hasStoreOffer : isDirectoryReady;
     const profileTasks = [
       { id: 'descripcion', label: 'Descripción clara', done: presentation.descripcion.trim().length >= 40, section: 'perfil' },
       { id: 'logo', label: 'Logo o foto del negocio', done: Boolean(presentation.logoUrl), section: 'perfil', target: esTiendaExterna ? 'logo' : 'rservas-data' },
       { id: 'portada', label: 'Foto de portada', done: Boolean(presentation.coverUrl), section: 'perfil' },
       { id: 'ubicacion', label: 'Provincia y municipio', done: Boolean(presentation.provincia && presentation.municipio), section: 'perfil', target: esTiendaExterna ? 'ubicacion' : 'rservas-data' },
       { id: 'whatsapp', label: 'WhatsApp de contacto', done: /^\d{8}$/.test(presentation.whatsapp), section: 'perfil', target: esTiendaExterna ? 'whatsapp' : 'rservas-data' },
-      { id: 'catalogo', label: esTiendaExterna ? 'Producto o curso activo' : 'Servicio activo', done: hasStoreOffer, section: esTiendaExterna ? 'tienda' : 'perfil', tab: esTiendaExterna ? 'productos' : null }
+      { id: 'catalogo', label: esTiendaExterna ? 'Producto o curso activo' : 'Servicio activo', done: isPublicReady, section: esTiendaExterna ? 'tienda' : 'perfil', tab: esTiendaExterna ? 'productos' : null }
     ];
     const completedTasks = profileTasks.filter((task) => task.done).length;
     const profileProgress = Math.round((completedTasks / profileTasks.length) * 100);
@@ -814,8 +815,8 @@
                 <div className="absolute left-4 -bottom-0.5 translate-y-1/2 w-16 h-16 rounded-2xl border-4 border-white bg-white overflow-hidden shadow-md flex items-center justify-center">
                   {presentation.logoUrl ? <img src={presentation.logoUrl} alt="Logo del negocio" className="w-full h-full object-cover" /> : <span className="text-lg font-extrabold text-[var(--primary-color)]">{String(presentation.nombre || businessName || 'R').trim().slice(0, 2).toUpperCase()}</span>}
                 </div>
-                <span className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-sm ${isDirectoryReady ? 'bg-green-50 text-green-700' : 'bg-white text-[var(--primary-color)]'}`}>
-                  {isDirectoryReady ? 'Disponible' : 'Próximamente'}
+                <span className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-sm ${isPublicReady ? 'bg-green-50 text-green-700' : 'bg-white text-[var(--primary-color)]'}`}>
+                  {isPublicReady ? (esTiendaExterna ? 'Tienda activa' : 'Disponible') : (esTiendaExterna ? 'Configurando tienda' : 'Próximamente')}
                 </span>
               </div>
               <div className="px-4 pt-11 pb-4">
@@ -827,20 +828,20 @@
           </article>
 
           <article className="surface-rr p-5 md:p-6 flex flex-col" data-name="promotion-center">
-            <div className={`rounded-xl border p-4 ${isDirectoryReady ? 'border-green-200 bg-green-50' : 'border-amber-200 bg-amber-50'}`} role="status">
-              <p className={`text-sm font-semibold ${isDirectoryReady ? 'text-green-800' : 'text-amber-900'}`}>
-                {isDirectoryReady ? 'Tu negocio está visible en el directorio' : esTiendaExterna && hasStoreOffer ? 'Tu tienda está activa; el directorio mostrará “Próximamente”' : 'Tu negocio aparece como “Próximamente”'}
+            <div className={`rounded-xl border p-4 ${isPublicReady ? 'border-green-200 bg-green-50' : 'border-amber-200 bg-amber-50'}`} role="status">
+              <p className={`text-sm font-semibold ${isPublicReady ? 'text-green-800' : 'text-amber-900'}`}>
+                {isPublicReady ? (esTiendaExterna ? 'Tu tienda está visible en Tienda' : 'Tu negocio está visible en el directorio') : (esTiendaExterna ? 'Tu tienda está en configuración' : 'Tu negocio aparece como “Próximamente”')}
               </p>
-              <p className={`mt-1 text-xs leading-relaxed ${isDirectoryReady ? 'text-green-700' : 'text-amber-800'}`}>
-                {isDirectoryReady
-                  ? 'Las clientas pueden encontrarte por nombre, ubicación y servicios.'
-                  : esTiendaExterna && hasStoreOffer
-                    ? 'Tus productos y cursos sí pueden venderse y compartirse. El directorio de servicios se activa cuando el negocio tiene servicios publicados.'
-                    : esTiendaExterna
-                      ? 'Publica un producto o curso para comenzar a vender y compartir tu tienda.'
-                      : 'Publica y activa al menos un servicio en Rservasroma para entrar al directorio disponible.'}
+              <p className={`mt-1 text-xs leading-relaxed ${isPublicReady ? 'text-green-700' : 'text-amber-800'}`}>
+                {isPublicReady
+                  ? esTiendaExterna
+                    ? 'Las clientas pueden encontrar tu tienda y entrar para ver tus productos o cursos.'
+                    : 'Las clientas pueden encontrarte por nombre, ubicación y servicios.'
+                  : esTiendaExterna
+                    ? 'Publica un producto o curso para comenzar a vender y compartir tu tienda.'
+                    : 'Publica y activa al menos un servicio en Rservasroma para entrar al directorio disponible.'}
               </p>
-              {!isDirectoryReady && !hasStoreOffer ? (
+              {!isPublicReady ? (
                 <button type="button" className="mt-3 text-xs font-bold text-[var(--primary-color)] hover:underline" onClick={() => openTask(profileTasks.find((task) => task.id === 'catalogo'))}>Completar oferta ahora</button>
               ) : null}
             </div>

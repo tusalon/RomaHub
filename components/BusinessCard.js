@@ -65,7 +65,7 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
             ) : null}
             {upcoming ? (
               <span className="absolute top-2 right-2 inline-flex px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-bold text-[var(--primary-color)] shadow-sm" data-name="upcoming-badge" data-file="components/BusinessCard.js">
-                Próximamente
+                {b.esTiendaExterna ? 'Configurando tienda' : 'Próximamente'}
               </span>
             ) : null}
           </div>
@@ -100,7 +100,7 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
             </div>
 
             <div className="mt-3 flex flex-wrap gap-2" data-name="badges" data-file="components/BusinessCard.js">
-              {upcoming ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--primary-color)]" data-name="services-pending" data-file="components/BusinessCard.js">Preparando servicios</span> : null}
+              {upcoming ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--primary-color)]" data-name="services-pending" data-file="components/BusinessCard.js">{b.esTiendaExterna ? 'Preparando catálogo' : 'Preparando servicios'}</span> : null}
               {serviceCount ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--text-muted)]" data-name="services-count" data-file="components/BusinessCard.js">{serviceCount} servicios</span> : null}
               {productCount ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--text-muted)]" data-name="products-count" data-file="components/BusinessCard.js">Tienda</span> : null}
               {courseCount ? <span className="chip-rr px-2.5 py-1 text-[11px] text-[var(--text-muted)]" data-name="courses-count" data-file="components/BusinessCard.js">Cursos</span> : null}
@@ -109,7 +109,7 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
 
             <div className="mt-4 flex items-center justify-between gap-3" data-name="bottom" data-file="components/BusinessCard.js">
               <span className="text-xs text-[var(--text-muted)] truncate" data-name="price" data-file="components/BusinessCard.js">
-                {upcoming ? 'Aún no acepta reservas desde RomaHub' : offerOnly ? activePromotion.titulo : (firstService ? `${firstService.nombre} - ${Format.formatPrecioCUP(firstService.precio, firstService.moneda)}` : Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max, b.rangoPrecio?.moneda))}
+                {upcoming ? (b.esTiendaExterna ? 'Aún no tiene productos publicados' : 'Aún no acepta reservas desde RomaHub') : offerOnly ? activePromotion.titulo : (firstService ? `${firstService.nombre} - ${Format.formatPrecioCUP(firstService.precio, firstService.moneda)}` : Format.formatRangoPrecio(b.rangoPrecio?.min, b.rangoPrecio?.max, b.rangoPrecio?.moneda))}
               </span>
 
               {upcoming ? (

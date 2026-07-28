@@ -52,7 +52,7 @@ function TiendaApp() {
           <Header data-name="header-wrap" data-file="tienda-app.js" />
           <main className="flex-1" data-name="main" data-file="tienda-app.js">
             {!dataReady ? (
-              <div className="container-rr py-16 text-center text-sm text-[var(--text-muted)]" data-name="tienda-loading" data-file="tienda-app.js">Cargando tienda...</div>
+              <div className="container-rr py-16 text-center text-sm text-[var(--text-muted)]" data-name="tienda-loading" data-file="tienda-app.js">Cargando tiendas...</div>
             ) : dataError ? (
               <div className="container-rr py-16 text-center text-sm text-[var(--text-muted)]" data-name="tienda-error-msg" data-file="tienda-app.js">{dataError}</div>
             ) : (

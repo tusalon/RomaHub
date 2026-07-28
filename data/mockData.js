@@ -355,6 +355,7 @@ const MockData = (() => {
     const resenas = relations.resenas[id] || [];
     const descripcionNegocio = valueFrom(row, ['descripcion', 'description', 'mensaje_bienvenida'], '');
     const tieneServicios = servicios.length > 0;
+    const tieneTienda = productos.length > 0 || cursos.length > 0;
     const tieneUbicacion = Boolean(provincia && municipio);
     const tienePrecioServicio = servicios.some((item) => numberFrom(item, ['precio', 'precio_cup', 'monto'], 0) > 0);
     const calidadPerfil = [
@@ -412,6 +413,7 @@ const MockData = (() => {
       totalResenas: totalValoraciones,
       enRanking,
       tieneServicios,
+      tieneTienda,
       tieneUbicacion,
       tienePrecioServicio,
       calidadPerfil,
@@ -706,7 +708,9 @@ const MockData = (() => {
   }
 
   function listUpcomingBusinesses(limit) {
-    const list = businesses.filter((business) => !business.tieneServicios).sort(ordenNegocio);
+    const list = businesses
+      .filter((business) => !business.tieneServicios && !(business.esTiendaExterna && business.tieneTienda))
+      .sort(ordenNegocio);
     return limit ? list.slice(0, limit) : list;
   }
 
@@ -734,11 +738,14 @@ const MockData = (() => {
       .slice(0, 10);
   }
 
-  function listRomaStores() {
-    return businesses
+  function listRomaStores(limit) {
+    const stores = businesses
       .filter((business) => business.tieneTienda)
-      .sort((a, b) => a.nombre.localeCompare(b.nombre))
-      .slice(0, 12);
+      .sort((a, b) => {
+        if (a.esRservasroma !== b.esRservasroma) return a.esRservasroma ? -1 : 1;
+        return a.nombre.localeCompare(b.nombre);
+      });
+    return limit ? stores.slice(0, limit) : stores;
   }
 
   // Orden del escaparate: primero los productos de negocios rservasroma
@@ -891,7 +898,7 @@ const MockData = (() => {
     const q = query || {};
     if (!String(q.nombre || '').trim() || String(q.servicio || '').trim()) return [];
     return businesses
-      .filter((business) => !business.tieneServicios && matchesBusiness(business, q, false))
+      .filter((business) => !business.tieneServicios && !(business.esTiendaExterna && business.tieneTienda) && matchesBusiness(business, q, false))
       .sort(ordenNegocio);
   }
 

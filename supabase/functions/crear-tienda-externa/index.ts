@@ -204,6 +204,7 @@ Deno.serve(async (req: Request) => {
       municipio,
       mensaje_bienvenida: descripcion,
       logo_url: logoUrl,
+      plan: "gratuito",
       configurado: true,
       es_tienda_externa: true,
     }),
@@ -216,7 +217,13 @@ Deno.serve(async (req: Request) => {
   const linkResponse = await fetch(`${SUPABASE_URL}/rest/v1/usuarios_negocio`, {
     method: "POST",
     headers: serviceHeaders,
-    body: JSON.stringify({ user_id: userId, negocio_id: negocioId, rol: "dueno" }),
+    body: JSON.stringify({
+      user_id: userId,
+      negocio_id: negocioId,
+      rol: "dueno",
+      estado: "activo",
+      activo: true,
+    }),
   });
   if (!linkResponse.ok) {
     await rollbackAuth();

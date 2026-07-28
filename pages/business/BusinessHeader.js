@@ -71,7 +71,15 @@
                 </p>
               ) : null}
               <div className="mt-4 flex flex-wrap gap-2" data-name="quick-facts" data-file="pages/business/BusinessHeader.js">
-                {services.length ? <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="services-count" data-file="pages/business/BusinessHeader.js">{services.length} servicios</span> : <span className="chip-rr px-3 py-1.5 text-xs text-[var(--primary-color)]" data-name="services-upcoming" data-file="pages/business/BusinessHeader.js">Próximamente · preparando servicios</span>}
+                {services.length ? (
+                  <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="services-count" data-file="pages/business/BusinessHeader.js">{services.length} servicios</span>
+                ) : b.esTiendaExterna && (products.length || courses.length) ? (
+                  <span className="chip-rr px-3 py-1.5 text-xs text-green-700 bg-green-50" data-name="store-active" data-file="pages/business/BusinessHeader.js">Tienda activa</span>
+                ) : b.esTiendaExterna ? (
+                  <span className="chip-rr px-3 py-1.5 text-xs text-[var(--primary-color)]" data-name="store-configuring" data-file="pages/business/BusinessHeader.js">Configurando tienda</span>
+                ) : (
+                  <span className="chip-rr px-3 py-1.5 text-xs text-[var(--primary-color)]" data-name="services-upcoming" data-file="pages/business/BusinessHeader.js">Próximamente · preparando servicios</span>
+                )}
                 {products.length ? <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="products-count" data-file="pages/business/BusinessHeader.js">{products.length} productos</span> : null}
                 {courses.length ? <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="courses-count" data-file="pages/business/BusinessHeader.js">{courses.length} cursos</span> : null}
                 {services.length ? <span className="chip-rr px-3 py-1.5 text-xs text-[var(--text-muted)]" data-name="first-price" data-file="pages/business/BusinessHeader.js">Desde {firstPrice}</span> : null}
