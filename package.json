@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "test": "node tests/registration-duplicates.test.js",
     "build": "node scripts/build.js",
     "build:css": "tailwindcss -i styles/tailwind-input.css -o styles/tailwind.css --minify"
   },

@@ -112,6 +112,33 @@ Deno.serve(async (req: Request) => {
   const descripcion = String(body.descripcion || "").trim().slice(0, 600) || null;
   const logoUrl = safeHttpsUrl(body.logo_url);
 
+  // El alta publica es solo para negocios que todavia no existen en RservasRoma.
+  // Comprobarlo antes de crear el usuario de Auth evita dos perfiles con el
+  // mismo WhatsApp y mantiene el negocio original como unica fuente de datos.
+  const existingBusinessResponse = await fetch(
+    `${SUPABASE_URL}/rest/v1/negocios?or=(telefono.eq.${encodeURIComponent(whatsapp)},telefono.eq.${encodeURIComponent(`53${whatsapp}`)})&select=id,nombre,slug,es_tienda_externa&limit=5`,
+    { headers: serviceHeaders },
+  );
+  if (!existingBusinessResponse.ok) {
+    console.error("No se pudo comprobar el WhatsApp existente:", await existingBusinessResponse.text());
+    return json(req, { error: "No se pudo comprobar el negocio. Intenta de nuevo." }, 503);
+  }
+
+  const existingBusinesses = await existingBusinessResponse.json().catch(() => []);
+  if (Array.isArray(existingBusinesses) && existingBusinesses.length > 0) {
+    const rservasBusiness = existingBusinesses.find((business) => business?.es_tienda_externa !== true);
+    if (rservasBusiness) {
+      return json(req, {
+        error: "Ese WhatsApp ya pertenece a un negocio de RservasRoma. Activa RomaHub desde Configuracion > Tienda en tu panel.",
+        code: "RSERVAS_BUSINESS_EXISTS",
+      }, 409);
+    }
+    return json(req, {
+      error: "Ese WhatsApp ya tiene una tienda. Inicia sesion con tu acceso de RomaHub.",
+      code: "ROMAHUB_STORE_EXISTS",
+    }, 409);
+  }
+
   const authEmail = `53${whatsapp}@${AUTH_PHONE_DOMAIN}`;
   const password = generarPassword();
   const recoveryCode = generateRecoveryCode();
@@ -120,7 +147,15 @@ Deno.serve(async (req: Request) => {
   const authResponse = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
     method: "POST",
     headers: serviceHeaders,
-    body: JSON.stringify({ email: authEmail, password, email_confirm: true }),
+    body: JSON.stringify({
+      email: authEmail,
+      password,
+      email_confirm: true,
+      user_metadata: {
+        skip_negocio_autocreate: true,
+        roma_account_type: "external_store",
+      },
+    }),
   });
   const authData = await authResponse.json().catch(() => ({}));
   if (!authResponse.ok) {
