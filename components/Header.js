@@ -30,7 +30,7 @@ function Header({ currentParams }) {
       <header className="sticky top-0 z-[60] bg-white/95 backdrop-blur border-b border-[var(--border)]" data-name="header" data-file="components/Header.js">
         <div className="container-rr py-3" data-name="header-inner" data-file="components/Header.js">
           <div className="flex items-center gap-3" data-name="header-row" data-file="components/Header.js">
-            <button className="flex items-center gap-2.5" onClick={onGoHome} data-name="brand" data-file="components/Header.js">
+            <button className="flex items-center gap-2.5 shrink-0" onClick={onGoHome} data-name="brand" data-file="components/Header.js">
               <div className="w-9 h-9 rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(232,51,135,0.20)]" data-name="brand-mark" data-file="components/Header.js">
                 <img src="icons/icon-96x96.png" alt="RomaHub" className="w-full h-full object-cover" width="36" height="36" data-name="brand-mark-img" data-file="components/Header.js" />
               </div>
@@ -42,9 +42,9 @@ function Header({ currentParams }) {
               </div>
             </button>
 
-            <div className="hidden xl:flex items-center gap-2 ml-auto" data-name="header-actions-desktop" data-file="components/Header.js">
+            <div className="hidden xl:flex items-center gap-1.5 ml-auto" data-name="header-actions-desktop" data-file="components/Header.js">
               <button
-                className={`btn-rr ${page === 'index.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+                className={`btn-rr px-3 py-2.5 text-sm whitespace-nowrap ${page === 'index.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 onClick={onGoHome}
                 data-name="nav-home"
                 data-file="components/Header.js"
@@ -52,7 +52,7 @@ function Header({ currentParams }) {
                 Inicio
               </button>
               <button
-                className={`btn-rr ${page === 'search.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+                className={`btn-rr px-3 py-2.5 text-sm whitespace-nowrap ${page === 'search.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 onClick={onGoSearch}
                 data-name="nav-search"
                 data-file="components/Header.js"
@@ -60,7 +60,7 @@ function Header({ currentParams }) {
                 Reservas
               </button>
               <a
-                className={`btn-rr ${page === 'tienda.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+                className={`btn-rr px-3 py-2.5 text-sm whitespace-nowrap ${page === 'tienda.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 href="tienda.html"
                 data-name="nav-tienda"
                 data-file="components/Header.js"
@@ -68,7 +68,7 @@ function Header({ currentParams }) {
                 Tienda
               </a>
               <a
-                className={`btn-rr flex items-center gap-2 ${page === 'favoritos.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+                className={`btn-rr px-3 py-2.5 text-sm whitespace-nowrap flex items-center gap-2 ${page === 'favoritos.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 href="favoritos.html"
                 data-name="nav-favorites"
                 data-file="components/Header.js"
@@ -77,7 +77,7 @@ function Header({ currentParams }) {
                 Guardados{savedCount ? ` (${savedCount})` : ''}
               </a>
               <a
-                className={`btn-rr flex items-center gap-2 ${page === 'pedidos.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+                className={`btn-rr px-3 py-2.5 text-sm whitespace-nowrap flex items-center gap-2 ${page === 'pedidos.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 href="pedidos.html"
                 data-name="nav-orders"
                 data-file="components/Header.js"
@@ -86,7 +86,19 @@ function Header({ currentParams }) {
                 Mis pedidos
               </a>
               <a
-                className={`btn-rr ${page === 'register.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+                className="btn-rr px-3 py-2.5 text-sm whitespace-nowrap inline-flex items-center gap-2 bg-[#111827] text-white border-[#111827] hover:bg-[#374151]"
+                href="https://tusalon.github.io/HouseofRservasRoma/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Conocer RservasRoma y obtener la app"
+                data-name="nav-get-app"
+                data-file="components/Header.js"
+              >
+                <span className="icon-sparkles text-base text-[#F9A8D4]" aria-hidden="true"></span>
+                Quiero la app
+              </a>
+              <a
+                className={`btn-rr px-3 py-2.5 text-sm whitespace-nowrap ${page === 'register.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 href="register.html"
                 data-name="nav-register"
                 data-file="components/Header.js"
@@ -94,7 +106,7 @@ function Header({ currentParams }) {
                 Abrir tienda gratis
               </a>
               <a
-                className={`btn-rr ${page === 'login.html' || page === 'panel.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+                className={`btn-rr px-3 py-2.5 text-sm whitespace-nowrap ${page === 'login.html' || page === 'panel.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
                 href="login.html"
                 data-name="nav-login"
                 data-file="components/Header.js"
@@ -141,6 +153,18 @@ function Header({ currentParams }) {
                   <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="register.html" data-name="m-register" data-file="components/Header.js">
                     <span data-name="m-register-text" data-file="components/Header.js">Abrir tienda gratis</span>
                     <div className="icon-arrow-right text-xl text-[#e83387]" data-name="m-register-icon" data-file="components/Header.js"></div>
+                  </a>
+                  <a
+                    className="btn-rr w-full flex items-center justify-between bg-[#111827] text-white border-[#111827]"
+                    href="https://tusalon.github.io/HouseofRservasRoma/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Conocer RservasRoma y obtener la app"
+                    data-name="m-get-app"
+                    data-file="components/Header.js"
+                  >
+                    <span data-name="m-get-app-text">Quiero tener la app</span>
+                    <span className="icon-sparkles text-xl text-[#F9A8D4]" aria-hidden="true"></span>
                   </a>
                   <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="login.html" data-name="m-login" data-file="components/Header.js">
                     <span data-name="m-login-text" data-file="components/Header.js">Acceso negocio</span>
