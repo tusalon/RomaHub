@@ -26,8 +26,19 @@ function HomeHero({ initialParams }) {
     }, []);
 
     return (
-      <section className="relative overflow-hidden pt-4 md:pt-6 pb-2" data-name="home-hero" data-file="pages/home/HomeHero.js">
+      <section className="relative overflow-hidden pt-11 md:pt-6 pb-2" data-name="home-hero" data-file="pages/home/HomeHero.js">
         <div className="hero-blob-rr top-[-160px] right-[-120px]" aria-hidden="true" data-name="hero-blob" data-file="pages/home/HomeHero.js"></div>
+        <a
+          className="absolute top-3 right-3 md:top-6 md:right-8 z-20 inline-flex items-center gap-1 whitespace-nowrap px-2.5 py-1.5 md:px-3.5 md:py-2 rounded-full bg-white/90 backdrop-blur border border-[var(--border)] text-[11px] md:text-xs font-bold text-[#111827] hover:text-[#e83387] hover:border-[#e83387]/40 transition-colors shadow-sm"
+          href="https://tusalon.github.io/HouseofRservasRoma/"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-name="hero-about-link"
+          data-file="pages/home/HomeHero.js"
+        >
+          Conocer más sobre Rservasroma
+          <div className="icon-arrow-right text-sm" aria-hidden="true" data-name="hero-about-link-i" data-file="pages/home/HomeHero.js"></div>
+        </a>
         <div className="container-rr relative grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10 lg:gap-6 items-center" data-name="home-hero-inner" data-file="pages/home/HomeHero.js">
           <div className="max-w-3xl hero-anim-rr" data-name="home-hero-copy" data-file="pages/home/HomeHero.js">
             {/* Insignia honesta de apertura: RomaHub de verdad acaba de
