@@ -1,30 +1,9 @@
 function NegociosTestimonios() {
   try {
-    // Testimonios reales publicados en la landing de Rservasroma
-    // (tusalon.github.io/HouseofRservasRoma). Son duenas de negocio hablando
-    // de la app, NO clientas valorando salones: por eso la seccion se titula
-    // "lo que dicen los negocios" y no se mezcla con el ranking del directorio,
-    // que se alimenta solo de valoraciones verificadas de clientas.
-    const testimonios = [
-      {
-        id: 'yuliet',
-        texto: 'Antes perdía horas confirmando citas por WhatsApp. Ahora las clientas reservan solas y yo recibo la notificación. En serio, cambió todo.',
-        nombre: 'Yuliet M.',
-        negocio: 'Exotic Nails · La Habana'
-      },
-      {
-        id: 'carla',
-        texto: 'Por muy poco cada mes tengo una app con mi nombre, mis colores y mis servicios. Las clientas piensan que invertí miles. Lo recomiendo sin dudar.',
-        nombre: 'Carla R.',
-        negocio: 'Nails Carla Salon · Cuba'
-      },
-      {
-        id: 'leci',
-        texto: 'Los anticipos me salvaron. Antes las clientas cancelaban y yo perdía el turno. Ahora pagan para reservar y las ausencias bajaron a cero.',
-        nombre: 'Leci N.',
-        negocio: "Leci's Nails · Cuba"
-      }
-    ];
+    // Lista compartida con RegisterBusinessPage.js — ver data/testimonios.js.
+    // Se titula "lo que dicen los negocios" (no clientas) para no mezclarse
+    // con el ranking del directorio, que solo usa valoraciones verificadas.
+    const testimonios = window.TESTIMONIOS_NEGOCIOS || [];
 
     const inicial = (nombre) => String(nombre || '?').trim().charAt(0).toUpperCase();
 

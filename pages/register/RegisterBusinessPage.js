@@ -200,6 +200,30 @@ function RegisterBusinessPage() {
                 ))}
               </div>
 
+              {/* Quien llega directo a este formulario (por un anuncio o un
+                  reenvio de WhatsApp) puede no haber visto nunca el home con
+                  el contador de negocios y los testimonios — aqui es donde
+                  de verdad se decide si confia. Mismas 3 citas reales que
+                  usa el home, ver data/testimonios.js. */}
+              <div className="mt-6" data-name="register-social-proof" data-file="pages/register/RegisterBusinessPage.js">
+                <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--text-muted)] mb-3" data-name="register-social-proof-kicker" data-file="pages/register/RegisterBusinessPage.js">
+                  Salones que ya confían en RomaHub
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" data-name="register-social-proof-grid" data-file="pages/register/RegisterBusinessPage.js">
+                  {(window.TESTIMONIOS_NEGOCIOS || []).slice(0, 2).map((t) => (
+                    <figure key={t.id} className="surface-rr p-4" data-name="register-testimonio" data-file="pages/register/RegisterBusinessPage.js">
+                      <blockquote className="text-sm text-[var(--text-soft)] leading-relaxed" data-name="register-testimonio-texto" data-file="pages/register/RegisterBusinessPage.js">
+                        {t.texto}
+                      </blockquote>
+                      <figcaption className="mt-3 pt-3 border-t border-[var(--border)] text-xs" data-name="register-testimonio-autor" data-file="pages/register/RegisterBusinessPage.js">
+                        <span className="font-semibold text-[#2A1620]">{t.nombre}</span>
+                        <span className="text-[var(--text-muted)]"> · {t.negocio}</span>
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              </div>
+
               <div className="mt-6 rounded-2xl border border-[rgba(181,0,99,0.20)] bg-[rgba(181,0,99,0.06)] p-5" data-name="rservasroma-note" data-file="pages/register/RegisterBusinessPage.js">
                 <div className="flex items-start gap-3">
                   <span className="text-xl" aria-hidden="true">💎</span>

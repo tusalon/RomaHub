@@ -28,6 +28,31 @@
       window.RomaSaved?.addRecentBusiness?.(b);
     }, [b.id]);
 
+    // business.html trae un <title>/OG generico ("Perfil | RomaHub") igual
+    // para los 289 negocios: ni Google puede diferenciar una pagina de otra,
+    // ni una clienta que comparte el link por WhatsApp ve el nombre o la foto
+    // real del negocio en la vista previa. Lo pisamos aqui con los datos
+    // reales apenas se resuelve el negocio.
+    React.useEffect(() => {
+      const setMeta = (selector, value) => {
+        const el = document.querySelector(selector);
+        if (el && value) el.setAttribute('content', value);
+      };
+      const titulo = `${b.nombre} | RomaHub`;
+      const descripcion = String(b.descripcion || '').trim().slice(0, 160)
+        || `${b.categoria || 'Belleza'} en ${b.ubicacion?.zona || b.ubicacion?.ciudad || 'Cuba'}. Consulta servicios, precios y reserva por WhatsApp.`;
+      const imagen = b.portadaUrl || b.logoUrl || '';
+
+      document.title = titulo;
+      setMeta('meta[name="description"]', descripcion);
+      setMeta('meta[property="og:title"]', titulo);
+      setMeta('meta[property="og:description"]', descripcion);
+      setMeta('meta[property="og:image"]', imagen);
+      setMeta('meta[name="twitter:title"]', titulo);
+      setMeta('meta[name="twitter:description"]', descripcion);
+      setMeta('meta[name="twitter:image"]', imagen);
+    }, [b.id]);
+
     React.useEffect(() => {
       if (!selectedItemId) return;
       const section = catalog.find((item) => (item.items || []).some((catalogItem) => String(catalogItem.id) === String(selectedItemId)));

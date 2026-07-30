@@ -13,6 +13,7 @@ const bundles = {
     'utils/romahub-analytics.js',
     'utils/romahub-saved.js',
     'data/mockData.js',
+    'data/testimonios.js',
     'components/ToastProvider.js',
     'components/Header.js',
     'components/Footer.js',
@@ -94,6 +95,7 @@ const bundles = {
   'register.bundle.js': [
     'utils/navigation.js',
     'utils/romahub-saved.js',
+    'data/testimonios.js',
     'components/ToastProvider.js',
     'components/Header.js',
     'components/Footer.js',
