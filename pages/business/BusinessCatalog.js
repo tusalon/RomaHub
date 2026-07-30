@@ -41,7 +41,7 @@ function BusinessCatalog({ business, onAddToCart, selectedItemId = '' }) {
         };
         return (
           <div id={`catalog-item-${item.id}`} className={`surface-rr overflow-hidden flex flex-col scroll-mt-28 transition-shadow ${selected ? 'ring-2 ring-[var(--primary-color)] shadow-lg' : ''}`} data-name="store-card" data-file="pages/business/BusinessCatalog.js">
-            <div className="relative aspect-square bg-[#F3F4F6]" data-name="store-image" data-file="pages/business/BusinessCatalog.js">
+            <div className="relative aspect-square bg-[#F2ECEF]" data-name="store-image" data-file="pages/business/BusinessCatalog.js">
               {favoriteEntry ? <FavoriteButton entry={favoriteEntry} className="absolute top-2 right-2 z-20" /> : null}
               {item.imagen ? (
                 <img loading="lazy" decoding="async" src={item.imagen} alt={item.nombre} className="absolute inset-0 w-full h-full object-cover" data-name="store-img" data-file="pages/business/BusinessCatalog.js" />
@@ -50,11 +50,11 @@ function BusinessCatalog({ business, onAddToCart, selectedItemId = '' }) {
                   <div className={`${esCurso ? 'icon-graduation-cap' : 'icon-shopping-bag'} text-3xl text-[var(--primary-color)] opacity-40`}></div>
                 </div>
               )}
-              {esCurso ? <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#111827] text-white text-[10px] font-bold" data-name="store-type" data-file="pages/business/BusinessCatalog.js">Curso</span> : null}
+              {esCurso ? <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#2A1620] text-white text-[10px] font-bold" data-name="store-type" data-file="pages/business/BusinessCatalog.js">Curso</span> : null}
               {selected ? <span className="absolute bottom-2 left-2 px-2 py-1 rounded-full bg-white text-[10px] font-bold text-[var(--primary-color)] shadow-sm">Tu selección</span> : null}
             </div>
             <div className="p-3 flex flex-col flex-1" data-name="store-copy" data-file="pages/business/BusinessCatalog.js">
-              <p className="text-sm font-bold text-[#111827] leading-snug line-clamp-2" data-name="store-name" data-file="pages/business/BusinessCatalog.js">{item.nombre}</p>
+              <p className="text-sm font-bold text-[#2A1620] leading-snug line-clamp-2" data-name="store-name" data-file="pages/business/BusinessCatalog.js">{item.nombre}</p>
               {item.descripcion ? <p className="text-xs text-[var(--text-muted)] mt-1 leading-relaxed line-clamp-2" data-name="store-description" data-file="pages/business/BusinessCatalog.js">{item.descripcion}</p> : null}
               <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-[var(--text-muted)]" data-name="store-meta" data-file="pages/business/BusinessCatalog.js">
                 {esCurso && item.ubicacion ? <span data-name="course-place" data-file="pages/business/BusinessCatalog.js">{item.ubicacion}</span> : null}
@@ -86,13 +86,13 @@ function BusinessCatalog({ business, onAddToCart, selectedItemId = '' }) {
               {serviceGroups.map((group) => (
                 <div key={group.title} data-name="service-group" data-file="pages/business/BusinessCatalog.js">
                   {(serviceGroups.length > 1 || group.title !== 'Servicios') ? (
-                    <div className="px-4 md:px-5 py-2.5 bg-[#F9FAFB] border-b border-[var(--border)]" data-name="service-group-title-wrap" data-file="pages/business/BusinessCatalog.js">
+                    <div className="px-4 md:px-5 py-2.5 bg-[#F8F4F6] border-b border-[var(--border)]" data-name="service-group-title-wrap" data-file="pages/business/BusinessCatalog.js">
                       <h3 className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--text-muted)]" data-name="service-group-title" data-file="pages/business/BusinessCatalog.js">{group.title}</h3>
                     </div>
                   ) : null}
                   <div className="divide-y divide-[var(--border)]" data-name="service-group-items" data-file="pages/business/BusinessCatalog.js">
                     {group.items.map((service, index) => (
-                      <div key={service.id || `${service.nombre}-${index}`} className="p-4 md:p-5 flex items-start justify-between gap-4 hover:bg-[#F9FAFB]" data-name="service-row" data-file="pages/business/BusinessCatalog.js">
+                      <div key={service.id || `${service.nombre}-${index}`} className="p-4 md:p-5 flex items-start justify-between gap-4 hover:bg-[#F8F4F6]" data-name="service-row" data-file="pages/business/BusinessCatalog.js">
                         <div className="min-w-0" data-name="service-copy" data-file="pages/business/BusinessCatalog.js">
                           <p className="text-sm md:text-base font-semibold leading-snug" data-name="service-name" data-file="pages/business/BusinessCatalog.js">{service.nombre}</p>
                           <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]" data-name="service-meta" data-file="pages/business/BusinessCatalog.js">

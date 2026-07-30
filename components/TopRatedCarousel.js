@@ -1,4 +1,4 @@
-﻿function TopRatedCarousel({ items }) {
+function TopRatedCarousel({ items }) {
   try {
     const list = items || [];
     const ref = React.useRef(null);
@@ -45,7 +45,7 @@
                   data-name="top-rated-card"
                   data-file="components/TopRatedCarousel.js"
                 >
-                  <div className="relative h-[170px] bg-[#F9FAFB]" data-name="top-rated-photo" data-file="components/TopRatedCarousel.js">
+                  <div className="relative h-[170px] bg-[#F8F4F6]" data-name="top-rated-photo" data-file="components/TopRatedCarousel.js">
                     {b.portadaUrl ? (
                       <img loading="lazy" decoding="async" src={b.portadaUrl} alt={`Imagen de ${b.nombre}`} className="w-full h-full object-cover" style={{ objectPosition: `${b.portadaPosicion?.x ?? 50}% ${b.portadaPosicion?.y ?? 50}%` }} data-name="top-rated-img" data-file="components/TopRatedCarousel.js" />
                     ) : (

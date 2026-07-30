@@ -1,4 +1,4 @@
-﻿function MapSplitView({ businesses, selectedProvince, onProvinceSelect }) {
+function MapSplitView({ businesses, selectedProvince, onProvinceSelect }) {
   try {
     const list = (businesses || []).filter((business) => business.ubicacion?.provincia);
     const normalize = (value) => String(value || '')
@@ -18,12 +18,12 @@
 
     return (
       <div className="relative w-full h-full overflow-hidden bg-[#F7FBF8]" data-name="map-coming-soon" data-file="components/MapSplitView.js">
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(145deg, #F9FAFB 0%, #F3FFF8 48%, #FFF7FC 100%)' }} data-name="map-soon-bg" data-file="components/MapSplitView.js"></div>
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(145deg, #F8F4F6 0%, #F3FFF8 48%, #FFF7FC 100%)' }} data-name="map-soon-bg" data-file="components/MapSplitView.js"></div>
         <div className="absolute inset-0 opacity-70" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(11,18,32,0.08) 1px, transparent 0)', backgroundSize: '26px 26px' }} data-name="map-soon-texture" data-file="components/MapSplitView.js"></div>
 
         <div className="relative z-10 h-full flex flex-col justify-center p-5 md:p-8" data-name="map-soon-content" data-file="components/MapSplitView.js">
           <div className="surface-rr bg-white/94 backdrop-blur p-5 md:p-7 max-w-[620px] mx-auto text-center" data-name="map-soon-card" data-file="components/MapSplitView.js">
-            <div className="mx-auto w-14 h-14 rounded-2xl bg-[var(--primary-color)] flex items-center justify-center shadow-[0_16px_44px_rgba(232,51,135,0.22)]" data-name="map-soon-logo" data-file="components/MapSplitView.js">
+            <div className="mx-auto w-14 h-14 rounded-2xl bg-[var(--primary-color)] flex items-center justify-center shadow-[0_16px_44px_rgba(181,0,99,0.22)]" data-name="map-soon-logo" data-file="components/MapSplitView.js">
               <img src="icons/icon-72x72.png" alt="" className="w-10 h-10 object-contain rounded-xl" data-name="map-soon-logo-img" data-file="components/MapSplitView.js" />
             </div>
             <p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--primary-color)]" data-name="map-soon-kicker" data-file="components/MapSplitView.js">Próximas actualizaciones</p>

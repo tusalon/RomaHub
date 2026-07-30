@@ -1,4 +1,4 @@
-﻿function BusinessHeader({ business }) {
+function BusinessHeader({ business }) {
   try {
     const b = business;
     const hasCover = Boolean(b.portadaUrl);
@@ -14,7 +14,7 @@
       <section className="bg-white border-b border-[var(--border)]" data-name="business-header" data-file="pages/business/BusinessHeader.js">
         <div className="container-rr py-5 md:py-7" data-name="header-wrap" data-file="pages/business/BusinessHeader.js">
           <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr_auto] gap-5 items-center" data-name="header-grid" data-file="pages/business/BusinessHeader.js">
-            <div className="relative h-[180px] lg:h-[160px] rounded-lg overflow-hidden border border-[var(--border)] bg-[#F9FAFB]" data-name="brand-media" data-file="pages/business/BusinessHeader.js">
+            <div className="relative h-[180px] lg:h-[160px] rounded-lg overflow-hidden border border-[var(--border)] bg-[#F8F4F6]" data-name="brand-media" data-file="pages/business/BusinessHeader.js">
               {hasCover ? (
                 <img
                   loading="lazy"

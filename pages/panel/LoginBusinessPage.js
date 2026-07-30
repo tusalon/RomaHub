@@ -162,7 +162,7 @@ function LoginBusinessPage() {
                     <p className="text-sm font-bold text-green-800">Contraseña actualizada</p>
                     <p className="mt-1 text-xs text-green-700 leading-relaxed">Guarda tu nuevo código de recuperación. El código anterior ya no funciona.</p>
                     <div className="mt-3 rounded-lg bg-white border border-green-200 p-3 flex items-center justify-between gap-3">
-                      <code className="text-sm font-bold tracking-wider text-[#111827]" data-name="new-recovery-code">{nextRecoveryCode}</code>
+                      <code className="text-sm font-bold tracking-wider text-[#2A1620]" data-name="new-recovery-code">{nextRecoveryCode}</code>
                       <button type="button" className="btn-rr btn-ghost-rr py-2 px-3 text-xs" onClick={copyRecoveryCode}>{copied ? 'Copiado' : 'Copiar'}</button>
                     </div>
                     <button type="button" className="mt-4 btn-rr btn-primary-rr w-full" onClick={() => openMode('login')}>Volver e iniciar sesión</button>

@@ -38,7 +38,7 @@ function FavoritesPage() {
       <article className="surface-rr overflow-hidden flex flex-col" data-name="favorite-store-card">
         <a href={entry.href} className="relative aspect-square bg-[var(--bg-muted)] block overflow-hidden">
           {entry.image ? <img src={entry.image} alt={entry.nombre} className="absolute inset-0 w-full h-full object-cover" loading="lazy" /> : <span className="absolute inset-0 flex items-center justify-center icon-shopping-bag text-4xl text-[var(--primary-color)] opacity-40"></span>}
-          <span className="absolute top-2 left-2 px-2 py-1 rounded-full bg-[#111827] text-white text-[10px] font-bold capitalize">{entry.type}</span>
+          <span className="absolute top-2 left-2 px-2 py-1 rounded-full bg-[#2A1620] text-white text-[10px] font-bold capitalize">{entry.type}</span>
         </a>
         <div className="p-3 flex flex-col flex-1">
           <div className="flex items-start gap-2">

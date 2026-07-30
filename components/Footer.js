@@ -31,7 +31,7 @@ function Footer() {
     ];
 
     return (
-      <footer className="border-t border-[var(--border)] bg-[#111827]" data-name="footer" data-file="components/Footer.js">
+      <footer className="border-t border-[var(--border)] bg-[#2A1620]" data-name="footer" data-file="components/Footer.js">
         <div className="container-rr py-10 md:py-12" data-name="footer-inner" data-file="components/Footer.js">
           <div className="grid grid-cols-2 md:grid-cols-[1.5fr_1fr_1fr_1fr] gap-8 md:gap-6" data-name="footer-grid" data-file="components/Footer.js">
             <div className="col-span-2 md:col-span-1 space-y-3" data-name="footer-brand" data-file="components/Footer.js">
@@ -40,7 +40,7 @@ function Footer() {
                   <img loading="lazy" src="icons/icon-96x96.png" alt="RomaHub" className="w-full h-full object-cover" width="32" height="32" data-name="footer-mark-img" data-file="components/Footer.js" />
                 </div>
                 <p className="text-sm font-bold text-white" data-name="footer-title" data-file="components/Footer.js">
-                  Roma<span className="text-[#e83387]">Hub</span>
+                  Roma<span className="text-[#B50063]">Hub</span>
                 </p>
               </div>
               <p className="text-xs text-gray-400 leading-relaxed max-w-xs" data-name="footer-sub" data-file="components/Footer.js">
@@ -60,7 +60,7 @@ function Footer() {
                   {columna.enlaces.map((enlace) => (
                     <li key={enlace.texto} data-name="footer-col-item" data-file="components/Footer.js">
                       <a
-                        className="text-xs text-gray-400 hover:text-[#e83387] transition-colors"
+                        className="text-xs text-gray-400 hover:text-[#B50063] transition-colors"
                         href={enlace.href}
                         {...(enlace.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                         data-name="footer-link"

@@ -100,7 +100,7 @@ function CrearTiendaPage() {
             </a>
 
             <div className="mt-6 pt-6 border-t border-[var(--border)] text-left" data-name="crear-tienda-upsell" data-file="pages/tienda/CrearTiendaPage.js">
-              <p className="text-xs font-bold text-[#111827]">💎 Un paso más: reservas online</p>
+              <p className="text-xs font-bold text-[#2A1620]">💎 Un paso más: reservas online</p>
               <p className="mt-1.5 text-xs text-[var(--text-muted)] leading-relaxed">
                 Tu tienda vende por WhatsApp. Con Rservasroma también puedes tener agenda propia para que tus clientas reserven turno solas, con recordatorios automáticos. 15 días de prueba gratis.
               </p>

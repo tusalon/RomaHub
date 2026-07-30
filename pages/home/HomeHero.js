@@ -29,7 +29,7 @@ function HomeHero({ initialParams }) {
       <section className="relative overflow-hidden pt-11 md:pt-6 pb-2" data-name="home-hero" data-file="pages/home/HomeHero.js">
         <div className="hero-blob-rr top-[-160px] right-[-120px]" aria-hidden="true" data-name="hero-blob" data-file="pages/home/HomeHero.js"></div>
         <a
-          className="absolute top-3 right-3 md:top-6 md:right-8 z-20 inline-flex items-center gap-1 whitespace-nowrap px-2.5 py-1.5 md:px-3.5 md:py-2 rounded-full bg-white/90 backdrop-blur border border-[var(--border)] text-[11px] md:text-xs font-bold text-[#111827] hover:text-[#e83387] hover:border-[#e83387]/40 transition-colors shadow-sm"
+          className="absolute top-3 right-3 md:top-6 md:right-8 z-20 inline-flex items-center gap-1 whitespace-nowrap px-2.5 py-1.5 md:px-3.5 md:py-2 rounded-full bg-white/90 backdrop-blur border border-[var(--border)] text-[11px] md:text-xs font-bold text-[#2A1620] hover:text-[#B50063] hover:border-[#B50063]/40 transition-colors shadow-sm"
           href="https://tusalon.github.io/HouseofRservasRoma/"
           target="_blank"
           rel="noopener noreferrer"
@@ -45,9 +45,9 @@ function HomeHero({ initialParams }) {
                 lanzarse, asi que decirlo no es una afirmacion exagerada.
                 Nada de urgencia falsa ("solo por tiempo limitado") porque
                 el directorio gratis no tiene fecha de vencimiento. */}
-            <div className="inline-flex items-center gap-1.5 mb-3 px-3 py-1.5 rounded-full bg-[rgba(232,51,135,0.08)] border border-[rgba(232,51,135,0.18)]" data-name="hero-launch-badge" data-file="pages/home/HomeHero.js">
+            <div className="inline-flex items-center gap-1.5 mb-3 px-3 py-1.5 rounded-full bg-[rgba(181,0,99,0.08)] border border-[rgba(181,0,99,0.18)]" data-name="hero-launch-badge" data-file="pages/home/HomeHero.js">
               <span aria-hidden="true">🎉</span>
-              <span className="text-xs font-bold text-[#e83387]" data-name="hero-launch-badge-text" data-file="pages/home/HomeHero.js">Recién inaugurado</span>
+              <span className="text-xs font-bold text-[#B50063]" data-name="hero-launch-badge-text" data-file="pages/home/HomeHero.js">Recién inaugurado</span>
             </div>
 
             <p className="kicker-rr mb-5" data-name="hero-kicker" data-file="pages/home/HomeHero.js">
@@ -58,9 +58,9 @@ function HomeHero({ initialParams }) {
                 tinta oscura + Hub en rosa): aqui se reparte la frase, no las
                 letras, para no depender de que el texto contenga esas
                 palabras exactas. */}
-            <h1 className="text-4xl md:text-6xl lg:text-[64px] font-black tracking-[-0.025em] leading-[1.02] text-[#111827]" data-name="hero-title" data-file="pages/home/HomeHero.js">
+            <h1 className="text-4xl md:text-6xl lg:text-[64px] font-black tracking-[-0.025em] leading-[1.02] text-[#2A1620]" data-name="hero-title" data-file="pages/home/HomeHero.js">
               La belleza de Cuba en{' '}
-              <span className="relative inline-block text-[#e83387]" data-name="hero-title-accent" data-file="pages/home/HomeHero.js">
+              <span className="relative inline-block text-[#B50063]" data-name="hero-title-accent" data-file="pages/home/HomeHero.js">
                 un solo lugar.
                 <svg
                   className="absolute left-0 -bottom-1 md:-bottom-2 w-full h-2 md:h-3 pointer-events-none"
@@ -70,7 +70,7 @@ function HomeHero({ initialParams }) {
                   data-name="hero-title-underline"
                   data-file="pages/home/HomeHero.js"
                 >
-                  <path d="M2 9 C 50 2, 150 2, 198 9" stroke="#e83387" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.3" />
+                  <path d="M2 9 C 50 2, 150 2, 198 9" stroke="#B50063" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.3" />
                 </svg>
               </span>
             </h1>
@@ -93,7 +93,7 @@ function HomeHero({ initialParams }) {
                   Como enlace de texto queda claro que es la ruta alterna
                   (sin elegir provincia), no una accion igual de importante. */}
               <button
-                className="mt-3 text-sm font-semibold text-[var(--text-muted)] hover:text-[#e83387] transition-colors inline-flex items-center gap-1.5"
+                className="mt-3 text-sm font-semibold text-[var(--text-muted)] hover:text-[#B50063] transition-colors inline-flex items-center gap-1.5"
                 onClick={() => Navigation.goToSearch('', '')}
                 data-name="hero-explore"
                 data-file="pages/home/HomeHero.js"
@@ -105,7 +105,7 @@ function HomeHero({ initialParams }) {
 
             <div className="mt-6 surface-rr p-4 flex flex-col sm:flex-row sm:items-center gap-3 justify-between" data-name="hero-business-cta" data-file="pages/home/HomeHero.js">
               <div data-name="hero-business-copy" data-file="pages/home/HomeHero.js">
-                <p className="text-sm font-bold text-[#111827]" data-name="hero-business-title" data-file="pages/home/HomeHero.js">¿Tienes un salón o negocio de belleza?</p>
+                <p className="text-sm font-bold text-[#2A1620]" data-name="hero-business-title" data-file="pages/home/HomeHero.js">¿Tienes un salón o negocio de belleza?</p>
                 <p className="text-xs text-[var(--text-muted)] mt-0.5" data-name="hero-business-sub" data-file="pages/home/HomeHero.js">Crea tu espacio gratis y recibe pedidos directamente por WhatsApp.</p>
               </div>
               <a className="btn-rr btn-primary-rr text-sm py-2 px-4 flex items-center justify-center gap-1.5 shrink-0" href="register.html" data-name="hero-store" data-file="pages/home/HomeHero.js">
@@ -116,7 +116,7 @@ function HomeHero({ initialParams }) {
 
             <div className="mt-7 flex gap-1" data-name="hero-stats" data-file="pages/home/HomeHero.js">
               <div className="px-4 py-3 rounded-l-xl border border-[var(--border)] bg-white" data-name="stat-businesses" data-file="pages/home/HomeHero.js">
-                <p className="text-xl md:text-2xl font-bold text-[#111827]" data-name="stat-businesses-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={totalBusinesses}>{totalBusinesses}</span></p>
+                <p className="text-xl md:text-2xl font-bold text-[#2A1620]" data-name="stat-businesses-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={totalBusinesses}>{totalBusinesses}</span></p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-businesses-label" data-file="pages/home/HomeHero.js">negocios</p>
               </div>
               {/* "en el ranking" mostraba 0: todavia no hay valoraciones
@@ -126,11 +126,11 @@ function HomeHero({ initialParams }) {
                   contradice esa misma regla. Se cambia por un dato que si
                   es verdad ahora: RomaHub no cobra por aparecer. */}
               <div className="px-4 py-3 border border-[var(--border)] bg-white" data-name="stat-free" data-file="pages/home/HomeHero.js">
-                <p className="text-xl md:text-2xl font-bold text-[#e83387]" data-name="stat-free-value" data-file="pages/home/HomeHero.js">Gratis</p>
+                <p className="text-xl md:text-2xl font-bold text-[#B50063]" data-name="stat-free-value" data-file="pages/home/HomeHero.js">Gratis</p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-free-label" data-file="pages/home/HomeHero.js">para negocios</p>
               </div>
               <div className="px-4 py-3 rounded-r-xl border border-[var(--border)] bg-white" data-name="stat-today" data-file="pages/home/HomeHero.js">
-                <p className="text-xl md:text-2xl font-bold text-[#111827]" data-name="stat-today-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={Number(reservasHoy || 0)}>{Number(reservasHoy || 0)}</span></p>
+                <p className="text-xl md:text-2xl font-bold text-[#2A1620]" data-name="stat-today-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={Number(reservasHoy || 0)}>{Number(reservasHoy || 0)}</span></p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-today-label" data-file="pages/home/HomeHero.js">reservas hoy</p>
               </div>
             </div>
@@ -138,12 +138,12 @@ function HomeHero({ initialParams }) {
 
           <div className="relative mx-auto w-full max-w-[300px] lg:max-w-full" data-name="hero-visual" data-file="pages/home/HomeHero.js">
             <a
-              className="group block relative rounded-[22px] lg:rounded-[28px] border border-[var(--border)] bg-white shadow-[0_16px_40px_rgba(17,24,39,0.12)] lg:shadow-[0_24px_60px_rgba(17,24,39,0.12)] overflow-hidden"
+              className="group block relative rounded-[22px] lg:rounded-[28px] border border-[var(--border)] bg-white shadow-[0_16px_40px_rgba(42,22,32,0.12)] lg:shadow-[0_24px_60px_rgba(42,22,32,0.12)] overflow-hidden"
               href="search.html"
               data-name="hero-visual-frame"
               data-file="pages/home/HomeHero.js"
             >
-              <div className="relative h-[220px] lg:h-[300px] bg-[#F3F4F6] overflow-hidden" data-name="hero-visual-cover" data-file="pages/home/HomeHero.js">
+              <div className="relative h-[220px] lg:h-[300px] bg-[#F2ECEF] overflow-hidden" data-name="hero-visual-cover" data-file="pages/home/HomeHero.js">
                 {CATEGORIAS_HERO.map((cat, index) => (
                   <img
                     key={cat.id}
@@ -158,7 +158,7 @@ function HomeHero({ initialParams }) {
                 ))}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-transparent" data-name="hero-visual-gradient" data-file="pages/home/HomeHero.js"></div>
 
-                <span className="absolute top-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-[#e83387] shadow-sm" data-name="hero-visual-kicker" data-file="pages/home/HomeHero.js">
+                <span className="absolute top-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur text-[11px] font-bold text-[#B50063] shadow-sm" data-name="hero-visual-kicker" data-file="pages/home/HomeHero.js">
                   ✨ Todos los rubros de belleza
                 </span>
 
@@ -181,7 +181,7 @@ function HomeHero({ initialParams }) {
 
               <div className="p-4 flex items-center justify-between gap-3" data-name="hero-visual-footer" data-file="pages/home/HomeHero.js">
                 <span className="text-xs text-[var(--text-muted)]" data-name="hero-visual-rating" data-file="pages/home/HomeHero.js">Uñas, belleza, barbería, peluquería y lashes</span>
-                <span className="text-xs font-bold text-[#e83387] inline-flex items-center gap-1 shrink-0" data-name="hero-visual-cta" data-file="pages/home/HomeHero.js">
+                <span className="text-xs font-bold text-[#B50063] inline-flex items-center gap-1 shrink-0" data-name="hero-visual-cta" data-file="pages/home/HomeHero.js">
                   Ver directorio
                   <div className="icon-arrow-right text-sm" aria-hidden="true"></div>
                 </span>
@@ -195,14 +195,14 @@ function HomeHero({ initialParams }) {
                 navegador el offset fijo si se metia encima del texto del
                 pie. En flujo normal nunca puede solaparse, sin importar
                 cuanto mida el nombre del negocio destacado. */}
-            <div className="mt-3 mx-2 lg:mx-4 surface-rr px-3 py-2 lg:px-4 lg:py-3 flex items-center gap-2 shadow-[0_12px_28px_rgba(17,24,39,0.14)]" data-name="hero-visual-badge" data-file="pages/home/HomeHero.js">
+            <div className="mt-3 mx-2 lg:mx-4 surface-rr px-3 py-2 lg:px-4 lg:py-3 flex items-center gap-2 shadow-[0_12px_28px_rgba(42,22,32,0.14)]" data-name="hero-visual-badge" data-file="pages/home/HomeHero.js">
               <span className="text-base lg:text-lg" aria-hidden="true">📅</span>
               <div data-name="hero-visual-badge-copy" data-file="pages/home/HomeHero.js">
                 {/* Cifra viva de la propia base de datos. Antes decia "+300
                     negocios activos", pero el directorio de abajo lista los que
                     tienen la suscripcion al dia: la clienta leia una promesa y
                     justo debajo contaba otra cifra distinta. */}
-                <p className="text-xs lg:text-sm font-bold text-[#111827] leading-none" data-name="hero-visual-badge-title" data-file="pages/home/HomeHero.js">{totalBusinesses} negocios con servicios publicados</p>
+                <p className="text-xs lg:text-sm font-bold text-[#2A1620] leading-none" data-name="hero-visual-badge-title" data-file="pages/home/HomeHero.js">{totalBusinesses} negocios con servicios publicados</p>
                 <p className="text-[10px] lg:text-[11px] text-[var(--text-muted)] mt-1" data-name="hero-visual-badge-sub" data-file="pages/home/HomeHero.js">consulta opciones y precios antes de elegir</p>
               </div>
             </div>

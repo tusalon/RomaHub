@@ -3,8 +3,151 @@
 html { scroll-behavior: smooth; }
 body { margin: 0; -webkit-font-smoothing: antialiased; }
 
+/* RomaHub Elite: piel visual inspirada en el prototipo de Stitch.
+   La estructura y el comportamiento siguen viviendo en los componentes; este
+   bloque solo define la jerarquia, la atmosfera y los acabados compartidos. */
+body {
+  letter-spacing: -0.01em;
+}
+
+h1, h2, h3 {
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+[data-name="header"] {
+  background: rgba(255, 253, 254, 0.92) !important;
+  border-color: rgba(89, 64, 71, 0.14) !important;
+  box-shadow: 0 10px 34px rgba(42, 22, 32, 0.06);
+}
+
+[data-name="header-inner"] {
+  max-width: 1320px;
+}
+
+[data-name="header"] .btn-ghost-rr {
+  background: transparent;
+  border-color: transparent;
+}
+
+[data-name="header"] .btn-ghost-rr:hover {
+  background: #E2E8F5;
+  border-color: #E2E8F5;
+}
+
+[data-name="brand-mark"] {
+  border: 1px solid rgba(181, 0, 99, 0.18);
+  box-shadow: 0 8px 22px rgba(181, 0, 99, 0.14) !important;
+}
+
+[data-name="brand-title"] {
+  color: #2A1620 !important;
+  letter-spacing: -0.03em;
+}
+
+[data-name="brand-title"] span,
+[data-name="footer-title"] span {
+  color: #B50063 !important;
+}
+
+[data-name="nav-get-app"],
+[data-name="m-get-app"] {
+  background: #2A1620 !important;
+  border-color: #2A1620 !important;
+}
+
+[data-name="home-hero"] {
+  isolation: isolate;
+  background:
+    linear-gradient(112deg, rgba(255, 253, 254, 0.98) 0%, rgba(248, 238, 243, 0.94) 52%, rgba(226, 232, 245, 0.86) 100%);
+  border-bottom: 1px solid rgba(89, 64, 71, 0.12);
+}
+
+[data-name="home-hero"]::before {
+  content: "";
+  position: absolute;
+  inset: auto auto -150px -110px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: rgba(181, 0, 99, 0.07);
+  filter: blur(2px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+[data-name="hero-title"] {
+  color: #2A1620 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.055em !important;
+}
+
+[data-name="hero-title-accent"],
+[data-name="hero-launch-badge-text"],
+[data-name="hero-visual-kicker"],
+[data-name="hero-visual-cta"],
+[data-name="stat-free-value"] {
+  color: #B50063 !important;
+}
+
+[data-name="hero-launch-badge"] {
+  background: rgba(255, 253, 254, 0.76) !important;
+  border-color: rgba(181, 0, 99, 0.2) !important;
+  backdrop-filter: blur(10px);
+}
+
+[data-name="hero-search"] [data-name="searchbar-surface"] {
+  background: rgba(255, 253, 254, 0.9) !important;
+  border-color: rgba(89, 64, 71, 0.16) !important;
+  box-shadow: 0 18px 44px rgba(42, 22, 32, 0.09);
+  backdrop-filter: blur(14px);
+}
+
+[data-name="hero-business-cta"] {
+  background: #E2E8F5 !important;
+  border-color: rgba(89, 64, 71, 0.12) !important;
+  box-shadow: none !important;
+}
+
+[data-name="hero-visual-frame"] {
+  border-color: rgba(89, 64, 71, 0.18) !important;
+  box-shadow: 0 28px 70px rgba(42, 22, 32, 0.18) !important;
+}
+
+[data-name="hero-visual-badge"] {
+  background: rgba(255, 253, 254, 0.94) !important;
+  box-shadow: 0 18px 36px rgba(42, 22, 32, 0.12) !important;
+}
+
+[data-name="business-header"] {
+  background:
+    linear-gradient(118deg, rgba(255, 253, 254, 0.98), rgba(246, 231, 239, 0.72) 58%, rgba(226, 232, 245, 0.78)) !important;
+  border-color: rgba(89, 64, 71, 0.14) !important;
+}
+
+[data-name="footer"] {
+  background: #2A1620 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-name="footer"] [data-name="footer-link"]:hover {
+  color: #F2A7CF !important;
+}
+
+@media (max-width: 767px) {
+  [data-name="home-hero"] {
+    background:
+      linear-gradient(160deg, rgba(255, 253, 254, 0.99), rgba(246, 231, 239, 0.86) 62%, rgba(226, 232, 245, 0.78));
+  }
+
+  [data-name="header-mobile-panel"] {
+    background: rgba(255, 253, 254, 0.98) !important;
+    box-shadow: 0 22px 48px rgba(42, 22, 32, 0.16) !important;
+  }
+}
+
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
-  outline: 2px solid rgba(232, 51, 135, 0.36);
+  outline: 2px solid rgba(181, 0, 99, 0.36);
   outline-offset: 2px;
 }
 
@@ -128,7 +271,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 .rr-map-popup span {
   margin-top: 2px;
-  color: #6B7280;
+  color: #806B74;
   font-size: 11px;
 }
 

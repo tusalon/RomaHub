@@ -56,7 +56,7 @@ function NegociosCerca({ negocioActual, listo }) {
       <section className="mt-10" data-name="negocios-cerca" data-file="components/NegociosCerca.js">
         <div className="mb-4" data-name="cerca-head" data-file="components/NegociosCerca.js">
           <span className="kicker-rr block mb-2" data-name="cerca-badge" data-file="components/NegociosCerca.js">Tambien te puede servir</span>
-          <h2 className="text-xl md:text-2xl font-extrabold tracking-[-0.02em] text-[#111827]" data-name="cerca-title" data-file="components/NegociosCerca.js">
+          <h2 className="text-xl md:text-2xl font-extrabold tracking-[-0.02em] text-[#2A1620]" data-name="cerca-title" data-file="components/NegociosCerca.js">
             {titulo}
           </h2>
         </div>
@@ -70,13 +70,13 @@ function NegociosCerca({ negocioActual, listo }) {
               data-name="cerca-card"
               data-file="components/NegociosCerca.js"
             >
-              <div className="relative h-24 bg-[#F3F4F6] overflow-hidden" data-name="cerca-media" data-file="components/NegociosCerca.js">
+              <div className="relative h-24 bg-[#F2ECEF] overflow-hidden" data-name="cerca-media" data-file="components/NegociosCerca.js">
                 {otro.portadaUrl ? (
                   <img loading="lazy" decoding="async" src={otro.portadaUrl} alt={`Imagen de ${otro.nombre}`} className="w-full h-full object-cover" style={{ objectPosition: `${otro.portadaPosicion?.x ?? 50}% ${otro.portadaPosicion?.y ?? 50}%` }} data-name="cerca-img" data-file="components/NegociosCerca.js" />
                 ) : null}
               </div>
               <div className="p-3" data-name="cerca-body" data-file="components/NegociosCerca.js">
-                <p className="text-sm font-bold text-[#111827] leading-snug line-clamp-2 flex items-center gap-1" data-name="cerca-nombre" data-file="components/NegociosCerca.js">
+                <p className="text-sm font-bold text-[#2A1620] leading-snug line-clamp-2 flex items-center gap-1" data-name="cerca-nombre" data-file="components/NegociosCerca.js">
                   <span className="truncate">{otro.nombre}</span>
                   {otro.esRservasroma ? <span className="shrink-0" title="Verificado · reserva online" data-name="cerca-diamante" data-file="components/NegociosCerca.js">💎</span> : null}
                 </p>

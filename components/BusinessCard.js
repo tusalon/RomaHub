@@ -1,7 +1,7 @@
 function BusinessCard({ business, onHover, active, upcoming = false }) {
   try {
     const b = business;
-    const border = active ? 'border-[rgba(232,51,135,0.35)] shadow-[0_16px_40px_rgba(232,51,135,0.10)]' : '';
+    const border = active ? 'border-[rgba(181,0,99,0.35)] shadow-[0_16px_40px_rgba(181,0,99,0.10)]' : '';
     const serviceSection = (b.categoriasCatalogo || []).find((section) => section.tipo === 'servicios');
     const productSection = (b.categoriasCatalogo || []).find((section) => section.tipo === 'productos');
     const courseSection = (b.categoriasCatalogo || []).find((section) => section.tipo === 'cursos');
@@ -49,7 +49,7 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
         data-name="business-card"
         data-file="components/BusinessCard.js"
       >
-        <a href={profileHref} className="relative block h-32 sm:h-36 overflow-hidden bg-gradient-to-br from-[#FCE7F3] via-[#F9FAFB] to-[#F3F4F6]" data-name="business-cover-link" data-file="components/BusinessCard.js">
+        <a href={profileHref} className="relative block h-32 sm:h-36 overflow-hidden bg-gradient-to-br from-[#F7E3ED] via-[#F8F4F6] to-[#F2ECEF]" data-name="business-cover-link" data-file="components/BusinessCard.js">
           {b.portadaUrl ? (
             <img loading="lazy" decoding="async" src={b.portadaUrl} alt={`Portada de ${b.nombre}`} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-[1.02]" style={{ objectPosition: `${b.portadaPosicion?.x ?? 50}% ${b.portadaPosicion?.y ?? 50}%` }} data-name="photo-cover" data-file="components/BusinessCard.js" />
           ) : (
@@ -58,7 +58,7 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" aria-hidden="true"></div>
 
           {b.vip ? (
-            <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#111827]/90 text-white text-[11px] font-bold border border-white/30 shadow-sm" data-name="vip-chip" data-file="components/BusinessCard.js">
+            <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#2A1620]/90 text-white text-[11px] font-bold border border-white/30 shadow-sm" data-name="vip-chip" data-file="components/BusinessCard.js">
               <span className="icon-crown text-sm text-[#F59E0B]" aria-hidden="true"></span>
               VIP
             </span>
@@ -144,7 +144,7 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
               ))}
             </div>
           ) : activePromotion && !upcoming ? (
-            <a href={offerHref} onClick={onOfferClick} className="mt-4 rounded-xl border border-[rgba(232,51,135,0.20)] bg-[var(--secondary-color)] px-3.5 py-3 hover:border-[rgba(232,51,135,0.45)]" data-name="featured-offer" data-file="components/BusinessCard.js">
+            <a href={offerHref} onClick={onOfferClick} className="mt-4 rounded-xl border border-[rgba(181,0,99,0.20)] bg-[var(--secondary-color)] px-3.5 py-3 hover:border-[rgba(181,0,99,0.45)]" data-name="featured-offer" data-file="components/BusinessCard.js">
               <span className="block text-[10px] font-extrabold uppercase tracking-[0.04em] text-[var(--primary-color)]">Oferta destacada</span>
               <span className="mt-1 block text-sm font-semibold truncate">{activePromotion.titulo}</span>
             </a>

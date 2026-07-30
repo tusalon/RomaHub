@@ -33,7 +33,7 @@ function NegociosTestimonios() {
         <div className="container-rr" data-name="testimonios-inner" data-file="components/NegociosTestimonios.js">
           <div className="mb-5" data-name="testimonios-head" data-file="components/NegociosTestimonios.js">
             <span className="kicker-rr block mb-2" data-name="testimonios-badge" data-file="components/NegociosTestimonios.js">Quienes ya lo usan</span>
-            <h2 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em] text-[#111827]" data-name="testimonios-title" data-file="components/NegociosTestimonios.js">
+            <h2 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em] text-[#2A1620]" data-name="testimonios-title" data-file="components/NegociosTestimonios.js">
               Lo que dicen los negocios
             </h2>
             <p className="mt-2 text-sm text-[var(--text-muted)] leading-relaxed max-w-xl" data-name="testimonios-sub" data-file="components/NegociosTestimonios.js">
@@ -53,11 +53,11 @@ function NegociosTestimonios() {
                   {t.texto}
                 </blockquote>
                 <figcaption className="mt-4 pt-4 border-t border-[var(--border)] flex items-center gap-3" data-name="testimonio-autor" data-file="components/NegociosTestimonios.js">
-                  <div className="w-9 h-9 rounded-full bg-[rgba(232,51,135,0.10)] flex items-center justify-center shrink-0 text-sm font-bold text-[#e83387]" aria-hidden="true" data-name="testimonio-inicial" data-file="components/NegociosTestimonios.js">
+                  <div className="w-9 h-9 rounded-full bg-[rgba(181,0,99,0.10)] flex items-center justify-center shrink-0 text-sm font-bold text-[#B50063]" aria-hidden="true" data-name="testimonio-inicial" data-file="components/NegociosTestimonios.js">
                     {inicial(t.nombre)}
                   </div>
                   <div className="min-w-0" data-name="testimonio-autor-copy" data-file="components/NegociosTestimonios.js">
-                    <p className="text-sm font-semibold text-[#111827] truncate" data-name="testimonio-nombre" data-file="components/NegociosTestimonios.js">{t.nombre}</p>
+                    <p className="text-sm font-semibold text-[#2A1620] truncate" data-name="testimonio-nombre" data-file="components/NegociosTestimonios.js">{t.nombre}</p>
                     <p className="text-xs text-[var(--text-muted)] truncate" data-name="testimonio-negocio" data-file="components/NegociosTestimonios.js">{t.negocio}</p>
                   </div>
                 </figcaption>
@@ -67,7 +67,7 @@ function NegociosTestimonios() {
 
           <div className="mt-5 surface-rr p-5 flex flex-col sm:flex-row sm:items-center gap-4 justify-between" data-name="testimonios-cta" data-file="components/NegociosTestimonios.js">
             <div data-name="testimonios-cta-copy" data-file="components/NegociosTestimonios.js">
-              <p className="text-sm font-bold text-[#111827]" data-name="testimonios-cta-title" data-file="components/NegociosTestimonios.js">
+              <p className="text-sm font-bold text-[#2A1620]" data-name="testimonios-cta-title" data-file="components/NegociosTestimonios.js">
                 ¿Tienes un salon y quieres aparecer aqui?
               </p>
               <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed" data-name="testimonios-cta-sub" data-file="components/NegociosTestimonios.js">

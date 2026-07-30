@@ -71,7 +71,7 @@ function TiendaPage() {
                 />
               ) : null}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
-              <span className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold shadow-sm ${tienda.esRservasroma ? 'bg-[#111827] text-white' : 'bg-white/95 text-[var(--primary-color)]'}`}>
+              <span className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold shadow-sm ${tienda.esRservasroma ? 'bg-[#2A1620] text-white' : 'bg-white/95 text-[var(--primary-color)]'}`}>
                 {tienda.esRservasroma ? '💎 VIP RservasRoma' : 'Tienda gratis'}
               </span>
               <span className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-bold text-green-700 shadow-sm">Tienda activa</span>
@@ -87,7 +87,7 @@ function TiendaPage() {
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h2 className="text-base font-bold text-[#111827] leading-snug truncate">{tienda.nombre}</h2>
+                  <h2 className="text-base font-bold text-[#2A1620] leading-snug truncate">{tienda.nombre}</h2>
                   <p className="mt-1 text-xs text-[var(--text-muted)] truncate">{[tienda.categoria, tienda.ubicacionCorta].filter(Boolean).join(' · ')}</p>
                 </div>
               </div>
@@ -159,7 +159,7 @@ function TiendaPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h1 className="text-2xl md:text-3xl font-extrabold tracking-[-0.02em]">{tiendaActual.nombre}</h1>
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${tiendaActual.esRservasroma ? 'bg-[#111827] text-white' : 'bg-[var(--secondary-color)] text-[var(--primary-color)]'}`}>{tiendaActual.esRservasroma ? '💎 VIP' : 'Tienda gratis'}</span>
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${tiendaActual.esRservasroma ? 'bg-[#2A1620] text-white' : 'bg-[var(--secondary-color)] text-[var(--primary-color)]'}`}>{tiendaActual.esRservasroma ? '💎 VIP' : 'Tienda gratis'}</span>
                     </div>
                     <p className="mt-1 text-sm text-[var(--text-muted)]">{[tiendaActual.categoria, tiendaActual.ubicacionCorta].filter(Boolean).join(' · ')}</p>
                     {tiendaActual.descripcion ? <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)] max-w-2xl">{tiendaActual.descripcion}</p> : null}
@@ -208,7 +208,7 @@ function TiendaPage() {
           <div className="hero-blob-rr top-[-140px] right-[-100px]" aria-hidden="true"></div>
           <div className="container-rr relative py-8 md:py-12">
             <p className="kicker-rr mb-2">Marketplace de belleza</p>
-            <h1 className="text-3xl md:text-5xl font-extrabold tracking-[-0.02em] leading-tight text-[#111827]">Tiendas de belleza de toda Cuba</h1>
+            <h1 className="text-3xl md:text-5xl font-extrabold tracking-[-0.02em] leading-tight text-[#2A1620]">Tiendas de belleza de toda Cuba</h1>
             <p className="mt-3 text-sm md:text-base text-[var(--text-muted)] leading-relaxed max-w-xl">Primero elige una tienda. Dentro encontrarás sus productos, cursos, precios y contacto directo por WhatsApp.</p>
             <div className="mt-6 flex flex-col sm:flex-row gap-3 max-w-2xl">
               <input className="input-rr flex-1" value={busqueda} onChange={(event) => setBusqueda(event.target.value)} placeholder="Buscar tienda, categoría o ubicación..." />

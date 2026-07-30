@@ -23,10 +23,10 @@ function BusinessRail({ title, subtitle, items, badge, emptyText }) {
               {subtitle ? <p className="text-sm text-[var(--text-muted)] mt-1" data-name="business-rail-subtitle" data-file="components/BusinessRail.js">{subtitle}</p> : null}
             </div>
             <div className="hidden md:flex items-center gap-2" data-name="business-rail-controls" data-file="components/BusinessRail.js">
-              <button className="w-10 h-10 rounded-lg border border-[var(--border)] bg-white flex items-center justify-center hover:bg-[#F9FAFB]" onClick={() => scrollBy(-1)} aria-label="Anterior" data-name="business-rail-prev" data-file="components/BusinessRail.js">
+              <button className="w-10 h-10 rounded-lg border border-[var(--border)] bg-white flex items-center justify-center hover:bg-[#F8F4F6]" onClick={() => scrollBy(-1)} aria-label="Anterior" data-name="business-rail-prev" data-file="components/BusinessRail.js">
                 <div className="icon-chevron-left text-xl text-[var(--primary-color)]" data-name="business-rail-prev-i" data-file="components/BusinessRail.js"></div>
               </button>
-              <button className="w-10 h-10 rounded-lg border border-[var(--border)] bg-white flex items-center justify-center hover:bg-[#F9FAFB]" onClick={() => scrollBy(1)} aria-label="Siguiente" data-name="business-rail-next" data-file="components/BusinessRail.js">
+              <button className="w-10 h-10 rounded-lg border border-[var(--border)] bg-white flex items-center justify-center hover:bg-[#F8F4F6]" onClick={() => scrollBy(1)} aria-label="Siguiente" data-name="business-rail-next" data-file="components/BusinessRail.js">
                 <div className="icon-chevron-right text-xl text-[var(--primary-color)]" data-name="business-rail-next-i" data-file="components/BusinessRail.js"></div>
               </button>
             </div>

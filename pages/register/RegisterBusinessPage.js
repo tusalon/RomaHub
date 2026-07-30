@@ -114,7 +114,7 @@ function RegisterBusinessPage() {
               <div className="icon-circle-check text-3xl text-green-600" data-name="success-icon" data-file="pages/register/RegisterBusinessPage.js"></div>
             </div>
             <p className="mt-5 text-xs font-bold uppercase tracking-[0.16em] text-green-700" data-name="success-kicker" data-file="pages/register/RegisterBusinessPage.js">Negocio creado</p>
-            <h1 className="mt-2 text-3xl md:text-4xl font-extrabold tracking-tight text-[#111827]" data-name="success-title" data-file="pages/register/RegisterBusinessPage.js">
+            <h1 className="mt-2 text-3xl md:text-4xl font-extrabold tracking-tight text-[#2A1620]" data-name="success-title" data-file="pages/register/RegisterBusinessPage.js">
               ¡{credenciales.nombre} ya está en RomaHub!
             </h1>
             <p className="mt-3 text-sm text-[var(--text-muted)] leading-relaxed max-w-lg mx-auto" data-name="success-sub" data-file="pages/register/RegisterBusinessPage.js">
@@ -125,7 +125,7 @@ function RegisterBusinessPage() {
               <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-4" data-name="credential-user" data-file="pages/register/RegisterBusinessPage.js">
                 <p className="text-[11px] uppercase tracking-wide text-[var(--text-muted)] font-bold">Usuario (tu WhatsApp)</p>
                 <div className="mt-2 flex items-center justify-between gap-3">
-                  <p className="text-lg font-extrabold text-[#111827]">{credenciales.usuario}</p>
+                  <p className="text-lg font-extrabold text-[#2A1620]">{credenciales.usuario}</p>
                   <button type="button" className="btn-rr btn-ghost-rr py-2 px-3 text-xs" onClick={() => copiar('usuario', credenciales.usuario)}>
                     {copiado === 'usuario' ? 'Copiado' : 'Copiar'}
                   </button>
@@ -134,7 +134,7 @@ function RegisterBusinessPage() {
               <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-muted)] p-4" data-name="credential-password" data-file="pages/register/RegisterBusinessPage.js">
                 <p className="text-[11px] uppercase tracking-wide text-[var(--text-muted)] font-bold">Contraseña</p>
                 <div className="mt-2 flex items-center justify-between gap-3">
-                  <p className="text-lg font-extrabold font-mono tracking-wider text-[#111827]">{credenciales.password}</p>
+                  <p className="text-lg font-extrabold font-mono tracking-wider text-[#2A1620]">{credenciales.password}</p>
                   <button type="button" className="btn-rr btn-ghost-rr py-2 px-3 text-xs" onClick={() => copiar('password', credenciales.password)}>
                     {copiado === 'password' ? 'Copiada' : 'Copiar'}
                   </button>
@@ -143,7 +143,7 @@ function RegisterBusinessPage() {
               <div className="rounded-xl border border-amber-200 bg-amber-50 p-4" data-name="credential-recovery" data-file="pages/register/RegisterBusinessPage.js">
                 <p className="text-[11px] uppercase tracking-wide text-amber-800 font-bold">Código de recuperación</p>
                 <div className="mt-2 flex items-center justify-between gap-3">
-                  <p className="text-base font-extrabold font-mono tracking-wide text-[#111827] break-all">{credenciales.recoveryCode}</p>
+                  <p className="text-base font-extrabold font-mono tracking-wide text-[#2A1620] break-all">{credenciales.recoveryCode}</p>
                   <button type="button" className="btn-rr btn-ghost-rr py-2 px-3 text-xs" onClick={() => copiar('recovery', credenciales.recoveryCode)}>
                     {copiado === 'recovery' ? 'Copiado' : 'Copiar'}
                   </button>
@@ -162,7 +162,7 @@ function RegisterBusinessPage() {
             </div>
 
             <div className="mt-7 pt-6 border-t border-[var(--border)] text-left" data-name="success-next" data-file="pages/register/RegisterBusinessPage.js">
-              <p className="text-sm font-bold text-[#111827]">Tu próximo paso</p>
+              <p className="text-sm font-bold text-[#2A1620]">Tu próximo paso</p>
               <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed">
                 Entra al panel para escribir la descripción, organizar tu perfil y comenzar a publicar productos o cursos.
               </p>
@@ -179,7 +179,7 @@ function RegisterBusinessPage() {
           <div className="container-rr relative grid grid-cols-1 lg:grid-cols-[1fr_430px] gap-8 lg:gap-12 items-start" data-name="register-grid" data-file="pages/register/RegisterBusinessPage.js">
             <div className="max-w-2xl" data-name="register-copy" data-file="pages/register/RegisterBusinessPage.js">
               <p className="kicker-rr mb-4" data-name="register-kicker" data-file="pages/register/RegisterBusinessPage.js">RomaHub para negocios</p>
-              <h1 className="text-4xl md:text-6xl font-black tracking-[-0.025em] leading-[1.02] text-[#111827]" data-name="register-title" data-file="pages/register/RegisterBusinessPage.js">
+              <h1 className="text-4xl md:text-6xl font-black tracking-[-0.025em] leading-[1.02] text-[#2A1620]" data-name="register-title" data-file="pages/register/RegisterBusinessPage.js">
                 Abre gratis tu negocio en <span className="text-[var(--primary-color)]">RomaHub.</span>
               </h1>
               <p className="mt-5 text-base md:text-lg text-[var(--text-muted)] leading-relaxed max-w-xl" data-name="register-subtitle" data-file="pages/register/RegisterBusinessPage.js">
@@ -194,17 +194,17 @@ function RegisterBusinessPage() {
                 ].map((item) => (
                   <div key={item[0]} className="surface-rr p-4" data-name="register-benefit" data-file="pages/register/RegisterBusinessPage.js">
                     <div className="w-9 h-9 rounded-full bg-[var(--secondary-color)] text-[var(--primary-color)] flex items-center justify-center text-sm font-extrabold">{item[0]}</div>
-                    <p className="mt-3 text-sm font-bold text-[#111827]">{item[1]}</p>
+                    <p className="mt-3 text-sm font-bold text-[#2A1620]">{item[1]}</p>
                     <p className="mt-1 text-xs text-[var(--text-muted)] leading-relaxed">{item[2]}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 rounded-2xl border border-[rgba(232,51,135,0.20)] bg-[rgba(232,51,135,0.06)] p-5" data-name="rservasroma-note" data-file="pages/register/RegisterBusinessPage.js">
+              <div className="mt-6 rounded-2xl border border-[rgba(181,0,99,0.20)] bg-[rgba(181,0,99,0.06)] p-5" data-name="rservasroma-note" data-file="pages/register/RegisterBusinessPage.js">
                 <div className="flex items-start gap-3">
                   <span className="text-xl" aria-hidden="true">💎</span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-extrabold text-[#111827]">¿Ya usas Rservasroma?</p>
+                    <p className="text-sm font-extrabold text-[#2A1620]">¿Ya usas Rservasroma?</p>
                     <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed">
                       No te registres otra vez. En tu panel de administración ve a <b>Configuración → Tienda</b>. Allí encontrarás el usuario y la contraseña para entrar a RomaHub, y tu negocio aparecerá como VIP.
                     </p>
@@ -219,7 +219,7 @@ function RegisterBusinessPage() {
 
             <form className="surface-rr p-5 md:p-6 lg:sticky lg:top-24" onSubmit={enviar} data-name="register-form" data-file="pages/register/RegisterBusinessPage.js">
               <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--primary-color)]">Gratis y en un minuto</p>
-              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-[#111827]" data-name="form-title" data-file="pages/register/RegisterBusinessPage.js">Crea tu negocio</h2>
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-[#2A1620]" data-name="form-title" data-file="pages/register/RegisterBusinessPage.js">Crea tu negocio</h2>
               <p className="mt-2 text-sm text-[var(--text-muted)] leading-relaxed">Solo te pedimos lo necesario para comenzar.</p>
 
               <label className="block mt-5" htmlFor="registro-nombre" data-name="field-name" data-file="pages/register/RegisterBusinessPage.js">

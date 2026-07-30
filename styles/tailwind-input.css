@@ -4,35 +4,35 @@
 
 @layer base {
   :root {
-    --bg: #FFFFFF;
-    --bg-muted: #F9FAFB;
-    --card: #FFFFFF;
+    --bg: #FCF9FA;
+    --bg-muted: #F4F0F3;
+    --card: #FFFDFE;
 
-    --text: #111827;
-    --text-soft: #374151;
-    --text-muted: #6B7280;
+    --text: #2A1620;
+    --text-soft: #594047;
+    --text-muted: #806B74;
 
-    --border: #E5E7EB;
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.12);
+    --border: #DED4D9;
+    --shadow-sm: 0 1px 2px rgba(42, 22, 32, 0.05), 0 8px 24px rgba(42, 22, 32, 0.04);
+    --shadow: 0 14px 36px rgba(42, 22, 32, 0.08);
+    --shadow-lg: 0 22px 54px rgba(42, 22, 32, 0.14);
 
-    --primary-color: #e83387;
-    --primary-hover: #c0166a;
-    --primary-glow: rgba(232, 51, 135, 0.20);
-    --secondary-color: rgba(232, 51, 135, 0.08);
-    --accent-soft: rgba(232, 51, 135, 0.08);
+    --primary-color: #B50063;
+    --primary-hover: #8F004F;
+    --primary-glow: rgba(181, 0, 99, 0.18);
+    --secondary-color: #E2E8F5;
+    --accent-soft: #F6E7EF;
 
-    --ink-dark: #111827;
+    --ink-dark: #2A1620;
 
     --gold: #F59E0B;
     --gold-2: #EAB308;
 
     --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
 
-    --container: 1200px;
+    --container: 1240px;
   }
 
   html,
@@ -43,7 +43,12 @@
   }
 
   body {
-    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    background:
+      radial-gradient(circle at 8% 0%, rgba(226, 232, 245, 0.72), transparent 28rem),
+      radial-gradient(circle at 100% 12%, rgba(181, 0, 99, 0.07), transparent 30rem),
+      var(--bg);
+    background-attachment: fixed;
   }
 
   a {
@@ -52,7 +57,7 @@
   }
 
   ::selection {
-    background: rgba(232, 51, 135, 0.16);
+    background: rgba(181, 0, 99, 0.16);
   }
 }
 
@@ -60,43 +65,44 @@
   .container-rr {
     max-width: var(--container);
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px;
   }
 
   .card-rr {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
   }
 
   .surface-rr {
-    background: var(--bg);
+    background: rgba(255, 253, 254, 0.96);
     border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
   }
 
   .chip-rr {
     border: 1px solid var(--border);
-    background: var(--bg-muted);
-    border-radius: var(--radius-sm);
+    background: var(--secondary-color);
+    border-radius: 999px;
   }
 
   .kicker-rr {
     font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.09em;
     color: var(--primary-color);
   }
 
   .btn-rr {
-    border-radius: var(--radius-md);
+    border-radius: 9px;
     padding: 12px 16px;
     border: 1px solid var(--border);
     font-weight: 700;
-    transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+    letter-spacing: -0.01em;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
   }
 
   .btn-rr:active {
@@ -107,37 +113,38 @@
     background: var(--primary-color);
     color: white;
     border-color: transparent;
-    box-shadow: 0 4px 12px var(--primary-glow);
+    box-shadow: 0 8px 20px var(--primary-glow);
   }
 
   .btn-primary-rr:hover {
     background: var(--primary-hover);
-    box-shadow: 0 8px 24px var(--primary-glow);
+    box-shadow: 0 12px 28px var(--primary-glow);
+    transform: translateY(-1px);
   }
 
   .btn-ghost-rr {
-    background: white;
+    background: var(--card);
     color: var(--text);
   }
 
   .btn-ghost-rr:hover {
-    background: var(--bg-muted);
-    border-color: #D1D5DB;
+    background: var(--secondary-color);
+    border-color: #CDBEC5;
   }
 
   .input-rr {
     width: 100%;
     background: white;
     border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    border-radius: 10px;
     padding: 12px 14px;
     outline: none;
     transition: box-shadow 200ms ease, border-color 200ms ease;
   }
 
   .input-rr:focus {
-    border-color: rgba(232, 51, 135, 0.45);
-    box-shadow: 0 0 0 4px rgba(232, 51, 135, 0.10);
+    border-color: rgba(181, 0, 99, 0.45);
+    box-shadow: 0 0 0 4px rgba(181, 0, 99, 0.10);
   }
 
   .muted-rr {
@@ -220,7 +227,7 @@
     width: 320px;
     height: 320px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(232, 51, 135, 0.14), rgba(232, 51, 135, 0) 65%);
+    background: radial-gradient(circle, rgba(181, 0, 99, 0.12), rgba(226, 232, 245, 0.22) 38%, rgba(181, 0, 99, 0) 68%);
     /* En móvil: estático y sin blur animado — los Android de gama baja
        pagan caro un blur repintándose 60 veces por segundo. */
   }
@@ -250,7 +257,7 @@
   }
 
   .card-lift-rr:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
   }
 
@@ -277,7 +284,7 @@
   }
 
   .skeleton-rr {
-    background: linear-gradient(90deg, rgba(17, 24, 39, 0.06), rgba(17, 24, 39, 0.02), rgba(17, 24, 39, 0.06));
+    background: linear-gradient(90deg, rgba(42, 22, 32, 0.06), rgba(42, 22, 32, 0.02), rgba(42, 22, 32, 0.06));
     background-size: 200% 100%;
     animation: shimmer 1.15s infinite linear;
     border-radius: var(--radius-sm);

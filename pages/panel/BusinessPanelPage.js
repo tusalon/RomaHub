@@ -1,4 +1,4 @@
-﻿function BusinessPanelPage() {
+function BusinessPanelPage() {
   try {
     const dateTimeLocal = (value) => {
       const date = value ? new Date(value) : new Date();
@@ -989,7 +989,7 @@
                   ) : null}
                 </div>
                 <div
-                  className={`relative aspect-video rounded-xl overflow-hidden border border-[var(--border)] bg-[#F3F4F6] ${presentation.coverUrl ? 'cursor-crosshair touch-none' : ''}`}
+                  className={`relative aspect-video rounded-xl overflow-hidden border border-[var(--border)] bg-[#F2ECEF] ${presentation.coverUrl ? 'cursor-crosshair touch-none' : ''}`}
                   onPointerDown={positionCoverFromPointer}
                   onPointerMove={positionCoverFromPointer}
                   data-name="cover-preview"
@@ -1179,7 +1179,7 @@
                   <div className="w-10 h-10 rounded-xl bg-[var(--secondary-color)] flex items-center justify-center">
                     <span className={`${metric.icon} text-lg text-[var(--primary-color)]`}></span>
                   </div>
-                  <p className="mt-4 text-2xl md:text-3xl font-extrabold text-[#111827]">{Number(metric.value || 0).toLocaleString('es-ES')}</p>
+                  <p className="mt-4 text-2xl md:text-3xl font-extrabold text-[#2A1620]">{Number(metric.value || 0).toLocaleString('es-ES')}</p>
                   <p className="mt-1 text-xs text-[var(--text-muted)] leading-snug">{metric.label}</p>
                 </article>
               ))}
@@ -1203,7 +1203,7 @@
                       <div key={day.fecha} className="h-full flex flex-col justify-end items-center gap-2" title={`${day.fecha}: ${visitas} visitas, ${contactos} contactos`}>
                         <div className="h-[118px] w-full flex items-end justify-center gap-1 border-b border-[var(--border)]">
                           <span className="w-2.5 sm:w-4 rounded-t bg-[var(--primary-color)] min-h-[2px]" style={{ height: visitas ? `${Math.max(8, (visitas / maxDailyValue) * 100)}%` : '2px' }}></span>
-                          <span className="w-2.5 sm:w-4 rounded-t bg-[#111827] min-h-[2px]" style={{ height: contactos ? `${Math.max(8, (contactos / maxDailyValue) * 100)}%` : '2px' }}></span>
+                          <span className="w-2.5 sm:w-4 rounded-t bg-[#2A1620] min-h-[2px]" style={{ height: contactos ? `${Math.max(8, (contactos / maxDailyValue) * 100)}%` : '2px' }}></span>
                         </div>
                         <span className="text-[10px] text-[var(--text-muted)] capitalize">{label}</span>
                       </div>
@@ -1255,7 +1255,7 @@
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3" aria-label={`Resumen de pedidos de los últimos ${orderSummary.periodo_dias || 90} días`}>
               {[
-                { label: 'Pedidos', value: orderSummary.total, icon: 'icon-shopping-bag', tone: 'text-[#111827]' },
+                { label: 'Pedidos', value: orderSummary.total, icon: 'icon-shopping-bag', tone: 'text-[#2A1620]' },
                 { label: 'Nuevos', value: orderSummary.nuevos, icon: 'icon-bell', tone: 'text-[var(--primary-color)]' },
                 { label: 'Contactados', value: orderSummary.contactados, icon: 'icon-message-circle', tone: 'text-blue-600' },
                 { label: 'Completados', value: orderSummary.completados, icon: 'icon-circle-check', tone: 'text-green-700' },
@@ -1308,7 +1308,7 @@
                       }, {});
                       const totalLabel = Object.entries(totalsByCurrency).map(([currency, value]) => Format.formatPrecioCUP(value, currency)).join(' + ') || Format.formatPrecioCUP(order.total || 0, 'CUP');
                       return (
-                        <article key={order.id} className={`p-4 md:p-5 ${status === 'nuevo' ? 'bg-[rgba(232,51,135,0.025)]' : ''}`} data-name="order-row">
+                        <article key={order.id} className={`p-4 md:p-5 ${status === 'nuevo' ? 'bg-[rgba(181,0,99,0.025)]' : ''}`} data-name="order-row">
                           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                             <div className="min-w-0">
                               <div className="flex flex-wrap items-center gap-2">
@@ -1316,7 +1316,7 @@
                                 <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${statusData.className}`}>{statusData.label}</span>
                               </div>
                               <p className="mt-1 text-xs text-[var(--text-muted)]">{new Date(order.created_at).toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' })} · Pedido #{String(order.id).slice(0, 8)}</p>
-                              <p className="mt-1 text-xs font-semibold text-[#111827]">WhatsApp: {String(order.cliente_whatsapp || '').replace(/\D/g, '').length === 8 ? '+53 ' : '+'}{String(order.cliente_whatsapp || '').replace(/\D/g, '')}</p>
+                              <p className="mt-1 text-xs font-semibold text-[#2A1620]">WhatsApp: {String(order.cliente_whatsapp || '').replace(/\D/g, '').length === 8 ? '+53 ' : '+'}{String(order.cliente_whatsapp || '').replace(/\D/g, '')}</p>
                             </div>
                             <p className="text-base font-extrabold text-[var(--primary-color)] shrink-0">{totalLabel}</p>
                           </div>
