@@ -3,12 +3,15 @@ function HomeHero({ initialParams }) {
     const businesses = MockData.listBusinesses();
     const totalBusinesses = businesses.length;
     const reservasHoy = MockData.getTodayReservations ? MockData.getTodayReservations() : 0;
-    // Mismas 5 fotos de categoria que utils/hero-backgrounds.js en
-    // rservasroma (las que la duena elige como fondo si no sube una foto
-    // propia), aqui en carrusel para mostrar de un vistazo todos los rubros
-    // que cubre el directorio, no solo el que mas negocios tiene hoy (unas).
+    // Carrusel para mostrar de un vistazo todos los rubros que cubre el
+    // directorio, no solo el que mas negocios tiene hoy (unas). "unas" usa
+    // una foto real subida por un negocio (Exotic Nails by Yuly) porque es
+    // la unica categoria con fotos reales en la base hoy; las otras 4 siguen
+    // en stock (mismas que utils/hero-backgrounds.js en rservasroma) hasta
+    // que haya fotos reales de barberia/peluqueria/lashes que valga la pena
+    // mostrar aqui.
     const CATEGORIAS_HERO = [
-      { id: 'unas', label: 'Uñas y manicura', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=60&w=800&auto=format&fit=crop' },
+      { id: 'unas', label: 'Uñas y manicura', image: 'https://res.cloudinary.com/uyvla7fj/image/upload/v1785016296/rservasroma/fondos/uzdrwt0mqcqk7pdt148h.jpg' },
       { id: 'belleza', label: 'Salón de belleza', image: 'https://images.unsplash.com/photo-1560750588-73207b1ef5b8?q=60&w=800&auto=format&fit=crop' },
       { id: 'barberia', label: 'Barbería', image: 'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?q=60&w=800&auto=format&fit=crop' },
       { id: 'peluqueria', label: 'Peluquería', image: 'https://images.unsplash.com/photo-1701976333339-1d41dad8138b?ixlib=rb-4.1.0&q=60&fm=jpg&crop=entropy&cs=srgb&w=800&auto=format&fit=crop' },
