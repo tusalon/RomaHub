@@ -64,6 +64,23 @@
     --radius-lg: 22px;
 
     --container: 1240px;
+
+    /* Escala editorial. El archivo de Fraunces que servimos trae el eje wght
+       de 400 a 600 y nada mas: pedir 700 u 800 no da mas negrita, el navegador
+       lo recorta a 600 (medido: el texto ocupa exactamente lo mismo en 600 que
+       en 900). Por eso el contraste de jerarquia lo dan el TAMANO y el color,
+       no el peso — que es como funciona el diseno editorial de verdad: una
+       serif de 600 a 40px pesa mucho mas que una de 800 a 26px.
+       Con clamp() la escala se estira sola entre movil y desktop, sin tener
+       que repetir el par text-2xl/md:text-[26px] en cada componente. */
+    --fs-display: clamp(2.875rem, 1.9rem + 4.2vw, 4.75rem);
+    --fs-section: clamp(1.75rem, 1.35rem + 1.7vw, 2.5rem);
+    --fs-sub: 0.9375rem;
+
+    /* Ritmo vertical. Antes todas las secciones iban a 40-48px fijos, igual en
+       un movil de 375px que en un desktop de 1240px: seis secciones seguidas
+       se leian como un solo bloque. */
+    --space-section: clamp(3.5rem, 2.5rem + 4vw, 6.5rem);
   }
 
   html,
@@ -134,6 +151,43 @@
     text-transform: uppercase;
     letter-spacing: 0.09em;
     color: var(--primary-color);
+  }
+
+  /* Los tres roles de titulo del sitio. Antes cada componente repetia a mano
+     "text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]" (9 copias), asi
+     que la escala no se podia mover sin tocar 9 archivos y el font-extrabold
+     ademas no hacia nada (ver nota del rango 400-600 arriba). */
+  .h-display-rr {
+    font-family: var(--serif);
+    font-optical-sizing: auto;
+    font-size: var(--fs-display);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+
+  .h-section-rr {
+    font-family: var(--serif);
+    font-optical-sizing: auto;
+    font-size: var(--fs-section);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  /* Bajada de seccion: un solo tamano para un solo rol. Venia en 11, 12 y 14px
+     segun el componente, que es ruido acumulado, no sistema. */
+  .sub-section-rr {
+    font-size: var(--fs-sub);
+    line-height: 1.6;
+    color: var(--text-muted);
+    max-width: 62ch;
+  }
+
+  /* Separacion entre secciones del home. Sustituye a los mt-10/mt-12 sueltos. */
+  .section-rr {
+    margin-top: var(--space-section);
   }
 
   .btn-rr {

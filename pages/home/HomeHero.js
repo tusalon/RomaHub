@@ -61,7 +61,7 @@ function HomeHero({ initialParams }) {
                 tinta oscura + Hub en rosa): aqui se reparte la frase, no las
                 letras, para no depender de que el texto contenga esas
                 palabras exactas. */}
-            <h1 className="text-4xl md:text-6xl lg:text-[64px] font-black tracking-[-0.025em] leading-[1.02] text-[#261D29]" data-name="hero-title" data-file="pages/home/HomeHero.js">
+            <h1 className="h-display-rr" data-name="hero-title" data-file="pages/home/HomeHero.js">
               La belleza de Cuba en{' '}
               <span className="relative inline-block text-[#681831]" data-name="hero-title-accent" data-file="pages/home/HomeHero.js">
                 un solo lugar.

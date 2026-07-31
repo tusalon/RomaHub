@@ -4,13 +4,13 @@ function ProductShowcase({ items, title, badge, subtitle, verTodosHref }) {
     if (!list.length) return null;
 
     return (
-      <section className="mt-12" data-name="product-showcase" data-file="components/ProductShowcase.js">
+      <section className="section-rr" data-name="product-showcase" data-file="components/ProductShowcase.js">
         <div className="container-rr" data-name="showcase-inner" data-file="components/ProductShowcase.js">
           <div className="flex items-end justify-between gap-3 mb-5" data-name="showcase-head" data-file="components/ProductShowcase.js">
             <div data-name="showcase-copy" data-file="components/ProductShowcase.js">
               {badge ? <span className="kicker-rr block mb-2" data-name="showcase-badge" data-file="components/ProductShowcase.js">{badge}</span> : null}
-              <h2 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]" data-name="showcase-title" data-file="components/ProductShowcase.js">{title}</h2>
-              {subtitle ? <p className="text-sm text-[var(--text-muted)] mt-1" data-name="showcase-subtitle" data-file="components/ProductShowcase.js">{subtitle}</p> : null}
+              <h2 className="h-section-rr" data-name="showcase-title" data-file="components/ProductShowcase.js">{title}</h2>
+              {subtitle ? <p className="sub-section-rr mt-2" data-name="showcase-subtitle" data-file="components/ProductShowcase.js">{subtitle}</p> : null}
             </div>
             {verTodosHref ? (
               <a className="btn-rr btn-ghost-rr py-2 px-4 text-sm whitespace-nowrap shrink-0" href={verTodosHref} data-name="showcase-all" data-file="components/ProductShowcase.js">Ver todo</a>

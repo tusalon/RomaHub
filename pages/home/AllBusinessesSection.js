@@ -142,11 +142,11 @@ function AllBusinessesSection() {
     };
 
     return (
-      <section className="mt-12" id="negocios" data-name="all-businesses-section" data-file="pages/home/AllBusinessesSection.js">
+      <section className="section-rr" id="negocios" data-name="all-businesses-section" data-file="pages/home/AllBusinessesSection.js">
         <div className="container-rr" data-name="intrigue-wall-inner" data-file="pages/home/AllBusinessesSection.js">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4" data-name="intrigue-wall-head" data-file="pages/home/AllBusinessesSection.js">
             <div data-name="intrigue-wall-titlewrap" data-file="pages/home/AllBusinessesSection.js">
-              <h2 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]" data-name="intrigue-wall-title" data-file="pages/home/AllBusinessesSection.js">Negocios con servicios</h2>
+              <h2 className="h-section-rr" data-name="intrigue-wall-title" data-file="pages/home/AllBusinessesSection.js">Negocios con servicios</h2>
               <p className="text-sm text-[var(--text-muted)] mt-1" data-name="intrigue-wall-subtitle" data-file="pages/home/AllBusinessesSection.js">Perfiles listos para consultar precios y reservar.</p>
             </div>
             <a className="btn-rr btn-ghost-rr inline-flex items-center justify-center gap-2 w-full md:w-auto" href="search.html" data-name="intrigue-wall-cta" data-file="pages/home/AllBusinessesSection.js">

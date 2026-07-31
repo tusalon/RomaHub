@@ -8,14 +8,14 @@ function NegociosTestimonios() {
     const inicial = (nombre) => String(nombre || '?').trim().charAt(0).toUpperCase();
 
     return (
-      <section className="mt-12" data-name="negocios-testimonios" data-file="components/NegociosTestimonios.js">
+      <section className="section-rr" data-name="negocios-testimonios" data-file="components/NegociosTestimonios.js">
         <div className="container-rr" data-name="testimonios-inner" data-file="components/NegociosTestimonios.js">
           <div className="mb-5" data-name="testimonios-head" data-file="components/NegociosTestimonios.js">
             <span className="kicker-rr block mb-2" data-name="testimonios-badge" data-file="components/NegociosTestimonios.js">Quienes ya lo usan</span>
-            <h2 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em] text-[#261D29]" data-name="testimonios-title" data-file="components/NegociosTestimonios.js">
+            <h2 className="h-section-rr" data-name="testimonios-title" data-file="components/NegociosTestimonios.js">
               Lo que dicen los negocios
             </h2>
-            <p className="mt-2 text-sm text-[var(--text-muted)] leading-relaxed max-w-xl" data-name="testimonios-sub" data-file="components/NegociosTestimonios.js">
+            <p className="sub-section-rr mt-2" data-name="testimonios-sub" data-file="components/NegociosTestimonios.js">
               Duenas de salon que ya reciben sus reservas con Rservasroma, la app detras de RomaHub.
             </p>
           </div>

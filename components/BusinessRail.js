@@ -14,13 +14,13 @@ function BusinessRail({ title, subtitle, items, badge, emptyText }) {
     };
 
     return (
-      <section className="mt-10" data-name="business-rail" data-file="components/BusinessRail.js">
+      <section className="section-rr" data-name="business-rail" data-file="components/BusinessRail.js">
         <div className="container-rr" data-name="business-rail-inner" data-file="components/BusinessRail.js">
           <div className="flex items-end justify-between gap-4 mb-4" data-name="business-rail-head" data-file="components/BusinessRail.js">
             <div data-name="business-rail-copy" data-file="components/BusinessRail.js">
               {badge ? <span className="kicker-rr block mb-2" data-name="business-rail-badge" data-file="components/BusinessRail.js">{badge}</span> : null}
-              <h2 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]" data-name="business-rail-title" data-file="components/BusinessRail.js">{title}</h2>
-              {subtitle ? <p className="text-sm text-[var(--text-muted)] mt-1" data-name="business-rail-subtitle" data-file="components/BusinessRail.js">{subtitle}</p> : null}
+              <h2 className="h-section-rr" data-name="business-rail-title" data-file="components/BusinessRail.js">{title}</h2>
+              {subtitle ? <p className="sub-section-rr mt-2" data-name="business-rail-subtitle" data-file="components/BusinessRail.js">{subtitle}</p> : null}
             </div>
             <div className="hidden md:flex items-center gap-2" data-name="business-rail-controls" data-file="components/BusinessRail.js">
               <button className="w-10 h-10 rounded-lg border border-[var(--border)] bg-white flex items-center justify-center hover:bg-[#F6EEE6]" onClick={() => scrollBy(-1)} aria-label="Anterior" data-name="business-rail-prev" data-file="components/BusinessRail.js">

@@ -95,7 +95,7 @@ function SearchPage({ query, onQueryChange }) {
       <div className="container-rr" data-name="search-page" data-file="pages/search/SearchPage.js">
         <div className="flex items-start justify-between gap-4" data-name="search-head" data-file="pages/search/SearchPage.js">
           <div data-name="search-titlewrap" data-file="pages/search/SearchPage.js">
-            <h1 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]" data-name="search-title" data-file="pages/search/SearchPage.js">Explorar negocios</h1>
+            <h1 className="h-section-rr" data-name="search-title" data-file="pages/search/SearchPage.js">Explorar negocios</h1>
             <p className="text-sm text-[var(--text-muted)] mt-1" data-name="search-sub" data-file="pages/search/SearchPage.js">
               {query?.ofertas ? 'Encuentra promociones vigentes de servicios, productos y cursos.' : 'Encuentra negocios que ya publicaron sus servicios y están listos para atenderte.'}
             </p>

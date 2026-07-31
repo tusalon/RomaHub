@@ -24,13 +24,13 @@ function HomePage({ initialParams }) {
         <HomeHero initialParams={initialParams} data-name="home-hero" data-file="pages/home/HomePage.js" />
 
         {promotions.length ? (
-          <section className="mt-10" aria-labelledby="home-promotions-title" data-name="home-promotions">
+          <section className="section-rr" aria-labelledby="home-promotions-title" data-name="home-promotions">
             <div className="container-rr">
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5">
                 <div>
                   <p className="kicker-rr">Aprovecha ahora</p>
-                  <h2 id="home-promotions-title" className="mt-1 text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]">Ofertas por tiempo limitado</h2>
-                  <p className="mt-1 text-sm text-[var(--text-muted)]">Promociones activas de negocios de belleza en RomaHub.</p>
+                  <h2 id="home-promotions-title" className="mt-1 h-section-rr">Ofertas por tiempo limitado</h2>
+                  <p className="mt-2 sub-section-rr">Promociones activas de negocios de belleza en RomaHub.</p>
                 </div>
                 <button type="button" className="btn-rr btn-ghost-rr shrink-0" onClick={() => Navigation.goToSearch('', '', '', true)}>Ver negocios con ofertas</button>
               </div>
@@ -53,10 +53,10 @@ function HomePage({ initialParams }) {
           />
         ) : null}
 
-        <section className="mt-10" data-name="province-directory" data-file="pages/home/HomePage.js">
+        <section className="section-rr" data-name="province-directory" data-file="pages/home/HomePage.js">
           <div className="container-rr" data-name="province-dir-inner" data-file="pages/home/HomePage.js">
             <span className="kicker-rr block mb-2" data-name="prov-badge" data-file="pages/home/HomePage.js">Directorio por provincia</span>
-            <h2 className="text-2xl md:text-[26px] font-extrabold tracking-[-0.02em]" data-name="prov-title" data-file="pages/home/HomePage.js">Explora por provincia</h2>
+            <h2 className="h-section-rr" data-name="prov-title" data-file="pages/home/HomePage.js">Explora por provincia</h2>
             <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" data-name="prov-grid" data-file="pages/home/HomePage.js">
               {provinceCounts.map((prov) => (
                 <button
@@ -102,7 +102,7 @@ function HomePage({ initialParams }) {
 
         <NegociosTestimonios data-name="negocios-testimonios" data-file="pages/home/HomePage.js" />
 
-        <section className="mt-12" data-name="home-trust" data-file="pages/home/HomePage.js">
+        <section className="section-rr" data-name="home-trust" data-file="pages/home/HomePage.js">
           <div className="container-rr" data-name="home-trust-inner" data-file="pages/home/HomePage.js">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4" data-name="trust-grid" data-file="pages/home/HomePage.js">
               <div className="surface-rr card-lift-rr p-5" data-name="trust-1" data-file="pages/home/HomePage.js">
