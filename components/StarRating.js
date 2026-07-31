@@ -6,8 +6,8 @@ function StarRating({ value, total, verified }) {
     if (stars === 0 && t === 0) {
       return (
         <div className="flex items-center gap-2" data-name="star-rating" data-file="components/StarRating.js">
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[rgba(181,0,99,0.08)] border border-[rgba(181,0,99,0.15)]" data-name="new-pill" data-file="components/StarRating.js">
-            <span className="text-xs font-medium text-[#B50063]" data-name="new-text" data-file="components/StarRating.js">Nuevo en RomaHub</span>
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[rgba(104,24,49,0.08)] border border-[rgba(104,24,49,0.15)]" data-name="new-pill" data-file="components/StarRating.js">
+            <span className="text-xs font-medium text-[#681831]" data-name="new-text" data-file="components/StarRating.js">Nuevo en RomaHub</span>
           </span>
         </div>
       );
@@ -21,9 +21,9 @@ function StarRating({ value, total, verified }) {
           <span className="text-xs text-[var(--text-muted)]" data-name="star-total" data-file="components/StarRating.js">({t} {t === 1 ? 'visita' : 'visitas'})</span>
         </div>
         {verified ? (
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[rgba(34,197,94,0.08)] border border-[rgba(34,197,94,0.2)]" data-name="verified-pill" data-file="components/StarRating.js">
-            <div className="icon-circle-check text-sm text-[#22C55E]" data-name="verified-icon" data-file="components/StarRating.js"></div>
-            <span className="text-[11px] text-[#22C55E] font-medium" data-name="verified-text" data-file="components/StarRating.js">Verificadas</span>
+          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[rgba(31,134,84,0.08)] border border-[rgba(31,134,84,0.2)]" data-name="verified-pill" data-file="components/StarRating.js">
+            <div className="icon-circle-check text-sm text-[#1F8654]" data-name="verified-icon" data-file="components/StarRating.js"></div>
+            <span className="text-[11px] text-[#1F8654] font-medium" data-name="verified-text" data-file="components/StarRating.js">Verificadas</span>
           </span>
         ) : null}
       </div>

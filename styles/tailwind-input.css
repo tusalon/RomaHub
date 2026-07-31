@@ -1,35 +1,66 @@
+/* Fuente de marca autoalojada: un solo archivo, mismo origen, cacheable por el
+   service worker. Es el subset latino (U+0000-00FF) — cubre acentos, ene y los
+   signos de apertura del espanol. Con internet cubano importa mas ahorrarse los
+   dos hosts externos de Google Fonts que los KB del archivo. */
+@font-face {
+  font-family: 'Fraunces';
+  src: url('../fonts/Fraunces-variable.woff2') format('woff2-variations'),
+       url('../fonts/Fraunces-variable.woff2') format('woff2');
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --bg: #FCF9FA;
-    --bg-muted: #F4F0F3;
-    --card: #FFFDFE;
+    /* Elegancia calida de evento: burdeos + coral + serif editorial. */
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-    --text: #2A1620;
-    --text-soft: #594047;
-    --text-muted: #806B74;
+    --bg: #FFFAF5;
+    --bg-muted: #F6EEE6;
+    --card: #FFFDFA;
 
-    --border: #DED4D9;
-    --shadow-sm: 0 1px 2px rgba(42, 22, 32, 0.05), 0 8px 24px rgba(42, 22, 32, 0.04);
-    --shadow: 0 14px 36px rgba(42, 22, 32, 0.08);
-    --shadow-lg: 0 22px 54px rgba(42, 22, 32, 0.14);
+    --text: #261D29;
+    --text-soft: #4D414D;
+    --text-muted: #746671;
 
-    --primary-color: #B50063;
-    --primary-hover: #8F004F;
-    --primary-glow: rgba(181, 0, 99, 0.18);
-    --secondary-color: #E2E8F5;
-    --accent-soft: #F6E7EF;
+    --border: #E5D7CD;
+    --shadow-sm: 0 1px 2px rgba(76, 34, 50, 0.05), 0 8px 24px rgba(76, 34, 50, 0.05);
+    --shadow: 0 14px 36px rgba(76, 34, 50, 0.09);
+    --shadow-lg: 0 16px 38px rgba(76, 34, 50, 0.1);
 
-    --ink-dark: #2A1620;
+    --primary-color: #681831;
+    --primary-hover: #8B2447;
+    --primary-glow: rgba(104, 24, 49, 0.20);
+    --secondary-color: #F6EEE6;
+    --accent-soft: #FFECEB;
 
+    --coral: #FF675C;
+    --purple: #5C2B83;
+    --lilac: #EADFF5;
+
+    --ink-dark: #261D29;
+
+    /* El ambar de las estrellas se queda fuera del rebrand: en coral, las
+       valoraciones se confundirian con los badges de acento. */
     --gold: #F59E0B;
     --gold-2: #EAB308;
 
+    --libre: #1F8654;
+    --libre-bg: #E6F4EC;
+    --ocupado: #A83C37;
+    --ocupado-bg: #FDECEB;
+    --info: #2A5FA8;
+    --info-bg: #E4EEFB;
+    --focus-ring: 0 0 0 3px rgba(255, 103, 92, 0.55);
+
     --radius-sm: 8px;
-    --radius-md: 14px;
+    --radius-md: 13px;
     --radius-lg: 22px;
 
     --container: 1240px;
@@ -43,12 +74,21 @@
   }
 
   body {
-    font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    font-family: var(--sans);
     background:
-      radial-gradient(circle at 8% 0%, rgba(226, 232, 245, 0.72), transparent 28rem),
-      radial-gradient(circle at 100% 12%, rgba(181, 0, 99, 0.07), transparent 30rem),
+      radial-gradient(circle at 8% 0%, rgba(234, 223, 245, 0.55), transparent 28rem),
+      radial-gradient(circle at 100% 12%, rgba(104, 24, 49, 0.06), transparent 30rem),
       var(--bg);
     background-attachment: fixed;
+  }
+
+  /* La serif solo manda en titulos y cifras grandes. El texto de trabajo usa la
+     pila del sistema: cero peso extra y se ve nativo en cada dispositivo. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--serif);
+    font-optical-sizing: auto;
   }
 
   a {
@@ -57,7 +97,7 @@
   }
 
   ::selection {
-    background: rgba(181, 0, 99, 0.16);
+    background: rgba(104, 24, 49, 0.16);
   }
 }
 
@@ -84,7 +124,7 @@
 
   .chip-rr {
     border: 1px solid var(--border);
-    background: var(--secondary-color);
+    background: var(--lilac);
     border-radius: 999px;
   }
 
@@ -97,8 +137,12 @@
   }
 
   .btn-rr {
-    border-radius: 9px;
-    padding: 12px 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    border-radius: var(--radius-md);
+    padding: 12px 18px;
     border: 1px solid var(--border);
     font-weight: 700;
     letter-spacing: -0.01em;
@@ -110,14 +154,15 @@
   }
 
   .btn-primary-rr {
-    background: var(--primary-color);
+    min-height: 54px;
+    background: linear-gradient(100deg, var(--primary-color), var(--primary-hover));
     color: white;
     border-color: transparent;
     box-shadow: 0 8px 20px var(--primary-glow);
   }
 
   .btn-primary-rr:hover {
-    background: var(--primary-hover);
+    background: linear-gradient(100deg, var(--primary-hover), #A32E55);
     box-shadow: 0 12px 28px var(--primary-glow);
     transform: translateY(-1px);
   }
@@ -129,7 +174,18 @@
 
   .btn-ghost-rr:hover {
     background: var(--secondary-color);
-    border-color: #CDBEC5;
+    border-color: #D6C3B4;
+  }
+
+  /* Boton secundario del brief: contorno burdeos, sin relleno. */
+  .btn-outline-rr {
+    background: transparent;
+    border: 1.5px solid var(--primary-color);
+    color: var(--primary-color);
+  }
+
+  .btn-outline-rr:hover {
+    background: var(--accent-soft);
   }
 
   .input-rr {
@@ -143,8 +199,8 @@
   }
 
   .input-rr:focus {
-    border-color: rgba(181, 0, 99, 0.45);
-    box-shadow: 0 0 0 4px rgba(181, 0, 99, 0.10);
+    border-color: rgba(104, 24, 49, 0.45);
+    box-shadow: 0 0 0 4px rgba(104, 24, 49, 0.10);
   }
 
   .muted-rr {
@@ -227,7 +283,7 @@
     width: 320px;
     height: 320px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(181, 0, 99, 0.12), rgba(226, 232, 245, 0.22) 38%, rgba(181, 0, 99, 0) 68%);
+    background: radial-gradient(circle, rgba(104, 24, 49, 0.12), rgba(234, 223, 245, 0.30) 38%, rgba(104, 24, 49, 0) 68%);
     /* En móvil: estático y sin blur animado — los Android de gama baja
        pagan caro un blur repintándose 60 veces por segundo. */
   }
@@ -257,7 +313,7 @@
   }
 
   .card-lift-rr:hover {
-    transform: translateY(-2px);
+    transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
   }
 
@@ -284,7 +340,7 @@
   }
 
   .skeleton-rr {
-    background: linear-gradient(90deg, rgba(42, 22, 32, 0.06), rgba(42, 22, 32, 0.02), rgba(42, 22, 32, 0.06));
+    background: linear-gradient(90deg, rgba(38, 29, 41, 0.06), rgba(38, 29, 41, 0.02), rgba(38, 29, 41, 0.06));
     background-size: 200% 100%;
     animation: shimmer 1.15s infinite linear;
     border-radius: var(--radius-sm);

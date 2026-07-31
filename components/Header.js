@@ -31,12 +31,12 @@ function Header({ currentParams }) {
         <div className="container-rr py-3" data-name="header-inner" data-file="components/Header.js">
           <div className="flex items-center gap-3" data-name="header-row" data-file="components/Header.js">
             <button className="flex items-center gap-2.5 shrink-0" onClick={onGoHome} data-name="brand" data-file="components/Header.js">
-              <div className="w-9 h-9 rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(181,0,99,0.20)]" data-name="brand-mark" data-file="components/Header.js">
+              <div className="w-9 h-9 rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(104,24,49,0.20)]" data-name="brand-mark" data-file="components/Header.js">
                 <img src="icons/icon-96x96.png" alt="RomaHub" className="w-full h-full object-cover" width="36" height="36" data-name="brand-mark-img" data-file="components/Header.js" />
               </div>
               <div className="leading-tight" data-name="brand-text" data-file="components/Header.js">
-                <p className="text-sm font-bold tracking-tight text-[#2A1620]" data-name="brand-title" data-file="components/Header.js">
-                  Roma<span className="text-[#B50063]">Hub</span>
+                <p className="text-sm font-bold tracking-tight text-[#261D29]" data-name="brand-title" data-file="components/Header.js">
+                  Roma<span className="text-[#681831]">Hub</span>
                 </p>
                 <p className="text-[10px] text-[var(--text-muted)] tracking-wide uppercase" data-name="brand-sub" data-file="components/Header.js">by Rservasroma</p>
               </div>
@@ -86,7 +86,7 @@ function Header({ currentParams }) {
                 Mis pedidos
               </a>
               <a
-                className="btn-rr px-3 py-2.5 text-sm whitespace-nowrap inline-flex items-center gap-2 bg-[#2A1620] text-white border-[#2A1620] hover:bg-[#594047]"
+                className="btn-rr px-3 py-2.5 text-sm whitespace-nowrap inline-flex items-center gap-2 bg-[#261D29] text-white border-[#261D29] hover:bg-[#4D414D]"
                 href="https://tusalon.github.io/HouseofRservasRoma/"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -94,7 +94,7 @@ function Header({ currentParams }) {
                 data-name="nav-get-app"
                 data-file="components/Header.js"
               >
-                <span className="icon-sparkles text-base text-[#F9A8D4]" aria-hidden="true"></span>
+                <span className="icon-sparkles text-base text-[#FFA79E]" aria-hidden="true"></span>
                 Quiero la app
               </a>
               <a
@@ -122,7 +122,7 @@ function Header({ currentParams }) {
               data-file="components/Header.js"
               aria-label="Abrir menú"
             >
-              <div className="icon-menu text-xl text-[#B50063]" data-name="nav-toggle-icon" data-file="components/Header.js"></div>
+              <div className="icon-menu text-xl text-[#681831]" data-name="nav-toggle-icon" data-file="components/Header.js"></div>
             </button>
           </div>
 
@@ -132,30 +132,30 @@ function Header({ currentParams }) {
                 <div className="grid grid-cols-1 gap-2" data-name="header-mobile-actions" data-file="components/Header.js">
                   <button className="btn-rr btn-ghost-rr w-full flex items-center justify-between" onClick={onGoHome} data-name="m-home" data-file="components/Header.js">
                     <span data-name="m-home-text" data-file="components/Header.js">Inicio</span>
-                    <div className="icon-arrow-right text-xl text-[#B50063]" data-name="m-home-icon" data-file="components/Header.js"></div>
+                    <div className="icon-arrow-right text-xl text-[#681831]" data-name="m-home-icon" data-file="components/Header.js"></div>
                   </button>
                   <button className={`btn-rr w-full flex items-center justify-between ${page === 'search.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`} onClick={onGoSearch} data-name="m-search" data-file="components/Header.js">
                     <span data-name="m-search-text" data-file="components/Header.js">Reservas</span>
-                    <div className={`icon-calendar text-xl ${page === 'search.html' ? 'text-white' : 'text-[#B50063]'}`} data-name="m-search-icon" data-file="components/Header.js"></div>
+                    <div className={`icon-calendar text-xl ${page === 'search.html' ? 'text-white' : 'text-[#681831]'}`} data-name="m-search-icon" data-file="components/Header.js"></div>
                   </button>
                   <a className={`btn-rr w-full flex items-center justify-between ${page === 'tienda.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`} href="tienda.html" data-name="m-tienda" data-file="components/Header.js">
                     <span data-name="m-tienda-text" data-file="components/Header.js">Tienda</span>
-                    <div className={`icon-shopping-bag text-xl ${page === 'tienda.html' ? 'text-white' : 'text-[#B50063]'}`} data-name="m-tienda-icon" data-file="components/Header.js"></div>
+                    <div className={`icon-shopping-bag text-xl ${page === 'tienda.html' ? 'text-white' : 'text-[#681831]'}`} data-name="m-tienda-icon" data-file="components/Header.js"></div>
                   </a>
                   <a className={`btn-rr w-full flex items-center justify-between ${page === 'favoritos.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`} href="favoritos.html" data-name="m-favorites" data-file="components/Header.js">
                     <span data-name="m-favorites-text">Guardados{savedCount ? ` (${savedCount})` : ''}</span>
-                    <div className={`icon-heart text-xl ${page === 'favoritos.html' ? 'text-white' : 'text-[#B50063]'}`}></div>
+                    <div className={`icon-heart text-xl ${page === 'favoritos.html' ? 'text-white' : 'text-[#681831]'}`}></div>
                   </a>
                   <a className={`btn-rr w-full flex items-center justify-between ${page === 'pedidos.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`} href="pedidos.html" data-name="m-orders" data-file="components/Header.js">
                     <span data-name="m-orders-text">Mis pedidos</span>
-                    <div className={`icon-receipt-text text-xl ${page === 'pedidos.html' ? 'text-white' : 'text-[#B50063]'}`}></div>
+                    <div className={`icon-receipt-text text-xl ${page === 'pedidos.html' ? 'text-white' : 'text-[#681831]'}`}></div>
                   </a>
                   <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="register.html" data-name="m-register" data-file="components/Header.js">
                     <span data-name="m-register-text" data-file="components/Header.js">Abrir tienda gratis</span>
-                    <div className="icon-arrow-right text-xl text-[#B50063]" data-name="m-register-icon" data-file="components/Header.js"></div>
+                    <div className="icon-arrow-right text-xl text-[#681831]" data-name="m-register-icon" data-file="components/Header.js"></div>
                   </a>
                   <a
-                    className="btn-rr w-full flex items-center justify-between bg-[#2A1620] text-white border-[#2A1620]"
+                    className="btn-rr w-full flex items-center justify-between bg-[#261D29] text-white border-[#261D29]"
                     href="https://tusalon.github.io/HouseofRservasRoma/"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -164,11 +164,11 @@ function Header({ currentParams }) {
                     data-file="components/Header.js"
                   >
                     <span data-name="m-get-app-text">Quiero tener la app</span>
-                    <span className="icon-sparkles text-xl text-[#F9A8D4]" aria-hidden="true"></span>
+                    <span className="icon-sparkles text-xl text-[#FFA79E]" aria-hidden="true"></span>
                   </a>
                   <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="login.html" data-name="m-login" data-file="components/Header.js">
                     <span data-name="m-login-text" data-file="components/Header.js">Acceso negocio</span>
-                    <div className="icon-log-in text-xl text-[#B50063]" data-name="m-login-icon" data-file="components/Header.js"></div>
+                    <div className="icon-log-in text-xl text-[#681831]" data-name="m-login-icon" data-file="components/Header.js"></div>
                   </a>
                 </div>
               </div>

@@ -15,14 +15,14 @@ function BusinessLogoCard({ business, onOpen }) {
           data-name="business-logo-card"
           data-file="components/BusinessLogoCard.js"
         >
-        <div className="relative h-36 overflow-hidden bg-[#F2ECEF]" data-name="logo-card-media" data-file="components/BusinessLogoCard.js">
+        <div className="relative h-36 overflow-hidden bg-[#F6EEE6]" data-name="logo-card-media" data-file="components/BusinessLogoCard.js">
           {b.portadaUrl ? (
             <img loading="lazy" decoding="async" src={b.portadaUrl} alt={`Imagen de ${b.nombre}`} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" style={{ objectPosition: `${b.portadaPosicion?.x ?? 50}% ${b.portadaPosicion?.y ?? 50}%` }} data-name="logo-card-cover" data-file="components/BusinessLogoCard.js" />
           ) : null}
           <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" data-name="logo-card-gradient" data-file="components/BusinessLogoCard.js"></div>
 
           {b.enRanking ? (
-            <span className="absolute top-3 right-14 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#22C55E] text-white text-[10px] font-bold shadow-[0_4px_12px_rgba(34,197,94,0.35)]" data-name="verified-badge" data-file="components/BusinessLogoCard.js">
+            <span className="absolute top-3 right-14 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#1F8654] text-white text-[10px] font-bold shadow-[0_4px_12px_rgba(31,134,84,0.35)]" data-name="verified-badge" data-file="components/BusinessLogoCard.js">
               <span>&#10003;</span> Verificado
             </span>
           ) : (
@@ -42,11 +42,11 @@ function BusinessLogoCard({ business, onOpen }) {
             {b.logoUrl ? (
               <img loading="lazy" decoding="async" src={b.logoUrl} alt={`Logo de ${b.nombre}`} className="w-full h-full object-contain" data-name="logo-img" data-file="components/BusinessLogoCard.js" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-sm font-bold text-[#B50063] bg-[var(--secondary-color)]" data-name="logo-initials" data-file="components/BusinessLogoCard.js">{initials}</div>
+              <div className="w-full h-full flex items-center justify-center text-sm font-bold text-[#681831] bg-[var(--secondary-color)]" data-name="logo-initials" data-file="components/BusinessLogoCard.js">{initials}</div>
             )}
           </div>
 
-          <p className="mt-2.5 text-sm font-bold text-[#2A1620] leading-snug line-clamp-2 flex items-center gap-1" data-name="name" data-file="components/BusinessLogoCard.js">
+          <p className="mt-2.5 text-sm font-bold text-[#261D29] leading-snug line-clamp-2 flex items-center gap-1" data-name="name" data-file="components/BusinessLogoCard.js">
             <span className="truncate">{b.nombre}</span>
             {b.esRservasroma ? <span className="shrink-0" title="Verificado · reserva online" data-name="diamond-badge" data-file="components/BusinessLogoCard.js">💎</span> : null}
           </p>
@@ -65,7 +65,7 @@ function BusinessLogoCard({ business, onOpen }) {
             ) : (
               <span className="text-xs text-[var(--text-muted)]" data-name="no-rating" data-file="components/BusinessLogoCard.js">Sin valoraciones</span>
             )}
-            <div className="flex items-center gap-1 text-xs font-semibold text-[#B50063]" data-name="peek" data-file="components/BusinessLogoCard.js">
+            <div className="flex items-center gap-1 text-xs font-semibold text-[#681831]" data-name="peek" data-file="components/BusinessLogoCard.js">
               <span data-name="peek-text" data-file="components/BusinessLogoCard.js">Ver perfil</span>
               <div className="icon-arrow-right text-base transition-transform duration-300 group-hover:translate-x-0.5" data-name="peek-icon" data-file="components/BusinessLogoCard.js"></div>
             </div>

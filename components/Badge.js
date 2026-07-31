@@ -1,11 +1,11 @@
 function Badge({ type, text }) {
   try {
     const styles = (() => {
-      if (type === 'vip') return { bg: 'bg-[#1F2937]', fg: 'text-white', icon: 'icon-crown', iconColor: 'text-[#F59E0B]' };
-      if (type === 'top') return { bg: 'bg-white', fg: 'text-[#1F2937]', icon: 'icon-star', iconColor: 'text-[#F59E0B]' };
-      if (type === 'reservado') return { bg: 'bg-white', fg: 'text-[#1F2937]', icon: 'icon-flame', iconColor: 'text-[var(--primary-color)]' };
-      if (type === 'mes') return { bg: 'bg-white', fg: 'text-[#1F2937]', icon: 'icon-award', iconColor: 'text-[var(--primary-color)]' };
-      return { bg: 'bg-white', fg: 'text-[#1F2937]', icon: 'icon-info', iconColor: 'text-[var(--primary-color)]' };
+      if (type === 'vip') return { bg: 'bg-[#261D29]', fg: 'text-white', icon: 'icon-crown', iconColor: 'text-[#F59E0B]' };
+      if (type === 'top') return { bg: 'bg-white', fg: 'text-[#261D29]', icon: 'icon-star', iconColor: 'text-[#F59E0B]' };
+      if (type === 'reservado') return { bg: 'bg-white', fg: 'text-[#261D29]', icon: 'icon-flame', iconColor: 'text-[var(--primary-color)]' };
+      if (type === 'mes') return { bg: 'bg-white', fg: 'text-[#261D29]', icon: 'icon-award', iconColor: 'text-[var(--primary-color)]' };
+      return { bg: 'bg-white', fg: 'text-[#261D29]', icon: 'icon-info', iconColor: 'text-[var(--primary-color)]' };
     })();
 
     return (

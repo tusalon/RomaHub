@@ -62,8 +62,8 @@ function ReportarNegocio({ negocioId, negocioNombre }) {
             <div className="surface-rr bg-white p-5 max-w-sm w-full" onClick={(e) => e.stopPropagation()} data-name="reportar-modal" data-file="components/ReportarNegocio.js">
               {enviado ? (
                 <div className="text-center py-3">
-                  <div className="w-12 h-12 rounded-2xl bg-[rgba(34,197,94,0.1)] flex items-center justify-center mx-auto">
-                    <div className="icon-circle-check text-2xl text-[#22C55E]"></div>
+                  <div className="w-12 h-12 rounded-2xl bg-[rgba(31,134,84,0.1)] flex items-center justify-center mx-auto">
+                    <div className="icon-circle-check text-2xl text-[#1F8654]"></div>
                   </div>
                   <p className="mt-3 text-sm font-semibold">Gracias por avisarnos</p>
                   <p className="mt-1 text-xs text-[var(--text-muted)] leading-relaxed">Vamos a revisar {negocioNombre}.</p>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'romahub-elite-v1';
+const CACHE_NAME = 'romahub-warm-v1';
 const APP_SHELL = [
   './index.html',
   './favoritos.html',

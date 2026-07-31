@@ -66,8 +66,8 @@ function CrearTiendaPage() {
       return (
         <section className="container-rr pt-6 md:pt-10 max-w-lg" data-name="crear-tienda-ok" data-file="pages/tienda/CrearTiendaPage.js">
           <div className="surface-rr p-6 md:p-8 text-center">
-            <div className="w-14 h-14 rounded-2xl bg-[rgba(34,197,94,0.1)] flex items-center justify-center mx-auto">
-              <div className="icon-circle-check text-3xl text-[#22C55E]"></div>
+            <div className="w-14 h-14 rounded-2xl bg-[rgba(31,134,84,0.1)] flex items-center justify-center mx-auto">
+              <div className="icon-circle-check text-3xl text-[#1F8654]"></div>
             </div>
             <h1 className="mt-4 text-2xl font-extrabold tracking-tight">¡Tu tienda está lista!</h1>
             <p className="mt-2 text-sm text-[var(--text-muted)] leading-relaxed">
@@ -100,7 +100,7 @@ function CrearTiendaPage() {
             </a>
 
             <div className="mt-6 pt-6 border-t border-[var(--border)] text-left" data-name="crear-tienda-upsell" data-file="pages/tienda/CrearTiendaPage.js">
-              <p className="text-xs font-bold text-[#2A1620]">💎 Un paso más: reservas online</p>
+              <p className="text-xs font-bold text-[#261D29]">💎 Un paso más: reservas online</p>
               <p className="mt-1.5 text-xs text-[var(--text-muted)] leading-relaxed">
                 Tu tienda vende por WhatsApp. Con Rservasroma también puedes tener agenda propia para que tus clientas reserven turno solas, con recordatorios automáticos. 15 días de prueba gratis.
               </p>

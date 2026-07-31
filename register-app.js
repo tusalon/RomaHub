@@ -15,7 +15,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-[#F8F4F6]" data-name="register-error" data-file="register-app.js">
+        <div className="min-h-screen flex items-center justify-center bg-[#F6EEE6]" data-name="register-error" data-file="register-app.js">
           <div className="text-center max-w-md mx-auto px-6" data-name="register-error-inner" data-file="register-app.js">
             <h1 className="text-2xl font-semibold text-[var(--text)] mb-2" data-name="register-error-title" data-file="register-app.js">Algo salio mal</h1>
             <button onClick={() => window.location.reload()} className="btn-rr btn-primary-rr" data-name="register-error-reload" data-file="register-app.js">Recargar</button>

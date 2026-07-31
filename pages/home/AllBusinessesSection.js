@@ -55,7 +55,7 @@ function AllBusinessesSection() {
                 data-file="pages/home/AllBusinessesSection.js"
               >
                 <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr]" data-name="intrigue-grid" data-file="pages/home/AllBusinessesSection.js">
-                  <div className="relative h-[260px] md:h-full bg-[#F8F4F6]" data-name="intrigue-photo" data-file="pages/home/AllBusinessesSection.js">
+                  <div className="relative h-[260px] md:h-full bg-[#F6EEE6]" data-name="intrigue-photo" data-file="pages/home/AllBusinessesSection.js">
                     <img loading="lazy" decoding="async" src={business.portadaUrl} alt={`Portada de ${business.nombre}`} className="w-full h-full object-cover" style={{ objectPosition: `${business.portadaPosicion?.x ?? 50}% ${business.portadaPosicion?.y ?? 50}%` }} data-name="intrigue-photo-img" data-file="pages/home/AllBusinessesSection.js" />
                     <button className="absolute top-4 right-4 w-11 h-11 rounded-2xl bg-white/90 backdrop-blur border border-[var(--border)] flex items-center justify-center hover:bg-white transition-colors" onClick={closeCard} data-name="intrigue-close" data-file="pages/home/AllBusinessesSection.js" aria-label="Cerrar">
                       <div className="icon-x text-xl text-[var(--primary-color)]" data-name="intrigue-close-icon" data-file="pages/home/AllBusinessesSection.js"></div>

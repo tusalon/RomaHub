@@ -67,11 +67,11 @@ function HomePage({ initialParams }) {
                   data-file="pages/home/HomePage.js"
                 >
                   <div className="flex items-center gap-2 mb-2" data-name="prov-head" data-file="pages/home/HomePage.js">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[rgba(181,0,99,0.08)]" data-name="prov-icon-wrap" data-file="pages/home/HomePage.js">
-                      <div className="icon-map-pin text-base text-[#B50063]" data-name="prov-icon" data-file="pages/home/HomePage.js"></div>
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[rgba(104,24,49,0.08)]" data-name="prov-icon-wrap" data-file="pages/home/HomePage.js">
+                      <div className="icon-map-pin text-base text-[#681831]" data-name="prov-icon" data-file="pages/home/HomePage.js"></div>
                     </div>
                   </div>
-                  <p className="text-sm font-semibold group-hover:text-[#B50063] transition-colors" data-name="prov-name" data-file="pages/home/HomePage.js">{prov.name}</p>
+                  <p className="text-sm font-semibold group-hover:text-[#681831] transition-colors" data-name="prov-name" data-file="pages/home/HomePage.js">{prov.name}</p>
                   <p className="text-xs text-[var(--text-muted)] mt-1" data-name="prov-count" data-file="pages/home/HomePage.js">{prov.count} {prov.count === 1 ? 'negocio' : 'negocios'}</p>
                 </button>
               ))}
@@ -106,8 +106,8 @@ function HomePage({ initialParams }) {
           <div className="container-rr" data-name="home-trust-inner" data-file="pages/home/HomePage.js">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4" data-name="trust-grid" data-file="pages/home/HomePage.js">
               <div className="surface-rr card-lift-rr p-5" data-name="trust-1" data-file="pages/home/HomePage.js">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(34,197,94,0.08)]" data-name="trust-1-iw" data-file="pages/home/HomePage.js">
-                  <div className="icon-circle-check text-xl text-[#22C55E]" data-name="trust-1-i" data-file="pages/home/HomePage.js"></div>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(31,134,84,0.08)]" data-name="trust-1-iw" data-file="pages/home/HomePage.js">
+                  <div className="icon-circle-check text-xl text-[#1F8654]" data-name="trust-1-i" data-file="pages/home/HomePage.js"></div>
                 </div>
                 <p className="mt-4 text-sm font-semibold" data-name="trust-1-t" data-file="pages/home/HomePage.js">Servicios publicados</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed" data-name="trust-1-d" data-file="pages/home/HomePage.js">
@@ -116,8 +116,8 @@ function HomePage({ initialParams }) {
               </div>
 
               <div className="surface-rr card-lift-rr p-5" data-name="trust-2" data-file="pages/home/HomePage.js">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(181,0,99,0.08)]" data-name="trust-2-iw" data-file="pages/home/HomePage.js">
-                  <div className="icon-trophy text-xl text-[#B50063]" data-name="trust-2-i" data-file="pages/home/HomePage.js"></div>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(104,24,49,0.08)]" data-name="trust-2-iw" data-file="pages/home/HomePage.js">
+                  <div className="icon-trophy text-xl text-[#681831]" data-name="trust-2-i" data-file="pages/home/HomePage.js"></div>
                 </div>
                 <p className="mt-4 text-sm font-semibold" data-name="trust-2-t" data-file="pages/home/HomePage.js">Negocios listos</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed" data-name="trust-2-d" data-file="pages/home/HomePage.js">
@@ -126,8 +126,8 @@ function HomePage({ initialParams }) {
               </div>
 
               <div className="surface-rr card-lift-rr p-5" data-name="trust-3" data-file="pages/home/HomePage.js">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(181,0,99,0.08)]" data-name="trust-3-iw" data-file="pages/home/HomePage.js">
-                  <div className="icon-map-pin text-xl text-[#B50063]" data-name="trust-3-i" data-file="pages/home/HomePage.js"></div>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[rgba(104,24,49,0.08)]" data-name="trust-3-iw" data-file="pages/home/HomePage.js">
+                  <div className="icon-map-pin text-xl text-[#681831]" data-name="trust-3-i" data-file="pages/home/HomePage.js"></div>
                 </div>
                 <p className="mt-4 text-sm font-semibold" data-name="trust-3-t" data-file="pages/home/HomePage.js">Directorio en crecimiento</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)] leading-relaxed" data-name="trust-3-d" data-file="pages/home/HomePage.js">

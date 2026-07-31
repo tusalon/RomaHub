@@ -44,7 +44,7 @@ function PromotionCard({ promotion, compact = false, highlighted = false }) {
           {image ? <img src={image} alt={p.titulo || 'Oferta'} className="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" /> : null}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
           <span className="absolute top-3 left-3 rounded-full bg-[var(--primary-color)] px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-white shadow-sm">{typeLabel}</span>
-          {validEndDate ? <span className="absolute top-3 right-3 rounded-full bg-white/95 px-2.5 py-1.5 text-[10px] font-bold text-[#2A1620] shadow-sm">Hasta {endDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span> : null}
+          {validEndDate ? <span className="absolute top-3 right-3 rounded-full bg-white/95 px-2.5 py-1.5 text-[10px] font-bold text-[#261D29] shadow-sm">Hasta {endDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span> : null}
           <div className="absolute left-3 right-3 bottom-3 text-white">
             <p className="text-xs font-medium opacity-90 truncate">{p.negocioNombre}</p>
             <h3 className="mt-1 text-lg font-extrabold leading-tight line-clamp-2">{p.titulo}</h3>
