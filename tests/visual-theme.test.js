@@ -58,5 +58,27 @@ const componentes = ['components', 'pages'].flatMap((dir) => {
 const conEstiloViejo = componentes.filter((f) => /text-2xl md:text-\[26px\]/.test(fs.readFileSync(f, 'utf8')));
 assert.equal(conEstiloViejo.length, 0, `titulos con la escala vieja copiada a mano: ${conEstiloViejo.join(', ')}`);
 
+// Ningun h1/h2/h3 puede pedir font-bold (700), font-extrabold (800) ni
+// font-black (900): son los unicos que reciben la serif (ver el @layer base) y
+// la fuente se queda en 600, asi que los tres se recortan por igual. Ojo con
+// font-bold: 700 parece inofensivo y miente lo mismo que 900.
+// En un <p> o un <div> si valen, porque esos van con la sans del sistema, que
+// tiene esos pesos de verdad — por eso el filtro es solo sobre h1/h2/h3.
+const raiz = path.join(__dirname, '..');
+const titulosQueMienten = [];
+componentes.forEach((f) => {
+  const src = fs.readFileSync(f, 'utf8');
+  (src.match(/<h[123]\b[^>]*>/g) || []).forEach((tag) => {
+    if (/font-(bold|extrabold|black)/.test(tag)) {
+      titulosQueMienten.push(`${path.relative(raiz, f)}: ${tag.slice(0, 70)}`);
+    }
+  });
+});
+assert.equal(
+  titulosQueMienten.length,
+  0,
+  `titulos serif pidiendo un peso que la fuente no tiene (se veran en 600):\n  ${titulosQueMienten.join('\n  ')}`
+);
+
 console.log('OK: apariencia RomaHub "Elegancia calida de evento" verificada');
 console.log('OK: escala editorial y techo de peso 400-600 verificados');

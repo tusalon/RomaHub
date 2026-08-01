@@ -69,7 +69,7 @@ function CrearTiendaPage() {
             <div className="w-14 h-14 rounded-2xl bg-[rgba(31,134,84,0.1)] flex items-center justify-center mx-auto">
               <div className="icon-circle-check text-3xl text-[#1F8654]"></div>
             </div>
-            <h1 className="mt-4 text-2xl font-extrabold tracking-tight">¡Tu tienda está lista!</h1>
+            <h1 className="mt-4 h-section-rr">¡Tu tienda está lista!</h1>
             <p className="mt-2 text-sm text-[var(--text-muted)] leading-relaxed">
               Guarda estos datos: son tu acceso para entrar y subir productos. <b>No los pierdas.</b>
             </p>
@@ -123,7 +123,7 @@ function CrearTiendaPage() {
     return (
       <section className="container-rr pt-6 md:pt-10 max-w-lg" data-name="crear-tienda" data-file="pages/tienda/CrearTiendaPage.js">
         <p className="kicker-rr mb-2">Abre tu tienda gratis</p>
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">Vende en RomaHub</h1>
+        <h1 className="h-section-rr">Vende en RomaHub</h1>
         <p className="mt-3 text-sm md:text-base text-[var(--text-muted)] leading-relaxed">
           Crea tu tienda en un minuto y empieza a vender productos y cursos por WhatsApp. Sin cuenta, sin costo.
         </p>

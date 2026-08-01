@@ -126,7 +126,7 @@ function RecentOrdersPage() {
         <section className="border-b border-[var(--border)] bg-[var(--bg-muted)]">
           <div className="container-rr py-8 md:py-12">
             <p className="kicker-rr">Seguimiento sencillo</p>
-            <h1 className="mt-2 text-3xl md:text-5xl font-extrabold tracking-tight">Mis pedidos</h1>
+            <h1 className="mt-2 h-section-rr">Mis pedidos</h1>
             <p className="mt-3 max-w-2xl text-sm md:text-base text-[var(--text-muted)] leading-relaxed">Consulta si el negocio recibió, atendió o completó tus pedidos de RomaHub. No necesitas crear una cuenta.</p>
             <div className="mt-5 flex flex-wrap gap-2">
               <span className="chip-rr px-3 py-2 text-xs text-[var(--primary-color)]">{orders.length} pedidos en este dispositivo</span>

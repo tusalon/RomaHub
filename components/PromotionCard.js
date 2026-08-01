@@ -47,7 +47,7 @@ function PromotionCard({ promotion, compact = false, highlighted = false }) {
           {validEndDate ? <span className="absolute top-3 right-3 rounded-full bg-white/95 px-2.5 py-1.5 text-[10px] font-bold text-[#261D29] shadow-sm">Hasta {endDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span> : null}
           <div className="absolute left-3 right-3 bottom-3 text-white">
             <p className="text-xs font-medium opacity-90 truncate">{p.negocioNombre}</p>
-            <h3 className="mt-1 text-lg font-extrabold leading-tight line-clamp-2">{p.titulo}</h3>
+            <h3 className="mt-1 text-lg font-semibold leading-tight line-clamp-2">{p.titulo}</h3>
           </div>
         </a>
         <div className="p-4 flex flex-col flex-1">

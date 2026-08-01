@@ -56,7 +56,7 @@ function NegociosCerca({ negocioActual, listo }) {
       <section className="mt-10" data-name="negocios-cerca" data-file="components/NegociosCerca.js">
         <div className="mb-4" data-name="cerca-head" data-file="components/NegociosCerca.js">
           <span className="kicker-rr block mb-2" data-name="cerca-badge" data-file="components/NegociosCerca.js">Tambien te puede servir</span>
-          <h2 className="text-xl md:text-2xl font-extrabold tracking-[-0.02em] text-[#261D29]" data-name="cerca-title" data-file="components/NegociosCerca.js">
+          <h2 className="text-xl md:text-2xl font-semibold tracking-[-0.02em] text-[#261D29]" data-name="cerca-title" data-file="components/NegociosCerca.js">
             {titulo}
           </h2>
         </div>

@@ -114,7 +114,7 @@ function RegisterBusinessPage() {
               <div className="icon-circle-check text-3xl text-green-600" data-name="success-icon" data-file="pages/register/RegisterBusinessPage.js"></div>
             </div>
             <p className="mt-5 text-xs font-bold uppercase tracking-[0.16em] text-green-700" data-name="success-kicker" data-file="pages/register/RegisterBusinessPage.js">Negocio creado</p>
-            <h1 className="mt-2 text-3xl md:text-4xl font-extrabold tracking-tight text-[#261D29]" data-name="success-title" data-file="pages/register/RegisterBusinessPage.js">
+            <h1 className="mt-2 h-section-rr" data-name="success-title" data-file="pages/register/RegisterBusinessPage.js">
               ¡{credenciales.nombre} ya está en RomaHub!
             </h1>
             <p className="mt-3 text-sm text-[var(--text-muted)] leading-relaxed max-w-lg mx-auto" data-name="success-sub" data-file="pages/register/RegisterBusinessPage.js">
@@ -179,7 +179,7 @@ function RegisterBusinessPage() {
           <div className="container-rr relative grid grid-cols-1 lg:grid-cols-[1fr_430px] gap-8 lg:gap-12 items-start" data-name="register-grid" data-file="pages/register/RegisterBusinessPage.js">
             <div className="max-w-2xl" data-name="register-copy" data-file="pages/register/RegisterBusinessPage.js">
               <p className="kicker-rr mb-4" data-name="register-kicker" data-file="pages/register/RegisterBusinessPage.js">RomaHub para negocios</p>
-              <h1 className="text-4xl md:text-6xl font-black tracking-[-0.025em] leading-[1.02] text-[#261D29]" data-name="register-title" data-file="pages/register/RegisterBusinessPage.js">
+              <h1 className="h-display-rr" data-name="register-title" data-file="pages/register/RegisterBusinessPage.js">
                 Abre gratis tu negocio en <span className="text-[var(--primary-color)]">RomaHub.</span>
               </h1>
               <p className="mt-5 text-base md:text-lg text-[var(--text-muted)] leading-relaxed max-w-xl" data-name="register-subtitle" data-file="pages/register/RegisterBusinessPage.js">
@@ -243,7 +243,7 @@ function RegisterBusinessPage() {
 
             <form className="surface-rr p-5 md:p-6 lg:sticky lg:top-24" onSubmit={enviar} data-name="register-form" data-file="pages/register/RegisterBusinessPage.js">
               <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--primary-color)]">Gratis y en un minuto</p>
-              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-[#261D29]" data-name="form-title" data-file="pages/register/RegisterBusinessPage.js">Crea tu negocio</h2>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[#261D29]" data-name="form-title" data-file="pages/register/RegisterBusinessPage.js">Crea tu negocio</h2>
               <p className="mt-2 text-sm text-[var(--text-muted)] leading-relaxed">Solo te pedimos lo necesario para comenzar.</p>
 
               <label className="block mt-5" htmlFor="registro-nombre" data-name="field-name" data-file="pages/register/RegisterBusinessPage.js">

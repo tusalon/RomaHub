@@ -87,7 +87,7 @@ function BusinessCatalog({ business, onAddToCart, selectedItemId = '' }) {
                 <div key={group.title} data-name="service-group" data-file="pages/business/BusinessCatalog.js">
                   {(serviceGroups.length > 1 || group.title !== 'Servicios') ? (
                     <div className="px-4 md:px-5 py-2.5 bg-[#F6EEE6] border-b border-[var(--border)]" data-name="service-group-title-wrap" data-file="pages/business/BusinessCatalog.js">
-                      <h3 className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--text-muted)]" data-name="service-group-title" data-file="pages/business/BusinessCatalog.js">{group.title}</h3>
+                      <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]" data-name="service-group-title" data-file="pages/business/BusinessCatalog.js">{group.title}</h3>
                     </div>
                   ) : null}
                   <div className="divide-y divide-[var(--border)]" data-name="service-group-items" data-file="pages/business/BusinessCatalog.js">
