@@ -36,8 +36,8 @@ assert.match(theme, /\.sub-section-rr\s*\{/);
 // jerarquia declarada deja de existir en pantalla. Estos dos asserts evitan
 // que vuelva a colarse un font-extrabold sobre un titulo serif.
 assert.match(theme, /font-weight:\s*400\s+600/, 'el @font-face debe declarar el rango real 400-600');
-const rolesSerif = theme.match(/\.h-(display|section)-rr\s*\{[^}]*\}/g) || [];
-assert.equal(rolesSerif.length, 2, 'faltan los roles de titulo .h-display-rr / .h-section-rr');
+const rolesSerif = theme.match(/\.(h-display-rr|h-section-rr|name-rr|num-rr)\s*\{[^}]*\}/g) || [];
+assert.equal(rolesSerif.length, 4, 'faltan roles serif: h-display / h-section / name / num');
 rolesSerif.forEach((bloque) => {
   const peso = bloque.match(/font-weight:\s*(\d+)/);
   assert.ok(peso, `${bloque.slice(0, 20)}... no declara font-weight`);

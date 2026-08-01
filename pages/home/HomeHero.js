@@ -119,7 +119,7 @@ function HomeHero({ initialParams }) {
 
             <div className="mt-7 flex gap-1" data-name="hero-stats" data-file="pages/home/HomeHero.js">
               <div className="px-4 py-3 rounded-l-xl border border-[var(--border)] bg-white" data-name="stat-businesses" data-file="pages/home/HomeHero.js">
-                <p className="text-xl md:text-2xl font-bold text-[#261D29]" data-name="stat-businesses-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={totalBusinesses}>{totalBusinesses}</span></p>
+                <p className="text-xl md:text-2xl num-rr text-[#261D29]" data-name="stat-businesses-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={totalBusinesses}>{totalBusinesses}</span></p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-businesses-label" data-file="pages/home/HomeHero.js">negocios</p>
               </div>
               {/* "en el ranking" mostraba 0: todavia no hay valoraciones
@@ -129,11 +129,11 @@ function HomeHero({ initialParams }) {
                   contradice esa misma regla. Se cambia por un dato que si
                   es verdad ahora: RomaHub no cobra por aparecer. */}
               <div className="px-4 py-3 border border-[var(--border)] bg-white" data-name="stat-free" data-file="pages/home/HomeHero.js">
-                <p className="text-xl md:text-2xl font-bold text-[#681831]" data-name="stat-free-value" data-file="pages/home/HomeHero.js">Gratis</p>
+                <p className="text-xl md:text-2xl num-rr text-[#681831]" data-name="stat-free-value" data-file="pages/home/HomeHero.js">Gratis</p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-free-label" data-file="pages/home/HomeHero.js">para negocios</p>
               </div>
               <div className="px-4 py-3 rounded-r-xl border border-[var(--border)] bg-white" data-name="stat-today" data-file="pages/home/HomeHero.js">
-                <p className="text-xl md:text-2xl font-bold text-[#261D29]" data-name="stat-today-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={Number(reservasHoy || 0)}>{Number(reservasHoy || 0)}</span></p>
+                <p className="text-xl md:text-2xl num-rr text-[#261D29]" data-name="stat-today-value" data-file="pages/home/HomeHero.js"><span className="countup-rr" data-target={Number(reservasHoy || 0)}>{Number(reservasHoy || 0)}</span></p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-0.5" data-name="stat-today-label" data-file="pages/home/HomeHero.js">reservas hoy</p>
               </div>
             </div>

@@ -176,6 +176,30 @@
     text-wrap: balance;
   }
 
+  /* Nombre de negocio a escala de display (>=18px): la tarjeta grande del
+     buscador y la ficha ampliada. En las tarjetas chicas (14px, con recorte a
+     dos lineas) el nombre se queda en la sans a proposito: una serif a ese
+     tamano y truncada se lee peor, no mas elegante. */
+  .name-rr {
+    font-family: var(--serif);
+    font-optical-sizing: auto;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  /* Cifras destacadas del hero. Sin font-variant-numeric a proposito: el
+     subset de Fraunces que servimos no trae la tabla tnum (medido: '000' y
+     '111' ocupan 47.91px y 32.91px con y sin tabular-nums, identico), asi que
+     declararlo solo daria una falsa sensacion de seguridad. No hace falta: el
+     ancho de cada celda lo fija su etiqueta ("reservas hoy"), que es mas larga
+     que cualquier cifra, y el contador animado no mueve el layout. */
+  .num-rr {
+    font-family: var(--serif);
+    font-optical-sizing: auto;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
   /* Bajada de seccion: un solo tamano para un solo rol. Venia en 11, 12 y 14px
      segun el componente, que es ruido acumulado, no sistema. */
   .sub-section-rr {

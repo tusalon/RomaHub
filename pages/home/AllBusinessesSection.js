@@ -68,7 +68,7 @@ function AllBusinessesSection() {
                         <img loading="lazy" decoding="async" src={business.logoUrl} alt={`Logo de ${business.nombre}`} className="w-full h-full object-cover" data-name="intrigue-logo-img" data-file="pages/home/AllBusinessesSection.js" />
                       </div>
                       <div className="min-w-0" data-name="intrigue-titlewrap" data-file="pages/home/AllBusinessesSection.js">
-                        <p className="text-lg md:text-xl font-semibold leading-tight" data-name="intrigue-name" data-file="pages/home/AllBusinessesSection.js">{business.nombre}</p>
+                        <p className="text-lg md:text-xl name-rr leading-tight" data-name="intrigue-name" data-file="pages/home/AllBusinessesSection.js">{business.nombre}</p>
                         <p className="text-sm text-[var(--text-muted)] mt-1" data-name="intrigue-meta" data-file="pages/home/AllBusinessesSection.js">
                           {business.categoria} · {business.ubicacion?.zona} · {business.ubicacion?.ciudad}
                         </p>
