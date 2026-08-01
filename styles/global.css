@@ -226,76 +226,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .icon-trophy::before { content: "\2605"; }
 .icon-chart-no-axes-column::before { content: "\25A5"; }
 
-.rr-leaflet-map,
-.rr-leaflet-map .leaflet-container {
-  width: 100%;
-  height: 100%;
-  font-family: inherit;
-}
-
-.rr-leaflet-map .leaflet-control-attribution {
-  display: none;
-}
-
-.rr-map-pin {
-  background: transparent;
-  border: 0;
-}
-
-.rr-map-pin span {
-  position: relative;
-  display: flex;
-  width: 32px;
-  height: 32px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background: #fff;
-  color: #fff;
-  border: 2px solid #fff;
-  box-shadow: 0 12px 26px rgba(11,18,32,0.24);
-  overflow: hidden;
-}
-
-.rr-map-pin img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.rr-map-pin span::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -5px;
-  width: 10px;
-  height: 10px;
-  transform: translateX(-50%) rotate(45deg);
-  background: #fff;
-  border-right: 2px solid #fff;
-  border-bottom: 2px solid #fff;
-}
-
-.rr-map-pin.is-selected span {
-  transform: scale(1.12);
-  border-color: #0B1220;
-}
-
-.rr-map-popup strong,
-.rr-map-popup span {
-  display: block;
-}
-
-.rr-map-popup strong {
-  font-size: 13px;
-}
-
-.rr-map-popup span {
-  margin-top: 2px;
-  color: var(--text-muted);
-  font-size: 11px;
-}
+/* Aqui vivian ~55 lineas de estilos de Leaflet (.rr-leaflet-map, .rr-map-pin,
+   .rr-map-popup). Se borraron porque ya no las usa nadie: MapSplitView.js hoy
+   es una tarjeta de "proximas actualizaciones" sin mapa, no esta en ningun
+   bundle de scripts/build.js, y Leaflet no es dependencia ni se carga por CDN.
+   Ademas eran lo ultimo que quedaba de la paleta azul marino anterior al
+   rebrand (#0B1220), que ya no pinta nada junto al burdeos. */
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }

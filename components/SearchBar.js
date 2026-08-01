@@ -49,7 +49,7 @@ function SearchBar({ initialNombre, initialServicio, initialUbicacion, compact }
         <div className={`surface-rr bg-white p-2 md:p-2 ${focus ? 'subtle-glow-rr' : ''} transition-shadow`} data-name="searchbar-surface" data-file="components/SearchBar.js">
           <div className="grid grid-cols-1 md:grid-cols-[1.15fr_0.85fr_auto] gap-2 items-stretch" data-name="searchbar-grid" data-file="components/SearchBar.js">
             <div className="flex items-center gap-3 px-3 py-3" data-name="field-nombre" data-file="components/SearchBar.js">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[rgba(11,18,32,0.04)]" data-name="field-nombre-icon" data-file="components/SearchBar.js">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[rgba(38,29,41,0.04)]" data-name="field-nombre-icon" data-file="components/SearchBar.js">
                 <div className="icon-search text-xl text-[var(--primary-color)]" data-name="field-nombre-icon-i" data-file="components/SearchBar.js"></div>
               </div>
               <div className="min-w-0 flex-1" data-name="field-nombre-input" data-file="components/SearchBar.js">
@@ -71,7 +71,7 @@ function SearchBar({ initialNombre, initialServicio, initialUbicacion, compact }
             </div>
 
             <div className="flex items-center gap-3 px-3 py-3" data-name="field-provincia" data-file="components/SearchBar.js">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[rgba(11,18,32,0.04)]" data-name="field-provincia-icon" data-file="components/SearchBar.js">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[rgba(38,29,41,0.04)]" data-name="field-provincia-icon" data-file="components/SearchBar.js">
                 <div className="icon-map-pin text-xl text-[var(--primary-color)]" data-name="field-provincia-icon-i" data-file="components/SearchBar.js"></div>
               </div>
               <div className="min-w-0 flex-1" data-name="field-provincia-input" data-file="components/SearchBar.js">

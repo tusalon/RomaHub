@@ -25,10 +25,10 @@ function TopRatedCarousel({ items }) {
               </p>
             </div>
             <div className="hidden md:flex items-center gap-2" data-name="top-rated-controls" data-file="components/TopRatedCarousel.js">
-              <button className="w-11 h-11 rounded-2xl border border-[var(--border)] bg-white flex items-center justify-center hover:bg-[rgba(11,18,32,0.04)] transition-colors" onClick={() => scrollBy(-1)} data-name="prev" data-file="components/TopRatedCarousel.js" aria-label="Anterior">
+              <button className="w-11 h-11 rounded-2xl border border-[var(--border)] bg-white flex items-center justify-center hover:bg-[rgba(38,29,41,0.04)] transition-colors" onClick={() => scrollBy(-1)} data-name="prev" data-file="components/TopRatedCarousel.js" aria-label="Anterior">
                 <div className="icon-chevron-left text-xl text-[var(--primary-color)]" data-name="prev-i" data-file="components/TopRatedCarousel.js"></div>
               </button>
-              <button className="w-11 h-11 rounded-2xl border border-[var(--border)] bg-white flex items-center justify-center hover:bg-[rgba(11,18,32,0.04)] transition-colors" onClick={() => scrollBy(1)} data-name="next" data-file="components/TopRatedCarousel.js" aria-label="Siguiente">
+              <button className="w-11 h-11 rounded-2xl border border-[var(--border)] bg-white flex items-center justify-center hover:bg-[rgba(38,29,41,0.04)] transition-colors" onClick={() => scrollBy(1)} data-name="next" data-file="components/TopRatedCarousel.js" aria-label="Siguiente">
                 <div className="icon-chevron-right text-xl text-[var(--primary-color)]" data-name="next-i" data-file="components/TopRatedCarousel.js"></div>
               </button>
             </div>
@@ -40,7 +40,7 @@ function TopRatedCarousel({ items }) {
               return (
               <div key={b.id} className="reveal-card-rr min-w-[260px] md:min-w-[320px]" data-name="top-rated-item" data-file="components/TopRatedCarousel.js">
                 <button
-                  className="card-rr w-full overflow-hidden text-left hover:shadow-[0_22px_70px_rgba(11,18,32,0.12)] transition-shadow"
+                  className="card-rr w-full overflow-hidden text-left hover:shadow-[0_22px_70px_rgba(38,29,41,0.12)] transition-shadow"
                   onClick={() => Navigation.goToBusiness(b.id)}
                   data-name="top-rated-card"
                   data-file="components/TopRatedCarousel.js"

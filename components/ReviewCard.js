@@ -17,7 +17,7 @@ function ReviewCard({ review }) {
               </div>
               <span className="text-xs text-[var(--text-muted)]" data-name="review-date" data-file="components/ReviewCard.js">{r.fecha}</span>
               {r.verificada ? (
-                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[rgba(11,18,32,0.04)] border border-[var(--border)]" data-name="review-verified" data-file="components/ReviewCard.js">
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[rgba(38,29,41,0.04)] border border-[var(--border)]" data-name="review-verified" data-file="components/ReviewCard.js">
                   <div className="icon-circle-check text-sm text-[var(--primary-color)]" data-name="review-verified-i" data-file="components/ReviewCard.js"></div>
                   <span className="text-[11px] text-[var(--text-muted)]" data-name="review-verified-t" data-file="components/ReviewCard.js">Reseña verificada</span>
                 </span>

@@ -15,7 +15,7 @@ function Accordion({ items }) {
           return (
             <div key={it.key} className="surface-rr overflow-hidden" data-name="accordion-item" data-file="components/Accordion.js">
               <button
-                className="w-full flex items-center justify-between gap-3 px-4 py-4 hover:bg-[rgba(11,18,32,0.03)] transition-colors"
+                className="w-full flex items-center justify-between gap-3 px-4 py-4 hover:bg-[rgba(38,29,41,0.03)] transition-colors"
                 onClick={() => setOpen((v) => (v === it.key ? null : it.key))}
                 data-name="accordion-trigger"
                 data-file="components/Accordion.js"

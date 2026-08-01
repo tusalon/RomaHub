@@ -19,7 +19,7 @@ function MapSplitView({ businesses, selectedProvince, onProvinceSelect }) {
     return (
       <div className="relative w-full h-full overflow-hidden bg-[#F6EEE6]" data-name="map-coming-soon" data-file="components/MapSplitView.js">
         <div className="absolute inset-0" style={{ background: 'linear-gradient(145deg, #F6EEE6 0%, #EADFF5 48%, #FFFAF5 100%)' }} data-name="map-soon-bg" data-file="components/MapSplitView.js"></div>
-        <div className="absolute inset-0 opacity-70" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(11,18,32,0.08) 1px, transparent 0)', backgroundSize: '26px 26px' }} data-name="map-soon-texture" data-file="components/MapSplitView.js"></div>
+        <div className="absolute inset-0 opacity-70" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(38,29,41,0.08) 1px, transparent 0)', backgroundSize: '26px 26px' }} data-name="map-soon-texture" data-file="components/MapSplitView.js"></div>
 
         <div className="relative z-10 h-full flex flex-col justify-center p-5 md:p-8" data-name="map-soon-content" data-file="components/MapSplitView.js">
           <div className="surface-rr bg-white/94 backdrop-blur p-5 md:p-7 max-w-[620px] mx-auto text-center" data-name="map-soon-card" data-file="components/MapSplitView.js">

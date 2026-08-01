@@ -26,9 +26,11 @@ const bundles = {
     'components/ProductCard.js',
     'components/ProductShowcase.js',
     'components/PromotionCard.js',
-    'components/RomaReviewsRail.js',
     'components/NegociosTestimonios.js',
-    'components/TopRatedCarousel.js',
+    // RomaReviewsRail.js y TopRatedCarousel.js quedan fuera a proposito: los
+    // archivos siguen ahi por si se retoman, pero hoy no los renderiza ninguna
+    // pagina y viajaban en el bundle sin pintar nada. Con la conexion cubana
+    // en mente, no se envia JS que nadie ejecuta.
     'pages/home/HomeHero.js',
     'pages/home/AllBusinessesSection.js',
     'pages/home/HomePage.js',
