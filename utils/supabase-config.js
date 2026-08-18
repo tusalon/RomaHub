@@ -18,3 +18,12 @@ window.NEGOCIO_ID_POR_DEFECTO = window.NEGOCIO_ID_POR_DEFECTO || '08638828-1a42-
 // Requiere ademas un upload preset SIN FIRMA llamado "romahub_productos"
 // (Settings > Upload > Upload presets > Add > Signing Mode: Unsigned).
 window.CLOUDINARY_CLOUD_NAME = window.CLOUDINARY_CLOUD_NAME || 'uyvla7fj';
+
+// Tasa de cambio informal USD -> CUP que usa el Radar de precios de la portada.
+// Hay negocios que publican toda su lista en USD: sin una tasa no se pueden
+// comparar con los que cobran en CUP, y sin decir cual es la tasa el numero no
+// se puede defender. Por eso se muestra siempre en pantalla junto al panel.
+// ACTUALIZALA A MANO cuando se mueva el cambio, y mueve tambien la fecha:
+// una tasa vieja mostrada como actual es peor que no mostrar ninguna.
+window.USD_CUP_TASA = window.USD_CUP_TASA || 650;
+window.USD_CUP_TASA_FECHA = window.USD_CUP_TASA_FECHA || '18/08/2026';

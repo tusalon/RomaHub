@@ -27,6 +27,7 @@ const bundles = {
     'components/ProductShowcase.js',
     'components/PromotionCard.js',
     'components/NegociosTestimonios.js',
+    'components/RadarPrecios.js',
     // RomaReviewsRail.js y TopRatedCarousel.js quedan fuera a proposito: los
     // archivos siguen ahi por si se retoman, pero hoy no los renderiza ninguna
     // pagina y viajaban en el bundle sin pintar nada. Con la conexion cubana

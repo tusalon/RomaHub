@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "node tests/registration-duplicates.test.js && node tests/store-directory.test.js && node tests/business-card-details.test.js && node tests/reveal-long-sections.test.js && node tests/header-app-access.test.js && node tests/visual-theme.test.js",
+    "test": "node tests/registration-duplicates.test.js && node tests/store-directory.test.js && node tests/business-card-details.test.js && node tests/reveal-long-sections.test.js && node tests/header-app-access.test.js && node tests/visual-theme.test.js && node tests/radar-precios.test.js",
     "build": "node scripts/build.js",
     "build:css": "tailwindcss -i styles/tailwind-input.css -o styles/tailwind.css --minify"
   },

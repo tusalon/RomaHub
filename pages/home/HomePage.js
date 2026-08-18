@@ -23,6 +23,8 @@ function HomePage({ initialParams }) {
       <div data-name="home-page" data-file="pages/home/HomePage.js">
         <HomeHero initialParams={initialParams} data-name="home-hero" data-file="pages/home/HomePage.js" />
 
+        <RadarPreciosPanel data-name="radar-precios-panel" data-file="pages/home/HomePage.js" />
+
         {promotions.length ? (
           <section className="section-rr" aria-labelledby="home-promotions-title" data-name="home-promotions">
             <div className="container-rr">

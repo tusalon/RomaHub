@@ -17,7 +17,7 @@ assert.match(globalStyles, /Elegancia calida de evento/);
 assert.match(globalStyles, /data-name="home-hero"/);
 assert.doesNotMatch(index, /fonts\.googleapis\.com/);
 assert.match(index, /fonts\/Fraunces-variable\.woff2/);
-assert.match(index, /styles\/tailwind\.css\?v=warm-1/);
+assert.match(index, /styles\/tailwind\.css\?v=warm-2/);
 assert.match(index, /styles\/global\.css\?v=warm-1/);
 assert.match(manifest, /"theme_color":\s*"#681831"/);
 assert.match(serviceWorker, /romahub-warm-v1/);
