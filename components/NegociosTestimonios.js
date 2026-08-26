@@ -55,7 +55,7 @@ function NegociosTestimonios() {
             </div>
             <a
               className="btn-rr btn-primary-rr shrink-0 flex items-center justify-center gap-2"
-              href="register.html"
+              href="crear-tienda.html"
               data-name="testimonios-cta-btn"
               data-file="components/NegociosTestimonios.js"
             >

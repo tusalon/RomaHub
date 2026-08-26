@@ -98,8 +98,8 @@ function Header({ currentParams }) {
                 Quiero la app
               </a>
               <a
-                className={`btn-rr px-3 py-2.5 text-sm whitespace-nowrap ${page === 'register.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
-                href="register.html"
+                className={`btn-rr px-3 py-2.5 text-sm whitespace-nowrap ${page === 'crear-tienda.html' ? 'btn-primary-rr' : 'btn-ghost-rr'}`}
+                href="crear-tienda.html"
                 data-name="nav-register"
                 data-file="components/Header.js"
               >
@@ -150,7 +150,7 @@ function Header({ currentParams }) {
                     <span data-name="m-orders-text">Mis pedidos</span>
                     <div className={`icon-receipt-text text-xl ${page === 'pedidos.html' ? 'text-white' : 'text-[#681831]'}`}></div>
                   </a>
-                  <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="register.html" data-name="m-register" data-file="components/Header.js">
+                  <a className="btn-rr btn-ghost-rr w-full flex items-center justify-between" href="crear-tienda.html" data-name="m-register" data-file="components/Header.js">
                     <span data-name="m-register-text" data-file="components/Header.js">Abrir tienda gratis</span>
                     <div className="icon-arrow-right text-xl text-[#681831]" data-name="m-register-icon" data-file="components/Header.js"></div>
                   </a>

@@ -160,7 +160,7 @@
 
   const getBusinessAccess = async () => {
     const rows = await request(
-      'usuarios_negocio?activo=eq.true&select=negocio_id,rol,negocios(id,nombre,slug,telefono,especialidad,provincia,municipio,logo_url,imagen_fondo_url,imagen_fondo_pos_x,imagen_fondo_pos_y,mensaje_bienvenida,sitio_web,es_tienda_externa)&limit=1',
+      'usuarios_negocio?activo=eq.true&select=negocio_id,rol,negocios(id,nombre,slug,telefono,especialidad,provincia,municipio,logo_url,imagen_fondo_url,imagen_fondo_pos_x,imagen_fondo_pos_y,mensaje_bienvenida,sitio_web,es_tienda_externa,romahub_estado,romahub_nota_rechazo)&limit=1',
       {},
       { requireAuth: true }
     );

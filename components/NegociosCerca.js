@@ -78,7 +78,7 @@ function NegociosCerca({ negocioActual, listo }) {
               <div className="p-3" data-name="cerca-body" data-file="components/NegociosCerca.js">
                 <p className="text-sm font-bold text-[#261D29] leading-snug line-clamp-2 flex items-center gap-1" data-name="cerca-nombre" data-file="components/NegociosCerca.js">
                   <span className="truncate">{otro.nombre}</span>
-                  {otro.esRservasroma ? <span className="shrink-0" title="Verificado · reserva online" data-name="cerca-diamante" data-file="components/NegociosCerca.js">💎</span> : null}
+                  <InsigniaTienda tipo={otro.insignia} data-name="cerca-diamante" data-file="components/NegociosCerca.js" />
                 </p>
                 <p className="mt-1 text-xs text-[var(--text-muted)] truncate" data-name="cerca-meta" data-file="components/NegociosCerca.js">
                   {[otro.categoria, otro.ubicacionCorta].filter(Boolean).join(' · ')}

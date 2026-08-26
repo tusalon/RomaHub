@@ -19,8 +19,8 @@ assert.match(storePage, /Catálogo de la tienda/);
 
 assert.match(dataSource, /function listRomaStores\(limit\)/);
 assert.match(dataSource, /business\.esTiendaExterna && business\.tieneTienda/);
-assert.match(panelSource, /const isPublicReady = esTiendaExterna \? hasStoreOffer : isDirectoryReady/);
-assert.match(panelSource, /Tu tienda está visible en Tienda/);
+assert.match(panelSource, /const isPublicReady = esTiendaExterna \? romahubEstado === 'aprobada' : isDirectoryReady/);
+assert.match(panelSource, /Las clientas pueden encontrar tu tienda y entrar para ver tus productos o cursos/);
 assert.match(businessHeader, /Tienda activa/);
 assert.match(businessHeader, /Configurando tienda/);
 

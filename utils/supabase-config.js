@@ -27,3 +27,9 @@ window.CLOUDINARY_CLOUD_NAME = window.CLOUDINARY_CLOUD_NAME || 'uyvla7fj';
 // una tasa vieja mostrada como actual es peor que no mostrar ninguna.
 window.USD_CUP_TASA = window.USD_CUP_TASA || 650;
 window.USD_CUP_TASA_FECHA = window.USD_CUP_TASA_FECHA || '18/08/2026';
+
+// Canal ntfy.sh donde avisa el panel cuando una tienda externa se envia a
+// revision, para que el SuperAdmin la vea sin tener que estar mirando la
+// tabla. Mismo servicio (ntfy.sh, sin backend propio) que ya usa
+// Rservas.SuperAdmin para avisos de turnos.
+window.NTFY_TOPIC_ROMAHUB = window.NTFY_TOPIC_ROMAHUB || 'rservas-romahub';

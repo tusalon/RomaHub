@@ -14,7 +14,11 @@ function BusinessPanelPage() {
     const [negocioId, setNegocioId] = React.useState('');
     const [businessName, setBusinessName] = React.useState('');
     const [esTiendaExterna, setEsTiendaExterna] = React.useState(false);
+    const [romahubEstado, setRomahubEstado] = React.useState('aprobada');
+    const [romahubNotaRechazo, setRomahubNotaRechazo] = React.useState('');
+    const [enviandoRevision, setEnviandoRevision] = React.useState(false);
     const LIMITE_TIENDA_EXTERNA = 40;
+    const MINIMO_TIENDA_EXTERNA = 3;
     const [authLoading, setAuthLoading] = React.useState(true);
     const [section, setSection] = React.useState('perfil');
     const [tab, setTab] = React.useState('productos');
@@ -128,6 +132,8 @@ function BusinessPanelPage() {
           setNegocioId(access.negocio_id);
           setBusinessName(access.negocios?.nombre || 'Tu negocio');
           setEsTiendaExterna(access.negocios?.es_tienda_externa === true);
+          setRomahubEstado(access.negocios?.romahub_estado || 'aprobada');
+          setRomahubNotaRechazo(access.negocios?.romahub_nota_rechazo || '');
           setPresentation({
             nombre: access.negocios?.nombre || '',
             whatsapp: String(access.negocios?.telefono || '').replace(/\D/g, '').replace(/^53/, '').slice(-8),
@@ -675,6 +681,32 @@ function BusinessPanelPage() {
       goToLogin();
     };
 
+    const enviarARevision = async () => {
+      try {
+        setEnviandoRevision(true);
+        setMessage('');
+        await supabaseRequest('rpc/enviar_tienda_a_revision', {
+          method: 'POST',
+          body: JSON.stringify({ p_negocio_id: negocioId })
+        });
+        setRomahubEstado('en_revision');
+        setRomahubNotaRechazo('');
+        // ponytail: POST directo a ntfy desde el navegador, mismo patron que
+        // super-admin.js. Si alguien spamea el canal, mover a una edge
+        // function con service_role.
+        fetch(`https://ntfy.sh/${window.NTFY_TOPIC_ROMAHUB}`, {
+          method: 'POST',
+          body: `${presentation.nombre || businessName} envio su tienda a revision.`,
+          headers: { Title: 'Tienda por aprobar en RomaHub', Priority: 'default', Tags: 'shopping_bags' }
+        }).catch(() => {});
+      } catch (error) {
+        console.error('BusinessPanelPage.enviarARevision error:', error);
+        setMessage(error.message || 'No se pudo enviar tu tienda a revisión.');
+      } finally {
+        setEnviandoRevision(false);
+      }
+    };
+
     const openTask = (task) => {
       if (!task) return;
       setSection(task.section || 'perfil');
@@ -704,16 +736,30 @@ function BusinessPanelPage() {
     const municipios = window.getMunicipiosDeProvincia?.(presentation.provincia, presentation.municipio) || [];
     const activeServices = services.filter((service) => service.activo !== false);
     const isDirectoryReady = activeServices.length > 0;
-    const hasStoreOffer = totalActivosExterna > 0;
-    const isPublicReady = esTiendaExterna ? hasStoreOffer : isDirectoryReady;
+    // catalogoListo es "la dueña ya hizo su parte" (sube el minimo de
+    // articulos); isPublicReady es "se ve en RomaHub" y para tiendas
+    // externas depende de la aprobacion del SuperAdmin, no solo del catalogo.
+    const catalogoListo = esTiendaExterna ? totalActivosExterna >= MINIMO_TIENDA_EXTERNA : isDirectoryReady;
+    const isPublicReady = esTiendaExterna ? romahubEstado === 'aprobada' : isDirectoryReady;
     const profileTasks = [
       { id: 'descripcion', label: 'Descripción clara', done: presentation.descripcion.trim().length >= 40, section: 'perfil' },
       { id: 'logo', label: 'Logo o foto del negocio', done: Boolean(presentation.logoUrl), section: 'perfil', target: esTiendaExterna ? 'logo' : 'rservas-data' },
       { id: 'portada', label: 'Foto de portada', done: Boolean(presentation.coverUrl), section: 'perfil' },
       { id: 'ubicacion', label: 'Provincia y municipio', done: Boolean(presentation.provincia && presentation.municipio), section: 'perfil', target: esTiendaExterna ? 'ubicacion' : 'rservas-data' },
       { id: 'whatsapp', label: 'WhatsApp de contacto', done: /^\d{8}$/.test(presentation.whatsapp), section: 'perfil', target: esTiendaExterna ? 'whatsapp' : 'rservas-data' },
-      { id: 'catalogo', label: esTiendaExterna ? 'Producto o curso activo' : 'Servicio activo', done: isPublicReady, section: esTiendaExterna ? 'tienda' : 'perfil', tab: esTiendaExterna ? 'productos' : null }
+      { id: 'catalogo', label: esTiendaExterna ? `${MINIMO_TIENDA_EXTERNA} productos o cursos activos` : 'Servicio activo', done: catalogoListo, section: esTiendaExterna ? 'tienda' : 'perfil', tab: esTiendaExterna ? 'productos' : null }
     ];
+    const estadoBadgeTexto = esTiendaExterna
+      ? ({ borrador: 'Configurando tienda', en_revision: 'En revisión', rechazada: 'Ajustar y reenviar', aprobada: 'Tienda verificada' }[romahubEstado] || 'Configurando tienda')
+      : (isPublicReady ? 'Disponible' : 'Próximamente');
+    const estadoBannerCopy = esTiendaExterna
+      ? ({
+          borrador: 'Sube al menos 3 productos o cursos y envía tu tienda a revisión para publicarla.',
+          en_revision: 'La estamos revisando. Te avisamos por WhatsApp en cuanto quede lista.',
+          rechazada: romahubNotaRechazo || 'No aprobamos tu tienda todavía. Ajusta lo señalado y reenvíala.',
+          aprobada: 'Las clientas pueden encontrar tu tienda y entrar para ver tus productos o cursos.'
+        }[romahubEstado] || '')
+      : (isPublicReady ? 'Las clientas pueden encontrarte por nombre, ubicación y servicios.' : 'Publica y activa al menos un servicio en Rservasroma para entrar al directorio disponible.');
     const completedTasks = profileTasks.filter((task) => task.done).length;
     const profileProgress = Math.round((completedTasks / profileTasks.length) * 100);
     const nextTask = profileTasks.find((task) => !task.done);
@@ -786,6 +832,20 @@ function BusinessPanelPage() {
                     Completar ahora
                   </button>
                 </>
+              ) : esTiendaExterna && romahubEstado !== 'aprobada' ? (
+                <>
+                  <p className="text-xs font-bold uppercase tracking-wide text-[var(--text-muted)]">Siguiente paso</p>
+                  {romahubEstado === 'en_revision' ? (
+                    <p className="mt-1 text-sm font-semibold text-amber-700">Tu tienda está en revisión. Te avisamos por WhatsApp.</p>
+                  ) : (
+                    <>
+                      <p className="mt-1 text-sm font-semibold">{romahubEstado === 'rechazada' ? 'Corrige lo señalado y reenvía tu tienda.' : 'Todo listo: envía tu tienda a revisión.'}</p>
+                      <button type="button" className="mt-3 btn-rr btn-primary-rr w-full py-2.5 text-sm" onClick={enviarARevision} disabled={enviandoRevision}>
+                        {enviandoRevision ? 'Enviando...' : 'Enviar a revisión'}
+                      </button>
+                    </>
+                  )}
+                </>
               ) : (
                 <>
                   <p className="text-sm font-semibold text-green-700">Tu perfil está listo para recibir clientas.</p>
@@ -816,7 +876,7 @@ function BusinessPanelPage() {
                   {presentation.logoUrl ? <img src={presentation.logoUrl} alt="Logo del negocio" className="w-full h-full object-cover" /> : <span className="text-lg font-extrabold text-[var(--primary-color)]">{String(presentation.nombre || businessName || 'R').trim().slice(0, 2).toUpperCase()}</span>}
                 </div>
                 <span className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-sm ${isPublicReady ? 'bg-green-50 text-green-700' : 'bg-white text-[var(--primary-color)]'}`}>
-                  {isPublicReady ? (esTiendaExterna ? 'Tienda activa' : 'Disponible') : (esTiendaExterna ? 'Configurando tienda' : 'Próximamente')}
+                  {estadoBadgeTexto}
                 </span>
               </div>
               <div className="px-4 pt-11 pb-4">
@@ -828,20 +888,14 @@ function BusinessPanelPage() {
           </article>
 
           <article className="surface-rr p-5 md:p-6 flex flex-col" data-name="promotion-center">
-            <div className={`rounded-xl border p-4 ${isPublicReady ? 'border-green-200 bg-green-50' : 'border-amber-200 bg-amber-50'}`} role="status">
-              <p className={`text-sm font-semibold ${isPublicReady ? 'text-green-800' : 'text-amber-900'}`}>
-                {isPublicReady ? (esTiendaExterna ? 'Tu tienda está visible en Tienda' : 'Tu negocio está visible en el directorio') : (esTiendaExterna ? 'Tu tienda está en configuración' : 'Tu negocio aparece como “Próximamente”')}
+            <div className={`rounded-xl border p-4 ${isPublicReady ? 'border-green-200 bg-green-50' : romahubEstado === 'rechazada' ? 'border-red-200 bg-red-50' : 'border-amber-200 bg-amber-50'}`} role="status">
+              <p className={`text-sm font-semibold ${isPublicReady ? 'text-green-800' : romahubEstado === 'rechazada' ? 'text-red-800' : 'text-amber-900'}`}>
+                {estadoBadgeTexto}
               </p>
-              <p className={`mt-1 text-xs leading-relaxed ${isPublicReady ? 'text-green-700' : 'text-amber-800'}`}>
-                {isPublicReady
-                  ? esTiendaExterna
-                    ? 'Las clientas pueden encontrar tu tienda y entrar para ver tus productos o cursos.'
-                    : 'Las clientas pueden encontrarte por nombre, ubicación y servicios.'
-                  : esTiendaExterna
-                    ? 'Publica un producto o curso para comenzar a vender y compartir tu tienda.'
-                    : 'Publica y activa al menos un servicio en Rservasroma para entrar al directorio disponible.'}
+              <p className={`mt-1 text-xs leading-relaxed ${isPublicReady ? 'text-green-700' : romahubEstado === 'rechazada' ? 'text-red-700' : 'text-amber-800'}`}>
+                {estadoBannerCopy}
               </p>
-              {!isPublicReady ? (
+              {!isPublicReady && !catalogoListo ? (
                 <button type="button" className="mt-3 text-xs font-bold text-[var(--primary-color)] hover:underline" onClick={() => openTask(profileTasks.find((task) => task.id === 'catalogo'))}>Completar oferta ahora</button>
               ) : null}
             </div>

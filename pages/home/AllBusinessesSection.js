@@ -82,7 +82,7 @@ function AllBusinessesSection() {
                     </div>
 
                     <div className="mt-4" data-name="intrigue-rating" data-file="pages/home/AllBusinessesSection.js">
-                      <StarRating value={business.estrellas} total={business.totalResenas || business['totalResenas']} verified={business.verificado} data-name="business-stars" data-file="pages/home/AllBusinessesSection.js" />
+                      <StarRating value={business.estrellas} total={business.totalResenas || business['totalResenas']} verified={business.bienValorado} data-name="business-stars" data-file="pages/home/AllBusinessesSection.js" />
                     </div>
 
                     <p className="mt-4 text-sm text-[var(--text-muted)] leading-relaxed" data-name="intrigue-desc" data-file="pages/home/AllBusinessesSection.js">

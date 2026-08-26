@@ -1,6 +1,6 @@
-function BusinessTabs({ active, onChange }) {
+function BusinessTabs({ active, onChange, tabs }) {
   try {
-    const tabs = [
+    const items = tabs || [
       { key: 'portafolio', label: 'Portafolio', icon: 'icon-image' },
       { key: 'catálogo', label: 'Servicios y Productos', icon: 'icon-list' },
       { key: 'cursos', label: 'Cursos y Talleres', icon: 'icon-calendar' },
@@ -8,10 +8,10 @@ function BusinessTabs({ active, onChange }) {
     ];
 
     return (
-      <div className="container-rr mt-5" data-name="business-tabs" data-file="pages/business/BusinessTabs.js">
+      <div data-name="business-tabs" data-file="pages/business/BusinessTabs.js">
         <div className="surface-rr p-2" data-name="tabs-surface" data-file="pages/business/BusinessTabs.js">
           <div className="flex gap-2 overflow-x-auto no-scrollbar" data-name="tabs-row" data-file="pages/business/BusinessTabs.js">
-            {tabs.map((t) => {
+            {items.map((t) => {
               const isActive = active === t.key;
               return (
                 <button

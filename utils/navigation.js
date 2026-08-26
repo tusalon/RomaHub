@@ -69,7 +69,7 @@ const Navigation = (() => {
 
   function goToRegister() {
     try {
-      window.location.href = 'register.html';
+      window.location.href = 'crear-tienda.html';
     } catch (error) {
       console.error('Navigation.goToRegister error:', error);
     }

@@ -83,7 +83,7 @@ function BusinessCard({ business, onHover, active, upcoming = false }) {
             <div className="min-w-0 flex-1" data-name="title" data-file="components/BusinessCard.js">
               <a href={profileHref} className="text-lg name-rr leading-snug flex items-center gap-1 hover:text-[var(--primary-color)]" data-name="name" data-file="components/BusinessCard.js">
                 <span className="truncate">{b.nombre}</span>
-                {b.esRservasroma ? <span className="shrink-0 text-sm" title="Negocio verificado Rservasroma" data-name="diamond-badge" data-file="components/BusinessCard.js">💎</span> : null}
+                <InsigniaTienda tipo={b.insignia} data-name="diamond-badge" data-file="components/BusinessCard.js" />
               </a>
               <p className="mt-1 flex items-center gap-1.5 text-xs text-[var(--text-muted)]" data-name="meta" data-file="components/BusinessCard.js">
                 <span className="icon-map-pin text-sm text-[var(--primary-color)] shrink-0" aria-hidden="true"></span>

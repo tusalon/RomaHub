@@ -23,7 +23,7 @@ function BusinessLogoCard({ business, onOpen }) {
 
           {b.enRanking ? (
             <span className="absolute top-3 right-14 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#1F8654] text-white text-[10px] font-bold shadow-[0_4px_12px_rgba(31,134,84,0.35)]" data-name="verified-badge" data-file="components/BusinessLogoCard.js">
-              <span>&#10003;</span> Verificado
+              <span>&#10003;</span> Bien valorado
             </span>
           ) : (
             <span className="absolute top-3 right-14 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur text-[10px] font-semibold text-[var(--text-muted)] shadow-sm" data-name="new-badge" data-file="components/BusinessLogoCard.js">Nuevo</span>
@@ -48,7 +48,7 @@ function BusinessLogoCard({ business, onOpen }) {
 
           <p className="mt-2.5 text-sm font-bold text-[#261D29] leading-snug line-clamp-2 flex items-center gap-1" data-name="name" data-file="components/BusinessLogoCard.js">
             <span className="truncate">{b.nombre}</span>
-            {b.esRservasroma ? <span className="shrink-0" title="Verificado · reserva online" data-name="diamond-badge" data-file="components/BusinessLogoCard.js">💎</span> : null}
+            <InsigniaTienda tipo={b.insignia} data-name="diamond-badge" data-file="components/BusinessLogoCard.js" />
           </p>
           <p className="text-xs text-[var(--text-muted)] mt-1" data-name="category" data-file="components/BusinessLogoCard.js">{[b.categoria, b.ubicacionCorta || b.ubicacion?.zona].filter(Boolean).join(' · ')}</p>
 

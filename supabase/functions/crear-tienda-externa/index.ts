@@ -4,6 +4,7 @@
 import {
   corsHeaders,
   enforceRateLimits,
+  esRubroBellezaValido,
   generateRecoveryCode,
   hashRecoveryCode,
   isOriginAllowed,
@@ -109,6 +110,9 @@ Deno.serve(async (req: Request) => {
   if (!provincia) return json(req, { error: "Selecciona la provincia de tu negocio." }, 400);
   const municipio = String(body.municipio || "").trim().slice(0, 100) || null;
   const categoria = String(body.categoria || "").trim().slice(0, 80) || null;
+  if (!categoria || !esRubroBellezaValido(categoria)) {
+    return json(req, { error: "RomaHub es solo para productos y cursos de belleza. Elige un rubro de la lista." }, 400);
+  }
   const descripcion = String(body.descripcion || "").trim().slice(0, 600) || null;
   const logoUrl = safeHttpsUrl(body.logo_url);
 
@@ -199,13 +203,14 @@ Deno.serve(async (req: Request) => {
       email: `${slug}@romahub.local`,
       telefono: whatsapp,
       codigo_pais: "53",
-      especialidad: categoria || "Belleza",
+      especialidad: categoria,
       provincia,
       municipio,
       mensaje_bienvenida: descripcion,
       logo_url: logoUrl,
       plan: "gratuito",
-      configurado: true,
+      configurado: false,
+      romahub_estado: "borrador",
       es_tienda_externa: true,
     }),
   });
@@ -262,7 +267,7 @@ Deno.serve(async (req: Request) => {
 
   return json(req, {
     ok: true,
-    tienda: { nombre, slug, negocio_id: negocioId },
+    tienda: { nombre, slug, negocio_id: negocioId, romahub_estado: "borrador" },
     acceso: {
       usuario: whatsapp,
       password,

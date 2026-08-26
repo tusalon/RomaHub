@@ -2,8 +2,9 @@ function ProductCard({ item }) {
   try {
     const it = item;
     const esCurso = it.tipo === 'curso';
+    const agotado = esCurso ? it.cupos === 0 : it.stock === 0;
     const itemId = String(it.itemId || it.id || '').replace(/^(producto|curso)-/, '');
-    const detailUrl = `business.html?id=${encodeURIComponent(it.negocioId)}&item=${encodeURIComponent(itemId)}&tipo=${encodeURIComponent(it.tipo)}`;
+    const detailUrl = `producto.html?id=${encodeURIComponent(itemId)}&tipo=${encodeURIComponent(it.tipo)}`;
     const whatsapp = String(it.negocioWhatsapp || '').replace(/\D/g, '');
     const whatsappCompleto = whatsapp.length === 8 ? `53${whatsapp}` : whatsapp;
     const contactUrl = whatsappCompleto
@@ -30,7 +31,7 @@ function ProductCard({ item }) {
         {favoriteEntry ? <FavoriteButton entry={favoriteEntry} className="absolute top-2.5 right-2.5 z-20" /> : null}
         <a href={detailUrl} onClick={trackView} className="relative aspect-square overflow-hidden bg-[#F6EEE6] block" data-name="product-media" data-file="components/ProductCard.js" aria-label={`Ver ${it.nombre} en ${it.negocioNombre}`}>
           {it.imagen ? (
-            <img loading="lazy" decoding="async" src={it.imagen} alt={it.nombre} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-name="product-img" data-file="components/ProductCard.js" />
+            <img loading="lazy" decoding="async" src={it.imagen} alt={it.nombre} className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${agotado ? 'opacity-50 grayscale' : ''}`} data-name="product-img" data-file="components/ProductCard.js" />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center" data-name="product-noimg" data-file="components/ProductCard.js">
               <div className={`${esCurso ? 'icon-graduation-cap' : 'icon-shopping-bag'} text-4xl text-[var(--primary-color)] opacity-40`} data-name="product-noimg-icon" data-file="components/ProductCard.js"></div>
@@ -38,6 +39,9 @@ function ProductCard({ item }) {
           )}
           {esCurso ? (
             <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-[#261D29] text-white text-[10px] font-bold shadow-sm" data-name="product-type" data-file="components/ProductCard.js">Curso</span>
+          ) : null}
+          {agotado ? (
+            <span className="absolute bottom-2.5 left-2.5 px-2.5 py-1 rounded-full bg-black/80 text-white text-[10px] font-bold shadow-sm" data-name="product-agotado" data-file="components/ProductCard.js">Agotado</span>
           ) : null}
           {it.destacado ? (
             <span className="absolute top-14 right-2.5 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/95 backdrop-blur text-[10px] font-bold text-[#F59E0B] shadow-sm" data-name="product-featured" data-file="components/ProductCard.js">
@@ -59,13 +63,17 @@ function ProductCard({ item }) {
               )}
             </div>
             <span className="text-xs text-[var(--text-muted)] truncate" data-name="product-biz-name" data-file="components/ProductCard.js">{it.negocioNombre}</span>
-            {it.negocioEsRservasroma ? <span className="text-xs shrink-0" title="Negocio verificado Rservasroma" data-name="diamond-badge" data-file="components/ProductCard.js">💎</span> : null}
+            <InsigniaTienda tipo={it.negocioInsignia} data-name="diamond-badge" data-file="components/ProductCard.js" />
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2" data-name="product-actions" data-file="components/ProductCard.js">
-            <a className="btn-rr btn-primary-rr py-2 px-2 text-xs flex items-center justify-center gap-1" href={contactUrl} onClick={whatsappCompleto ? trackContact : trackView} target={whatsappCompleto ? '_blank' : undefined} rel={whatsappCompleto ? 'noopener noreferrer' : undefined} data-name="product-contact">
-              <span className="icon-message-circle text-sm text-white"></span>
-              {esCurso ? 'Me interesa' : 'Comprar'}
-            </a>
+            {agotado ? (
+              <span className="btn-rr py-2 px-2 text-xs flex items-center justify-center bg-[var(--bg-muted)] text-[var(--text-muted)] cursor-not-allowed" data-name="product-contact-agotado">Agotado</span>
+            ) : (
+              <a className="btn-rr btn-primary-rr py-2 px-2 text-xs flex items-center justify-center gap-1" href={contactUrl} onClick={whatsappCompleto ? trackContact : trackView} target={whatsappCompleto ? '_blank' : undefined} rel={whatsappCompleto ? 'noopener noreferrer' : undefined} data-name="product-contact">
+                <span className="icon-message-circle text-sm text-white"></span>
+                {esCurso ? 'Me interesa' : 'Comprar'}
+              </a>
+            )}
             <a className="btn-rr btn-ghost-rr py-2 px-2 text-xs flex items-center justify-center" href={detailUrl} onClick={trackView} data-name="product-detail">Ver detalle</a>
           </div>
         </div>

@@ -47,7 +47,7 @@ function BusinessHeader({ business }) {
             <div className="min-w-0" data-name="header-copy" data-file="pages/business/BusinessHeader.js">
               <div className="flex flex-wrap items-center gap-2" data-name="title-row" data-file="pages/business/BusinessHeader.js">
                 <h1 className="text-2xl md:text-3xl font-semibold tracking-tight leading-tight" data-name="name" data-file="pages/business/BusinessHeader.js">{b.nombre}</h1>
-                {b.esRservasroma ? <span className="text-xl" title="Verificado · reserva online" data-name="diamond-badge" data-file="pages/business/BusinessHeader.js">💎</span> : null}
+                <InsigniaTienda tipo={b.insignia} size="lg" data-name="diamond-badge" data-file="pages/business/BusinessHeader.js" />
                 {b.vip ? <Badge type="vip" text="VIP" data-name="vip" data-file="pages/business/BusinessHeader.js" /> : null}
               </div>
               <p className="text-sm text-[var(--text-muted)] mt-2" data-name="meta" data-file="pages/business/BusinessHeader.js">

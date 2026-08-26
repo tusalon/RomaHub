@@ -6,6 +6,15 @@
     const initials = String(b.nombre || 'N').trim().slice(0, 2).toUpperCase();
     const catalog = b.categoriasCatalogo || [];
     const hasStore = Boolean((catalog.find((section) => section.tipo === 'productos')?.items || []).length || (catalog.find((section) => section.tipo === 'cursos')?.items || []).length);
+    // Pestanas Servicios / Ver tienda: solo se pintan si hay ambas cosas que
+    // mostrar. Una tienda externa nunca tiene servicios, asi que va directo
+    // a "tienda" sin pestanas.
+    const tabsDisponibles = [
+      b.tieneServicios ? { key: 'servicios', label: 'Servicios', icon: 'icon-list' } : null,
+      hasStore ? { key: 'tienda', label: 'Ver tienda', icon: 'icon-shopping-bag' } : null
+    ].filter(Boolean);
+    const [activeTab, setActiveTab] = React.useState(b.tieneServicios ? 'servicios' : 'tienda');
+    const seccionActiva = tabsDisponibles.length > 1 ? activeTab : (b.tieneServicios ? 'servicios' : 'tienda');
     const [cart, setCart] = React.useState([]);
     const [customer, setCustomer] = React.useState({ nombre: '', whatsapp: '', direccion: '', nota: '' });
     const [cartMessage, setCartMessage] = React.useState('');
@@ -252,7 +261,12 @@
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 items-start" data-name="business-grid" data-file="pages/business/BusinessPage.js">
             <div data-name="left" data-file="pages/business/BusinessPage.js">
               <BusinessPromotions business={b} selectedPromotionId={selectedPromotionId} />
-              <BusinessCatalog business={b} onAddToCart={addToCart} selectedItemId={selectedItemId} data-name="catalog" data-file="pages/business/BusinessPage.js" />
+              {tabsDisponibles.length > 1 ? (
+                <BusinessTabs active={activeTab} onChange={setActiveTab} tabs={tabsDisponibles} data-name="business-tabs" data-file="pages/business/BusinessPage.js" />
+              ) : null}
+              <div className="mt-4">
+                <BusinessCatalog business={b} onAddToCart={addToCart} selectedItemId={selectedItemId} mostrar={seccionActiva} data-name="catalog" data-file="pages/business/BusinessPage.js" />
+              </div>
               {hasStore ? <div className="lg:hidden mt-4" data-name="mobile-cart" data-file="pages/business/BusinessPage.js">
                 {renderCartCard()}
               </div> : null}

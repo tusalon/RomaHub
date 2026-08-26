@@ -150,7 +150,7 @@ function LoginBusinessPage() {
 
                 <button className="mt-5 btn-rr btn-primary-rr w-full flex items-center justify-center gap-2" type="submit" disabled={loading} data-name="login-submit" data-file="pages/panel/LoginBusinessPage.js">{loading ? 'Entrando...' : 'Entrar al panel'}<div className="icon-arrow-right text-xl text-white" data-name="login-submit-icon" data-file="pages/panel/LoginBusinessPage.js"></div></button>
                 <button className="mt-3 w-full text-sm font-semibold text-[var(--primary-color)] hover:underline" type="button" onClick={() => openMode('recovery')} data-name="forgot-password" data-file="pages/panel/LoginBusinessPage.js">Olvidé mi contraseña</button>
-                <a className="mt-3 btn-rr btn-ghost-rr w-full flex items-center justify-center gap-2" href="register.html" data-name="register-link" data-file="pages/panel/LoginBusinessPage.js">Crear mi negocio gratis</a>
+                <a className="mt-3 btn-rr btn-ghost-rr w-full flex items-center justify-center gap-2" href="crear-tienda.html" data-name="register-link" data-file="pages/panel/LoginBusinessPage.js">Crear mi negocio gratis</a>
               </form>
             ) : (
               <form className="surface-rr p-5 md:p-6" onSubmit={submitRecovery} data-name="recovery-form" data-file="pages/panel/LoginBusinessPage.js">

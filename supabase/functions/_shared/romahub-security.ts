@@ -128,3 +128,21 @@ export async function enforceRateLimits(
   ]);
   return ipAllowed && phoneAllowed;
 }
+
+// RomaHub es solo para negocios de belleza: productos, insumos y cursos del
+// rubro. El "que vendes" del alta se restringe a esta lista para que no se
+// cuele una tienda de otro giro.
+export const RUBROS_BELLEZA = [
+  "Uñas y manicura",
+  "Pestañas y cejas",
+  "Peluquería",
+  "Barbería",
+  "Maquillaje",
+  "Estética facial y corporal",
+  "Insumos y productos de belleza",
+  "Cursos de belleza",
+];
+
+export function esRubroBellezaValido(categoria: string): boolean {
+  return RUBROS_BELLEZA.includes(String(categoria || "").trim());
+}

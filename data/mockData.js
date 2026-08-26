@@ -295,6 +295,7 @@ const MockData = (() => {
         items: productos.map((item) => ({
           id: String(item.id || valueFrom(item, ['nombre', 'titulo', 'producto'], 'Producto')),
           nombre: valueFrom(item, ['nombre', 'titulo', 'producto'], 'Producto'),
+          categoria: valueFrom(item, ['categoria', 'subgrupo'], ''),
           stock: numberFrom(item, ['stock', 'cantidad'], 0),
           precio: numberFrom(item, ['precio', 'precio_cup', 'monto'], 0),
           moneda: String(valueFrom(item, ['precio_moneda', 'moneda'], 'CUP')).toUpperCase(),
@@ -311,8 +312,10 @@ const MockData = (() => {
         items: cursos.map((item) => ({
           id: String(item.id || valueFrom(item, ['nombre', 'titulo', 'curso'], 'Curso')),
           nombre: valueFrom(item, ['nombre', 'titulo', 'curso'], 'Curso'),
+          categoria: valueFrom(item, ['categoria', 'subgrupo'], ''),
           fecha: valueFrom(item, ['fecha', 'fecha_inicio', 'created_at'], new Date().toISOString()),
           ubicacion: valueFrom(item, ['ubicacion', 'direccion', 'lugar'], ''),
+          cupos: item.cupos === null || item.cupos === undefined ? null : numberFrom(item, ['cupos'], 0),
           precio: numberFrom(item, ['precio', 'precio_cup', 'monto'], 0),
           moneda: String(valueFrom(item, ['precio_moneda', 'moneda'], 'CUP')).toUpperCase(),
           descripcion: valueFrom(item, ['descripcion', 'description', 'detalle'], ''),
@@ -341,6 +344,7 @@ const MockData = (() => {
     const fotos = [coverUrl, logoUrl].filter(Boolean);
     const slug = valueFrom(row, ['slug'], '');
     const esTiendaExterna = boolFrom(row, ['es_tienda_externa'], false);
+    const romahubEstado = valueFrom(row, ['romahub_estado'], 'aprobada');
     const externalUrl = normalizeExternalUrl(valueFrom(row, ['reserva_url', 'booking_url', 'url_reserva', 'url_negocio', 'negocio_url', 'sitio_web', 'url', 'link'], ''));
     // Las tiendas externas tienen slug (para su propio perfil) pero NO tienen
     // agenda de citas en rservasroma: mandarlas ahi seria un enlace muerto.
@@ -396,7 +400,9 @@ const MockData = (() => {
       nombre: valueFrom(row, ['nombre', 'name', 'titulo'], 'Negocio sin nombre'),
       categoria: especialidad,
       vip: boolFrom(row, ['vip', 'es_vip', 'premium'], false),
-      verificado: enRanking,
+      // "bienValorado" (antes "verificado"): 3+ valoraciones. No confundir
+      // con la insignia de verificacion de RomaHub (dorada/azul, mas abajo).
+      bienValorado: enRanking,
       topRoma: boolFrom(row, ['top_roma', 'topRoma', 'destacado'], false),
       masReservado: boolFrom(row, ['mas_reservado', 'masReservado'], false),
       negocioDelMes: boolFrom(row, ['negocio_del_mes', 'negocioDelMes'], false),
@@ -418,9 +424,14 @@ const MockData = (() => {
       tienePrecioServicio,
       calidadPerfil,
       esTiendaExterna,
+      romahubEstado,
       // El diamante 💎 y la prioridad los tiene quien NO es tienda externa
       // (un negocio rservasroma con suscripción activa).
       esRservasroma: !esTiendaExterna,
+      // Insignia de confianza: dorada para negocios rservasroma, azul solo
+      // para tiendas externas ya aprobadas por el equipo. null = sin insignia
+      // (tienda externa en borrador/en_revision/rechazada).
+      insignia: esTiendaExterna ? (romahubEstado === 'aprobada' ? 'azul' : null) : 'dorada',
       portadaUrl: coverUrl,
       portadaEsPropia: Boolean(coverUrlPropia),
       portadaPosicion: {
@@ -524,7 +535,7 @@ const MockData = (() => {
       }
 
       try {
-        const CAMPOS_NEGOCIO = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,imagen_fondo_pos_x,imagen_fondo_pos_y,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,whatsapp_moneda';
+        const CAMPOS_NEGOCIO = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,imagen_fondo_pos_x,imagen_fondo_pos_y,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,romahub_estado,whatsapp_moneda';
         const [rowsRserva, rowsExternas, ratingData] = await Promise.all([
           // Ya no exige suscripcion activa: el directorio muestra todo negocio
           // configurado, tenga o no suscripcion al dia. El diamante 💎 nunca
@@ -612,6 +623,7 @@ const MockData = (() => {
             categoria: item.categoria || '',
             destacado: item.destacado === true,
             stock: item.stock,
+            cupos: item.cupos,
             fecha: item.fecha || null,
             negocioId: negocio.id,
             negocioNombre: negocio.nombre,
@@ -620,7 +632,8 @@ const MockData = (() => {
             negocioReservaUrl: negocio.reservaUrl,
             negocioWhatsapp: negocio.whatsapp,
             negocioEsRservasroma: negocio.esRservasroma,
-            negocioEsTiendaExterna: negocio.esTiendaExterna
+            negocioEsTiendaExterna: negocio.esTiendaExterna,
+            negocioInsignia: negocio.insignia
           };
         };
         showcaseItems = [
@@ -653,7 +666,7 @@ const MockData = (() => {
     if (current?.detallesCargados && !forceRefresh) return current;
 
     const encodedId = encodeURIComponent(negocioId);
-    const CAMPOS_DETALLE = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,imagen_fondo_pos_x,imagen_fondo_pos_y,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,whatsapp_moneda';
+    const CAMPOS_DETALLE = 'id,nombre,telefono,especialidad,slug,logo_url,imagen_fondo_url,imagen_fondo_tipo,imagen_fondo_pos_x,imagen_fondo_pos_y,mensaje_bienvenida,instagram,facebook,sitio_web,direccion,horario_atencion,configurado,plan,provincia,municipio,es_tienda_externa,romahub_estado,whatsapp_moneda';
     const [rowsRserva, rowsExterna, ratingData] = await Promise.all([
       // Mismo criterio que loadBusinesses: ya no exige suscripcion activa
       // para cargar el perfil, solo que este configurado.

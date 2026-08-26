@@ -6,6 +6,9 @@ function TiendaPage() {
     const tiendaActual = tiendas.find((tienda) => String(tienda.id) === String(negocioId)) || null;
     const [busqueda, setBusqueda] = React.useState('');
     const [tipo, setTipo] = React.useState('todos');
+    const [orden, setOrden] = React.useState('relevancia');
+    const [soloDisponibles, setSoloDisponibles] = React.useState(false);
+    const esAgotado = (articulo) => (articulo.tipo === 'curso' ? articulo.cupos === 0 : articulo.stock === 0);
 
     const normalizar = (texto) => String(texto || '')
       .toLowerCase()
@@ -40,6 +43,7 @@ function TiendaPage() {
     const articulosFiltrados = React.useMemo(() => {
       let lista = articulosTienda;
       if (tipo !== 'todos') lista = lista.filter((articulo) => articulo.tipo === tipo);
+      if (soloDisponibles) lista = lista.filter((articulo) => !esAgotado(articulo));
       const consulta = normalizar(busqueda).trim();
       if (consulta) {
         lista = lista.filter((articulo) => normalizar([
@@ -48,8 +52,10 @@ function TiendaPage() {
           articulo.descripcion
         ].filter(Boolean).join(' ')).includes(consulta));
       }
+      if (orden === 'precio_asc') lista = lista.slice().sort((a, b) => a.precio - b.precio);
+      else if (orden === 'precio_desc') lista = lista.slice().sort((a, b) => b.precio - a.precio);
       return lista;
-    }, [articulosTienda, tipo, busqueda]);
+    }, [articulosTienda, tipo, busqueda, orden, soloDisponibles]);
 
     const StoreCard = ({ tienda }) => {
       const conteos = conteosPorTienda[String(tienda.id)] || { productos: 0, cursos: 0, total: 0 };
@@ -71,8 +77,8 @@ function TiendaPage() {
                 />
               ) : null}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
-              <span className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold shadow-sm ${tienda.esRservasroma ? 'bg-[#261D29] text-white' : 'bg-white/95 text-[var(--primary-color)]'}`}>
-                {tienda.esRservasroma ? '💎 VIP RservasRoma' : 'Tienda gratis'}
+              <span className="absolute top-3 left-3">
+                <InsigniaTienda tipo={tienda.insignia} chip />
               </span>
               <span className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-white/95 text-[10px] font-bold text-green-700 shadow-sm">Tienda activa</span>
             </div>
@@ -159,7 +165,7 @@ function TiendaPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h1 className="text-2xl md:text-3xl name-rr">{tiendaActual.nombre}</h1>
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${tiendaActual.esRservasroma ? 'bg-[#261D29] text-white' : 'bg-[var(--secondary-color)] text-[var(--primary-color)]'}`}>{tiendaActual.esRservasroma ? '💎 VIP' : 'Tienda gratis'}</span>
+                      <InsigniaTienda tipo={tiendaActual.insignia} chip />
                     </div>
                     <p className="mt-1 text-sm text-[var(--text-muted)]">{[tiendaActual.categoria, tiendaActual.ubicacionCorta].filter(Boolean).join(' · ')}</p>
                     {tiendaActual.descripcion ? <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)] max-w-2xl">{tiendaActual.descripcion}</p> : null}
@@ -180,10 +186,21 @@ function TiendaPage() {
               <input className="input-rr w-full lg:max-w-sm" value={busqueda} onChange={(event) => setBusqueda(event.target.value)} placeholder="Buscar dentro de esta tienda..." />
             </div>
 
-            <div className="mb-5 flex gap-2 overflow-x-auto no-scrollbar pb-1">
-              <Chip id="todos">Todo ({conteos.total})</Chip>
-              <Chip id="producto">Productos ({conteos.productos})</Chip>
-              <Chip id="curso">Cursos ({conteos.cursos})</Chip>
+            <div className="mb-5 flex flex-wrap items-center gap-2">
+              <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                <Chip id="todos">Todo ({conteos.total})</Chip>
+                <Chip id="producto">Productos ({conteos.productos})</Chip>
+                <Chip id="curso">Cursos ({conteos.cursos})</Chip>
+              </div>
+              <select className="input-rr py-2 text-sm w-auto ml-auto" value={orden} onChange={(event) => setOrden(event.target.value)} aria-label="Ordenar por">
+                <option value="relevancia">Relevancia</option>
+                <option value="precio_asc">Precio: menor a mayor</option>
+                <option value="precio_desc">Precio: mayor a menor</option>
+              </select>
+              <label className="flex items-center gap-1.5 text-sm text-[var(--text-muted)] whitespace-nowrap">
+                <input type="checkbox" checked={soloDisponibles} onChange={(event) => setSoloDisponibles(event.target.checked)} />
+                Solo disponibles
+              </label>
             </div>
 
             {articulosFiltrados.length ? (
@@ -194,7 +211,7 @@ function TiendaPage() {
               <div className="surface-rr p-8 text-center">
                 <span className="icon-search text-4xl text-[var(--primary-color)] opacity-40"></span>
                 <p className="mt-3 text-sm font-semibold">No encontramos productos con ese filtro</p>
-                <button type="button" className="mt-4 btn-rr btn-ghost-rr" onClick={() => { setBusqueda(''); setTipo('todos'); }}>Limpiar filtros</button>
+                <button type="button" className="mt-4 btn-rr btn-ghost-rr" onClick={() => { setBusqueda(''); setTipo('todos'); setSoloDisponibles(false); }}>Limpiar filtros</button>
               </div>
             )}
           </section>
@@ -212,7 +229,7 @@ function TiendaPage() {
             <p className="mt-3 text-sm md:text-base text-[var(--text-muted)] leading-relaxed max-w-xl">Primero elige una tienda. Dentro encontrarás sus productos, cursos, precios y contacto directo por WhatsApp.</p>
             <div className="mt-6 flex flex-col sm:flex-row gap-3 max-w-2xl">
               <input className="input-rr flex-1" value={busqueda} onChange={(event) => setBusqueda(event.target.value)} placeholder="Buscar tienda, categoría o ubicación..." />
-              <a href="register.html" className="btn-rr btn-primary-rr inline-flex items-center justify-center gap-2 whitespace-nowrap">Abrir tienda gratis <span className="icon-arrow-right text-lg"></span></a>
+              <a href="crear-tienda.html" className="btn-rr btn-primary-rr inline-flex items-center justify-center gap-2 whitespace-nowrap">Abrir tienda gratis <span className="icon-arrow-right text-lg"></span></a>
             </div>
           </div>
         </section>

@@ -111,7 +111,7 @@ function HomeHero({ initialParams }) {
                 <p className="text-sm font-bold text-[#261D29]" data-name="hero-business-title" data-file="pages/home/HomeHero.js">¿Tienes un salón o negocio de belleza?</p>
                 <p className="text-xs text-[var(--text-muted)] mt-0.5" data-name="hero-business-sub" data-file="pages/home/HomeHero.js">Crea tu espacio gratis y recibe pedidos directamente por WhatsApp.</p>
               </div>
-              <a className="btn-rr btn-primary-rr text-sm py-2 px-4 flex items-center justify-center gap-1.5 shrink-0" href="register.html" data-name="hero-store" data-file="pages/home/HomeHero.js">
+              <a className="btn-rr btn-primary-rr text-sm py-2 px-4 flex items-center justify-center gap-1.5 shrink-0" href="crear-tienda.html" data-name="hero-store" data-file="pages/home/HomeHero.js">
                 Abrir mi tienda gratis
                 <div className="icon-arrow-right text-base text-white" data-name="hero-store-i" data-file="pages/home/HomeHero.js"></div>
               </a>

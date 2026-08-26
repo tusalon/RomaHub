@@ -1,6 +1,12 @@
 function CrearTiendaPage() {
   try {
     const PROVINCIAS = window.CUBA_PROVINCIAS || [];
+    // Misma lista que RUBROS_BELLEZA en supabase/functions/_shared/romahub-security.ts:
+    // RomaHub es solo para belleza, y el servidor rechaza cualquier otro rubro.
+    const RUBROS_BELLEZA = [
+      'Uñas y manicura', 'Pestañas y cejas', 'Peluquería', 'Barbería',
+      'Maquillaje', 'Estética facial y corporal', 'Insumos y productos de belleza', 'Cursos de belleza'
+    ];
 
     const [form, setForm] = React.useState({
       nombre: '', whatsapp: '', provincia: '', municipio: '', categoria: '', descripcion: '', logo_url: ''
@@ -37,6 +43,7 @@ function CrearTiendaPage() {
       if (form.nombre.trim().length < 2) return setError('Escribe el nombre de tu tienda.');
       if (!/^\d{8}$/.test(whatsapp)) return setError('Escribe los 8 dígitos de tu WhatsApp cubano.');
       if (!form.provincia) return setError('Elige tu provincia.');
+      if (!RUBROS_BELLEZA.includes(form.categoria)) return setError('Elige que vendes: RomaHub es solo para productos y cursos de belleza.');
 
       try {
         setEnviando(true);
@@ -69,10 +76,16 @@ function CrearTiendaPage() {
             <div className="w-14 h-14 rounded-2xl bg-[rgba(31,134,84,0.1)] flex items-center justify-center mx-auto">
               <div className="icon-circle-check text-3xl text-[#1F8654]"></div>
             </div>
-            <h1 className="mt-4 h-section-rr">¡Tu tienda está lista!</h1>
+            <h1 className="mt-4 h-section-rr">Tu tienda está creada</h1>
             <p className="mt-2 text-sm text-[var(--text-muted)] leading-relaxed">
               Guarda estos datos: son tu acceso para entrar y subir productos. <b>No los pierdas.</b>
             </p>
+            <div className="mt-4 surface-rr p-4 text-left bg-amber-50 border-amber-200">
+              <p className="text-xs font-bold text-amber-900">Todavía no se ve en RomaHub</p>
+              <p className="mt-1 text-xs text-amber-800 leading-relaxed">
+                Falta: 1) entrar a tu panel, 2) subir al menos 3 productos o cursos, 3) enviar tu tienda a revisión. La aprobamos y le ponemos la insignia de verificada.
+              </p>
+            </div>
 
             <div className="mt-6 space-y-3 text-left">
               <div className="surface-rr p-4 flex items-center justify-between gap-3">
@@ -196,8 +209,12 @@ function CrearTiendaPage() {
           </div>
 
           <label className="block">
-            <span className="text-xs font-semibold text-[var(--text-muted)]">¿Qué vendes? (categoría)</span>
-            <input className="input-rr mt-1" value={form.categoria} onChange={(e) => set('categoria', e.target.value)} placeholder="Ej: Esmaltes e insumos, Cursos de uñas..." maxLength={60} />
+            <span className="text-xs font-semibold text-[var(--text-muted)]">¿Qué vendes? (rubro)</span>
+            <select className="input-rr mt-1 bg-white" value={form.categoria} onChange={(e) => set('categoria', e.target.value)}>
+              <option value="">Elige...</option>
+              {RUBROS_BELLEZA.map((r) => <option key={r} value={r}>{r}</option>)}
+            </select>
+            <span className="mt-1 block text-[11px] text-[var(--text-muted)]">RomaHub es solo para productos de belleza y cursos del sector. Otros rubros no se aprueban.</span>
           </label>
 
           <label className="block">
