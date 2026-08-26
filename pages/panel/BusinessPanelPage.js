@@ -742,7 +742,7 @@ function BusinessPanelPage() {
     const catalogoListo = esTiendaExterna ? totalActivosExterna >= MINIMO_TIENDA_EXTERNA : isDirectoryReady;
     const isPublicReady = esTiendaExterna ? romahubEstado === 'aprobada' : isDirectoryReady;
     const profileTasks = [
-      { id: 'descripcion', label: 'Descripción clara', done: presentation.descripcion.trim().length >= 40, section: 'perfil' },
+      { id: 'descripcion', label: 'Descripción clara', done: Boolean(presentation.descripcion.trim()), section: 'perfil' },
       { id: 'logo', label: 'Logo o foto del negocio', done: Boolean(presentation.logoUrl), section: 'perfil', target: esTiendaExterna ? 'logo' : 'rservas-data' },
       { id: 'portada', label: 'Foto de portada', done: Boolean(presentation.coverUrl), section: 'perfil' },
       { id: 'ubicacion', label: 'Provincia y municipio', done: Boolean(presentation.provincia && presentation.municipio), section: 'perfil', target: esTiendaExterna ? 'ubicacion' : 'rservas-data' },

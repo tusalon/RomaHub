@@ -60,8 +60,8 @@ begin
   if coalesce(v_negocio.provincia, '') = '' or coalesce(v_negocio.municipio, '') = '' then
     raise exception 'Completa provincia y municipio antes de enviar tu tienda.' using errcode = 'P0001';
   end if;
-  if length(trim(coalesce(v_negocio.mensaje_bienvenida, ''))) < 40 then
-    raise exception 'Escribe una descripcion de al menos 40 caracteres.' using errcode = 'P0001';
+  if coalesce(trim(v_negocio.mensaje_bienvenida), '') = '' then
+    raise exception 'Escribe una descripcion de tu tienda.' using errcode = 'P0001';
   end if;
 
   select count(*) into v_total_activos
